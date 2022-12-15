@@ -149,7 +149,22 @@ class Snake {
     }
 
     void render(sfRenderWindow* window) {
+        if (snakeBody.length == 0) {
+            return;
+        }
 
+        SnakeSegment head = snakeBody[0];
+
+        bodyRect.sfRectangleShape_setFillColor(sfYellow);
+        bodyRect.sfRectangleShape_setPosition(sfVector2f(head.position.x * size, head.position.y * size));
+        window.sfRenderWindow_drawRectangleShape(bodyRect, null);
+
+        bodyRect.sfRectangleShape_setFillColor(sfGreen);
+
+        for (int i = 1; i < snakeBody.length; ++i) {
+            bodyRect.sfRectangleShape_setPosition(sfVector2f(snakeBody[i].position.x * size, snakeBody[i].position.y * size));
+            window.sfRenderWindow_drawRectangleShape(bodyRect, null);
+        }
     }
 
     private void checkCollision() {
