@@ -1,6 +1,6 @@
 import std.stdio;
+import bindbc.sfml;
 
-void main()
-{
-	writeln("Edit source/app.d to start your project.");
+void main() {
+	loadSFML();
 }

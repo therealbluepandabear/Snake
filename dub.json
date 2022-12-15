@@ -1,6 +1,13 @@
 {
 	"authors": [
-		"Tom Osman"
+		"thebluepandabear"
+	],
+	"dependencies": {
+		"bindbc-sfml": "~>1.0.0"
+	},
+	"versions": [
+		"SFML_Audio",
+		"SFML_Graphics"
 	],
 	"description": "A minimal D application.",
 	"license": "proprietary",
