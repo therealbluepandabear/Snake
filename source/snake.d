@@ -167,7 +167,8 @@ class Snake {
         }
     }
 
-    private void checkCollision() {
+private:
+    void checkCollision() {
         if (snakeBody.length < 5) {
             return;
         }
@@ -183,12 +184,12 @@ class Snake {
         }
     }
 
-    private SnakeContainer snakeBody;
-    private int size;
-    private Direction dir;
-    private int speed;
-    private  int lives;
-    private int score;
-    private bool lost;
-    private sfRectangleShape* bodyRect;
+    SnakeContainer snakeBody;
+    int size;
+    Direction dir;
+    int speed;
+    int lives;
+    int score;
+    bool lost;
+    sfRectangleShape* bodyRect;
 }
