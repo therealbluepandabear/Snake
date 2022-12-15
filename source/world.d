@@ -32,7 +32,7 @@ class World {
     }
 
     int getBlockSize() {
-        return 0;
+        return blockSize;
     }
 
     void respawnApple() {
@@ -44,7 +44,29 @@ class World {
     }
 
     void update(Snake* player) {
+        if (player.getPosition() == item) {
+            player.extend();
+            player.increaseScore();
+            respawnApple();
+        }
 
+        int gridSizeX = windowSize.x / blockSize;
+        int gridSizeY = windowSize.y / blockSize;
+
+        if (player.getPosition().x <= 0 ||
+            player.getPosition.y <= 0 ||
+            player.getPosition().x >= gridSizeX - 1 ||
+            player.getPosition().y >= gridSizeY - 1)
+        {
+            player.lose();
+        }
+    }
+
+    void render(sfRenderWindow* window) {
+        foreach (sfRectangleShape* rect; bounds) {
+            window.sfRenderWindow_drawRectangleShape(rect, null);
+        }
+        window.sfRenderWindow_drawCircleShape(appleShape, null);
     }
 
 private:
