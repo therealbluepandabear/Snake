@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/snake
+snake.so
+snake.dylib
+snake.dll
+snake.a
+snake.lib
+snake-test-*
+*.exe
+*.o
+*.obj
+*.lst
