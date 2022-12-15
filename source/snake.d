@@ -153,7 +153,19 @@ class Snake {
     }
 
     private void checkCollision() {
+        if (snakeBody.length < 5) {
+            return;
+        }
 
+        SnakeSegment* head = &snakeBody[0];
+
+        for (int i = 1; i < snakeBody.length; ++i) {
+            if (snakeBody[i].position == head.position) {
+                int segments = cast(int)(snakeBody.length) - i;
+                cut(segments);
+                break;
+            }
+        }
     }
 
     private SnakeContainer snakeBody;
