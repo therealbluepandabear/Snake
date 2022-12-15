@@ -9,3 +9,7 @@ struct SnakeSegment {
 
     sfVector2i position;
 }
+
+enum Direction {
+    none, up, down, left, right
+}
