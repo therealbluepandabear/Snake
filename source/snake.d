@@ -69,10 +69,10 @@ class Snake {
             return;
         }
 
-        SnakeSegment* tailHead = &snakeBody[snakeBody.length - 1];
+        SnakeSegment tailHead = snakeBody[snakeBody.length - 1];
 
         if (snakeBody.length > 1) {
-            SnakeSegment* tailBone = &snakeBody[snakeBody.length - 2];
+            SnakeSegment tailBone = snakeBody[snakeBody.length - 2];
 
             if (tailHead.position.x == tailBone.position.x) {
                 if (tailHead.position.y > tailBone.position.y) {
@@ -173,7 +173,7 @@ private:
             return;
         }
 
-        SnakeSegment* head = &snakeBody[0];
+        SnakeSegment head = snakeBody[0];
 
         for (int i = 1; i < snakeBody.length; ++i) {
             if (snakeBody[i].position == head.position) {
