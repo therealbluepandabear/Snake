@@ -2,6 +2,7 @@ module world;
 
 import bindbc.sfml;
 import snake;
+import std.random;
 
 class World {
     this(sfVector2u windowSize) {
@@ -35,7 +36,11 @@ class World {
     }
 
     void respawnApple() {
+        int maxX = (windowSize.x / blockSize) - 2;
+        int maxY = (windowSize.y / blockSize) - 2;
 
+        item = sfVector2i(uniform(0, maxX + 1), uniform(0, maxY + 1));
+        appleShape.sfCircleShape_setPosition(sfVector2f(item.x * blockSize, item.y * blockSize));
     }
 
     void update(Snake* player) {
