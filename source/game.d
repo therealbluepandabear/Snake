@@ -20,8 +20,31 @@ class Game {
         }
     }
 
-    void update() {
+    Window window() {
+        return m_window;
+    }
 
+    void update() {
+        m_window.update();
+        //float timestep = 1.0f / m_snake.speed;
+        //
+        //if (m_elapsed.sfTime_asSeconds() >= timestep) {
+        //    m_snake.tick();
+        //    m_world.update(&m_snake);
+        //}
+    }
+
+    void render() {
+        sfRectangleShape* shape = sfRectangleShape_create();
+
+        shape.sfRectangleShape_setSize(sfVector2f(50, 50));
+        shape.sfRectangleShape_setFillColor(sfRed);
+
+        m_window.beginDraw();
+
+        m_window.renderWindow.sfRenderWindow_drawRectangleShape(shape, null);
+
+        m_window.endDraw();
     }
 
 private:

@@ -3,11 +3,13 @@
 		"thebluepandabear"
 	],
 	"dependencies": {
-		"bindbc-sfml": "~>1.0.0"
+		"bindbc-sfml": "~>1.0.2",
+		"bindbc-loader": "~>1.0.1"
 	},
 	"versions": [
 		"SFML_Audio",
-		"SFML_Graphics"
+		"SFML_Graphics",
+		"SFML_250"
 	],
 	"description": "A minimal D application.",
 	"license": "proprietary",

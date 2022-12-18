@@ -4,10 +4,10 @@ import bindbc.sfml;
 
 class Window {
     this() {
-        setup("Window", sfVector2u(640, 480));
+        setup("Snake", sfVector2u(640, 480));
     }
 
-    this(const(string)title, const(sfVector2u) size) {
+    this(const string title, const sfVector2u size) {
         setup(title, size);
     }
 
@@ -15,18 +15,34 @@ class Window {
         destroy();
     }
 
+    bool isDone() {
+        return m_isDone;
+    }
+
+    bool isFullScreen() {
+        return m_isFullScreen;
+    }
+
+    sfVector2u windowSize() {
+        return m_windowSize;
+    }
+
+    sfRenderWindow* renderWindow() {
+        return m_renderWindow;
+    }
+
     void beginDraw() {
-        m_window.sfRenderWindow_clear(sfBlack);
+        m_renderWindow.sfRenderWindow_clear(sfBlack);
     }
 
     void endDraw() {
-        m_window.sfRenderWindow_display();
+        m_renderWindow.sfRenderWindow_display();
     }
 
     void update() {
         sfEvent event;
 
-        while (m_window.sfRenderWindow_pollEvent(&event)) {
+        while (m_renderWindow.sfRenderWindow_pollEvent(&event)) {
             if (event.type == sfEventType.sfEvtClosed) {
                 m_isDone = true;
             } else if ((event.type == sfEventType.sfEvtKeyPressed) && (event.key.code == sfKeyCode.sfKeyF5)) {
@@ -35,51 +51,38 @@ class Window {
         }
     }
 
-    bool isDone() {
-        return isDone;
-    }
-
-    bool isFullscreen() {
-        return m_isFullscreen;
-    }
-
-    sfVector2u windowSize() {
-        return m_windowSize;
-    }
-
-    sfRenderWindow* window() {
-        return m_window;
-    }
-
     void toggleFullscreen() {
-        m_isFullscreen = !m_isFullscreen;
+        m_isFullScreen = !m_isFullScreen;
         destroy();
         create();
     }
 
+    void drawSprite(sfSprite* sprite) {
+        m_renderWindow.sfRenderWindow_drawSprite(sprite, null);
+    }
+
 private:
-    void setup(const(string) title, const(sfVector2u) size) {
+    void setup(const string title, const sfVector2u size) {
         m_windowTitle = title;
         m_windowSize = size;
-        m_isFullscreen = false;
+        m_isFullScreen = false;
         m_isDone = false;
-
         create();
     }
 
     void destroy() {
-        m_window.sfRenderWindow_close();
+        m_renderWindow.sfRenderWindow_close();
     }
 
     void create() {
-        sfWindowStyle style = m_isFullscreen ? sfWindowStyle.sfFullscreen : sfWindowStyle.sfDefaultStyle;
-        m_window = sfRenderWindow_create(sfVideoMode(m_windowSize.x, m_windowSize.y, 32), cast(const char*)m_windowTitle, style, null);
+        sfWindowStyle style = m_isFullScreen ? sfWindowStyle.sfFullscreen : sfWindowStyle.sfDefaultStyle;
+        m_renderWindow = sfRenderWindow_create(sfVideoMode(m_windowSize.x, m_windowSize.y, 32), cast(const char*)m_windowTitle, style, null);
     }
 
-    sfRenderWindow* m_window;
+    sfRenderWindow* m_renderWindow;
     sfVector2u m_windowSize;
     string m_windowTitle;
     bool m_isDone;
-    bool m_isFullscreen;
+    bool m_isFullScreen;
 }
 
