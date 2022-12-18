@@ -156,7 +156,7 @@ class Snake {
 
         SnakeSegment head = m_snakeBody[0];
 
-        m_bodyRect.sfRectangleShape_setFillColor(sfYellow);
+        m_bodyRect.sfRectangleShape_setFillColor(sfColor(47, 79, 47, 255));
         m_bodyRect.sfRectangleShape_setPosition(sfVector2f(head.position.x * m_size, head.position.y * m_size));
 
         renderWindow.sfRenderWindow_drawRectangleShape(m_bodyRect, null);
