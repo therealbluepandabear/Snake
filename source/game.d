@@ -40,6 +40,7 @@ class Game {
         m_window.beginDraw();
 
         m_world.render(m_window.renderWindow);
+        //m_snake.render(m_window.renderWindow);
 
         m_window.endDraw();
     }

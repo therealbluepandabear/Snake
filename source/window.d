@@ -57,10 +57,6 @@ class Window {
         create();
     }
 
-    void drawSprite(sfSprite* sprite) {
-        m_renderWindow.sfRenderWindow_drawSprite(sprite, null);
-    }
-
 private:
     void setup(const string title, const sfVector2u size) {
         m_windowTitle = title;

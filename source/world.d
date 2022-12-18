@@ -22,7 +22,7 @@ class World {
             m_bounds[i] = sfRectangleShape_create();
             m_bounds[i].sfRectangleShape_setFillColor(sfBlue);
 
-            if (i == 0 || i == 2) {
+            if (i % 2) {
                 m_bounds[i].sfRectangleShape_setSize(sfVector2f(m_blockSize, windowSize.y));
             } else {
                 m_bounds[i].sfRectangleShape_setSize(sfVector2f(windowSize.x, m_blockSize));
@@ -40,11 +40,11 @@ class World {
     }
 
     void respawnApple() {
-        int maxX = (m_windowSize.x / m_blockSize) - 2;
-        int maxY = (m_windowSize.y / m_blockSize) - 2;
+        int maxX = m_windowSize.x - (cast(int)(m_appleShape.sfCircleShape_getRadius()) * 2) - blockSize;
+        int maxY = m_windowSize.y - (cast(int)(m_appleShape.sfCircleShape_getRadius()) * 2) - blockSize;
 
-        m_item = sfVector2i(uniform(0, maxX + 1), uniform(0, maxY + 1));
-        m_appleShape.sfCircleShape_setPosition(sfVector2f(m_item.x * m_blockSize, m_item.y * m_blockSize));
+        m_item = sfVector2i(uniform(m_blockSize - 1, maxX), uniform(m_blockSize - 1, maxY));
+        m_appleShape.sfCircleShape_setPosition(sfVector2f(m_item.x, m_item.y));
     }
 
     void update(Snake* player) {
@@ -70,6 +70,9 @@ class World {
         foreach (sfRectangleShape* rect; m_bounds) {
             renderWindow.sfRenderWindow_drawRectangleShape(rect, null);
         }
+
+        respawnApple();
+        renderWindow.sfRenderWindow_drawCircleShape(m_appleShape, null);
     }
 
 private:
