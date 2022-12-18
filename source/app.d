@@ -13,7 +13,9 @@ void main() {
 	Game game = new Game();
 
 	while (!game.window.isDone()) {
+		game.handleInput();
 		game.update();
 		game.render();
+		game.restartClock();
 	}
 }

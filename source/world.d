@@ -47,7 +47,7 @@ class World {
         m_appleShape.sfCircleShape_setPosition(sfVector2f(m_item.x, m_item.y));
     }
 
-    void update(Snake* player) {
+    void update(Snake player) {
         if (player.pos == m_item) {
             player.extend();
             player.incScore();
@@ -71,7 +71,6 @@ class World {
             renderWindow.sfRenderWindow_drawRectangleShape(rect, null);
         }
 
-        respawnApple();
         renderWindow.sfRenderWindow_drawCircleShape(m_appleShape, null);
     }
 
