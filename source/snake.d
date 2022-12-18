@@ -20,8 +20,10 @@ alias SnakeContainer = SnakeSegment[];
 class Snake {
     this(int size) {
         this.m_size = size;
+
         m_bodyRect = sfRectangleShape_create();
         m_bodyRect.sfRectangleShape_setSize(sfVector2f(size - 1, size - 1));
+
         reset();
     }
 

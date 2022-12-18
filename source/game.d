@@ -34,12 +34,11 @@ class Game {
 
     void restartClock() {
         m_elapsed += sfTime_asSeconds(m_clock.sfClock_restart());
-        writeln(m_elapsed);
     }
 
     void update() {
         m_window.update();
-        float timestep = 1.0f / 16f;
+        float timestep = 1.0f / m_snake.speed;
 
         if (m_elapsed >= timestep) {
             m_snake.tick();
