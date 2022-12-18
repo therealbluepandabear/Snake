@@ -9,7 +9,7 @@ class Game {
     this() {
         m_window = new Window("Snake", sfVector2u(800, 600));
         m_world = new World(m_window.renderWindow.sfRenderWindow_getSize());
-        m_snake = new Snake(5);
+        m_snake = new Snake(16);
 
         if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyUp) && (m_snake.dir != Direction.down)) {
             m_snake.dir = Direction.up;
@@ -28,19 +28,19 @@ class Game {
 
     void update() {
         m_window.update();
-        //float timestep = 1.0f / m_snake.speed;
-        //
-        //if (m_elapsed.sfTime_asSeconds() >= timestep) {
-        //    m_snake.tick();
-        //    m_world.update(&m_snake);
-        //}
+        float timestep = 1.0f / m_snake.speed;
+
+        if (m_elapsed.sfTime_asSeconds() >= timestep) {
+            m_snake.tick();
+            m_world.update(&m_snake);
+        }
     }
 
     void render() {
         m_window.beginDraw();
 
         m_world.render(m_window.renderWindow);
-        //m_snake.render(m_window.renderWindow);
+        m_snake.render(m_window.renderWindow);
 
         m_window.endDraw();
     }
