@@ -62,11 +62,10 @@ class World {
         }
     }
 
-    void render(sfRenderWindow* window) {
+    void render(sfRenderWindow* renderWindow) {
         foreach (sfRectangleShape* rect; m_bounds) {
-            window.sfRenderWindow_drawRectangleShape(rect, null);
+            renderWindow.sfRenderWindow_drawRectangleShape(rect, null);
         }
-        window.sfRenderWindow_drawCircleShape(m_appleShape, null);
     }
 
 private:
