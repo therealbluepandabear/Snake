@@ -11,6 +11,7 @@ class Game {
         m_window = new Window("Snake", sfVector2u(800, 600));
         m_world = new World(m_window.renderWindow.sfRenderWindow_getSize());
         m_snake = new Snake(16);
+        m_clock = sfClock_create();
     }
 
     Window window() {
