@@ -148,7 +148,7 @@ class Snake {
 
     }
 
-    void render(sfRenderWindow* window) {
+    void render(sfRenderWindow* renderWindow) {
         if (m_snakeBody.length == 0) {
             return;
         }
@@ -157,13 +157,13 @@ class Snake {
 
         m_bodyRect.sfRectangleShape_setFillColor(sfYellow);
         m_bodyRect.sfRectangleShape_setPosition(sfVector2f(head.position.x * m_size, head.position.y * m_size));
-        window.sfRenderWindow_drawRectangleShape(m_bodyRect, null);
+        renderWindow.sfRenderWindow_drawRectangleShape(m_bodyRect, null);
 
         m_bodyRect.sfRectangleShape_setFillColor(sfGreen);
 
         for (int i = 1; i < m_snakeBody.length; ++i) {
             m_bodyRect.sfRectangleShape_setPosition(sfVector2f(m_snakeBody[i].position.x * m_size, m_snakeBody[i].position.y * m_size));
-            window.sfRenderWindow_drawRectangleShape(m_bodyRect, null);
+            renderWindow.sfRenderWindow_drawRectangleShape(m_bodyRect, null);
         }
     }
 

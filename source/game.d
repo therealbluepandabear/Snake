@@ -9,6 +9,7 @@ class Game {
     this() {
         m_window = new Window("Snake", sfVector2u(800, 600));
         m_world = new World(m_window.renderWindow.sfRenderWindow_getSize());
+        m_snake = new Snake(5);
 
         if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyUp) && (m_snake.dir != Direction.down)) {
             m_snake.dir = Direction.up;

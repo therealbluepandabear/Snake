@@ -3,30 +3,34 @@ module world;
 import bindbc.sfml;
 import snake;
 import std.random;
+import std.stdio;
+import std.random;
 
 class World {
     this(sfVector2u windowSize) {
         this.m_blockSize = 16;
         this.m_windowSize = windowSize;
 
+        m_appleShape = sfCircleShape_create();
+
         respawnApple();
+
         m_appleShape.sfCircleShape_setFillColor(sfRed);
         m_appleShape.sfCircleShape_setRadius(m_blockSize / 2);
 
         for (int i = 0; i < 4; ++i) {
-            m_bounds[i].sfRectangleShape_setFillColor(sfColor(150, 0, 0, 255));
+            m_bounds[i] = sfRectangleShape_create();
+            m_bounds[i].sfRectangleShape_setFillColor(sfBlue);
 
-            if (!((i + 1) % 2)) {
-                m_bounds[i].sfRectangleShape_setSize(sfVector2f(windowSize.x, m_blockSize));
-            } else {
+            if (i == 0 || i == 2) {
                 m_bounds[i].sfRectangleShape_setSize(sfVector2f(m_blockSize, windowSize.y));
+            } else {
+                m_bounds[i].sfRectangleShape_setSize(sfVector2f(windowSize.x, m_blockSize));
             }
 
-            if (i < 2) {
-                m_bounds[i].sfRectangleShape_setPosition(sfVector2f(0, 0));
-            } else {
+            if (i >= 2) {
                 m_bounds[i].sfRectangleShape_setOrigin(m_bounds[i].sfRectangleShape_getSize());
-                m_bounds[i].sfRectangleShape_setPosition(cast(sfVector2f)windowSize);
+                m_bounds[i].sfRectangleShape_setPosition(sfVector2f(m_windowSize.x, windowSize.y));
             }
         }
     }
