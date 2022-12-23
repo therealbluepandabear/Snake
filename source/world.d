@@ -40,14 +40,17 @@ class World {
     }
 
     void respawnApple() {
-        int maxX = m_windowSize.x - (cast(int)(m_appleShape.sfCircleShape_getRadius()) * 2) - blockSize;
-        int maxY = m_windowSize.y - (cast(int)(m_appleShape.sfCircleShape_getRadius()) * 2) - blockSize;
-
-        m_item = sfVector2i(uniform(m_blockSize - 1, maxX), uniform(m_blockSize - 1, maxY));
-        m_appleShape.sfCircleShape_setPosition(sfVector2f(m_item.x, m_item.y));
+        m_item = sfVector2i(uniform(0, m_windowSize.x / m_blockSize), uniform(0, m_windowSize.y / m_blockSize));
+        m_appleShape.sfCircleShape_setPosition(sfVector2f(m_item.x * m_blockSize, m_item.y * m_blockSize));
     }
 
     void update(Snake player) {
+
+        if (sfVector2i(0, 0) == sfVector2i(0, 0)) {
+            writeln(player.pos, " ", m_item);
+            stdout.flush();
+        }
+
         if (player.pos == m_item) {
             player.extend();
             player.incScore();
@@ -60,8 +63,7 @@ class World {
         if (player.pos.x <= 0 ||
             player.pos.y <= 0 ||
             player.pos.x >= gridSizeX - 1 ||
-            player.pos.y >= gridSizeY - 1)
-        {
+            player.pos.y >= gridSizeY - 1) {
             player.lose();
         }
     }
