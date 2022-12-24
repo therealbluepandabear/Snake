@@ -15,7 +15,7 @@ class World {
         this.m_sound = sfSound_create();
         this.m_sound.sfSound_setBuffer(m_soundBuffer);
 
-        m_appleShape = sfCircleShape_create();
+        this.m_appleShape = sfCircleShape_create();
 
         respawnApple();
 
@@ -43,10 +43,10 @@ class World {
         int gridSizeX = m_windowSize.x / m_blockSize;
         int gridSizeY = m_windowSize.y / m_blockSize;
 
-        if (player.pos.x <= 0 ||
-            player.pos.y <= 0 ||
-            player.pos.x >= gridSizeX - 1 ||
-            player.pos.y >= gridSizeY - 1) {
+        if (player.pos.x < 0 ||
+            player.pos.y < 0 ||
+            player.pos.x > gridSizeX - 1 ||
+            player.pos.y > gridSizeY - 1) {
             player.lose();
         }
     }

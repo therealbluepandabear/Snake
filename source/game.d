@@ -5,12 +5,13 @@ import snake;
 import bindbc.sfml;
 import window;
 import std.stdio;
+import std.format;
+import std.math;
 
 class Game {
     this() {
-        m_window = new Window("Snake", sfVector2u(800, 600));
-        m_world = new World(m_window.renderWindow.sfRenderWindow_getSize());
-        m_snake = new Snake(24);
+        this.m_window = new Window("Snake", sfVector2u(800, 600));
+        setup();
 
         m_clock = sfClock_create();
         m_clock.sfClock_restart();
@@ -37,16 +38,18 @@ class Game {
     }
 
     void update() {
+        if (m_snake.lost) {
+            setup();
+        }
+
         m_window.update();
         float timestep = 1.0f / m_snake.speed;
 
         if (m_elapsed >= timestep) {
             m_snake.tick();
             m_world.update(m_snake);
-            m_elapsed -= timestep;
 
-            writeln(m_elapsed);
-            stdout.flush();
+            m_elapsed = 0;
         }
     }
 
@@ -62,6 +65,11 @@ class Game {
     }
 
 private:
+    void setup() {
+        this.m_world = new World(m_window.renderWindow.sfRenderWindow_getSize());
+        this.m_snake = new Snake(24);
+    }
+
     World m_world;
     Snake m_snake;
     Window m_window;

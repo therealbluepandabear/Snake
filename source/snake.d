@@ -112,7 +112,7 @@ class Snake {
 
         m_dir = Direction.none;
 
-        this.m_speed = 15;
+        this.m_speed = 10;
         this.m_lives = 3;
         this.m_score = 0;
         this.m_lost = false;
@@ -181,8 +181,7 @@ private:
 
         for (int i = 1; i < m_snakeBody.length; ++i) {
             if (m_snakeBody[i].position == head.position) {
-                int segments = cast(int)(m_snakeBody.length) - i;
-                cut(segments);
+                lose();
                 break;
             }
         }
