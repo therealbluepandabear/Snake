@@ -158,12 +158,12 @@ class Snake {
 
         SnakeSegment head = m_snakeBody[0];
 
-        m_bodyRect.sfRectangleShape_setFillColor(sfColor(47, 79, 47, 255));
+        m_bodyRect.sfRectangleShape_setFillColor(sfBlue);
         m_bodyRect.sfRectangleShape_setPosition(sfVector2f(head.position.x * m_size, head.position.y * m_size));
 
         renderWindow.sfRenderWindow_drawRectangleShape(m_bodyRect, null);
 
-        m_bodyRect.sfRectangleShape_setFillColor(sfGreen);
+        m_bodyRect.sfRectangleShape_setFillColor(sfColor(173, 216, 230, 255));
 
         for (int i = 1; i < m_snakeBody.length; ++i) {
             m_bodyRect.sfRectangleShape_setPosition(sfVector2f(m_snakeBody[i].position.x * m_size, m_snakeBody[i].position.y * m_size));

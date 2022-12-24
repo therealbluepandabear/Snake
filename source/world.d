@@ -8,7 +8,7 @@ import std.random;
 
 class World {
     this(sfVector2u windowSize) {
-        this.m_blockSize = 16;
+        this.m_blockSize = 24;
         this.m_windowSize = windowSize;
 
         m_appleShape = sfCircleShape_create();
@@ -17,22 +17,6 @@ class World {
 
         m_appleShape.sfCircleShape_setFillColor(sfRed);
         m_appleShape.sfCircleShape_setRadius(m_blockSize / 2);
-
-        for (int i = 0; i < 4; ++i) {
-            m_bounds[i] = sfRectangleShape_create();
-            m_bounds[i].sfRectangleShape_setFillColor(sfBlue);
-
-            if (i % 2) {
-                m_bounds[i].sfRectangleShape_setSize(sfVector2f(m_blockSize, windowSize.y));
-            } else {
-                m_bounds[i].sfRectangleShape_setSize(sfVector2f(windowSize.x, m_blockSize));
-            }
-
-            if (i >= 2) {
-                m_bounds[i].sfRectangleShape_setOrigin(m_bounds[i].sfRectangleShape_getSize());
-                m_bounds[i].sfRectangleShape_setPosition(sfVector2f(m_windowSize.x, windowSize.y));
-            }
-        }
     }
 
     int blockSize() {
@@ -65,44 +49,48 @@ class World {
     void render(sfRenderWindow* renderWindow) {
         drawCheckerboardPattern(renderWindow);
 
-        foreach (sfRectangleShape* rect; m_bounds) {
-            renderWindow.sfRenderWindow_drawRectangleShape(rect, null);
-        }
-
         renderWindow.sfRenderWindow_drawCircleShape(m_appleShape, null);
     }
 
 private:
     void drawCheckerboardPattern(sfRenderWindow* renderWindow) {
-        int countX = 0;
-        int countY = 0;
-
         sfRectangleShape* shape = sfRectangleShape_create();
-        sfColor fillColor = sfGreen;
+        shape.sfRectangleShape_setSize(sfVector2f(m_blockSize, m_blockSize));
 
-        for (int x = 1; x < renderWindow.sfRenderWindow_getSize().x; x += m_blockSize) {
-            for (int y = 1; y < renderWindow.sfRenderWindow_getSize().y; y += m_blockSize) {
+        sfColor orangeLight = sfColor(255, 140, 0, 255);
+        sfColor orangeDark = sfColor(255, 165, 0, 255);
+
+        sfColor fillColor;
+
+        for (int x = 0; x < renderWindow.sfRenderWindow_getSize().x; x += m_blockSize) {
+            for (int y = 0; y < renderWindow.sfRenderWindow_getSize().y; y += m_blockSize) {
                 if ((x / m_blockSize) % 2 == 0) {
                     if ((y / m_blockSize) % 2 == 0) {
-                        fillColor = sfColor(255, 140, 0, 255);
+                        fillColor = orangeLight;
                     } else {
-                        fillColor = sfColor(255, 165, 0, 255);
+                        fillColor = orangeDark;
                     }
                 } else {
                     if ((y / m_blockSize) % 2 != 0) {
-                        fillColor = sfColor(255, 140, 0, 255);
+                        fillColor = orangeLight;
                     } else {
-                        fillColor = sfColor(255, 165, 0, 255);
+                        fillColor = orangeDark;
                     }
                 }
 
                 shape.sfRectangleShape_setFillColor(fillColor);
+
+                if (y == 0) {
+                    shape.sfRectangleShape_setPosition(sfVector2f(x, 0));
+                    renderWindow.sfRenderWindow_drawRectangleShape(shape, null);
+                } else if (x == 0) {
+                    shape.sfRectangleShape_setPosition(sfVector2f(0, y));
+                    renderWindow.sfRenderWindow_drawRectangleShape(shape, null);
+                }
+
                 shape.sfRectangleShape_setPosition(sfVector2f(m_blockSize + x, m_blockSize + y));
-                shape.sfRectangleShape_setSize(sfVector2f(m_blockSize, m_blockSize));
 
                 renderWindow.sfRenderWindow_drawRectangleShape(shape, null);
-
-                ++countY;
             }
         }
     }
@@ -112,5 +100,4 @@ private:
     int m_blockSize;
 
     sfCircleShape* m_appleShape;
-    sfRectangleShape*[4] m_bounds;
 }
