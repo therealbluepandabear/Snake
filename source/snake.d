@@ -142,10 +142,6 @@ class Snake {
         checkCollision();
     }
 
-    void cut(int segments) {
-
-    }
-
     void render(sfRenderWindow* renderWindow) {
         if (m_snakeBody.length == 0) {
             return;
