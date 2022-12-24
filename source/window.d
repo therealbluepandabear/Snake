@@ -7,7 +7,7 @@ class Window {
         setup("Snake", sfVector2u(640, 480));
     }
 
-    this(const string title, const sfVector2u size) {
+    this(const(string) title, const(sfVector2u) size) {
         setup(title, size);
     }
 
@@ -58,7 +58,7 @@ class Window {
     }
 
 private:
-    void setup(const string title, const sfVector2u size) {
+    void setup(const(string) title, const(sfVector2u) size) {
         m_windowTitle = title;
         m_windowSize = size;
         m_isFullScreen = false;

@@ -11,6 +11,10 @@ class World {
         this.m_blockSize = 24;
         this.m_windowSize = windowSize;
 
+        this.m_soundBuffer = sfSoundBuffer_createFromFile("powerup.wav");
+        this.m_sound = sfSound_create();
+        this.m_sound.sfSound_setBuffer(m_soundBuffer);
+
         m_appleShape = sfCircleShape_create();
 
         respawnApple();
@@ -97,11 +101,7 @@ private:
     }
 
     void playPowerupSound() {
-        sfSoundBuffer* buffer = sfSoundBuffer_createFromFile("powerup.wav");
-        sfSound* sound = sfSound_create();
-
-        sound.sfSound_setBuffer(buffer);
-        sound.sfSound_play();
+        m_sound.sfSound_play();
     }
 
     sfVector2u m_windowSize;
@@ -109,4 +109,7 @@ private:
     int m_blockSize;
 
     sfCircleShape* m_appleShape;
+
+    sfSoundBuffer* m_soundBuffer;
+    sfSound* m_sound;
 }

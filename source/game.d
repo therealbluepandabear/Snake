@@ -44,6 +44,9 @@ class Game {
             m_snake.tick();
             m_world.update(m_snake);
             m_elapsed -= timestep;
+
+            writeln(m_elapsed);
+            stdout.flush();
         }
     }
 
