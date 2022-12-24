@@ -164,10 +164,6 @@ class Snake {
 
         Direction dir = Direction.none;
 
-        if (m_snakeBody.length <= 1) {
-            return dir;
-        }
-
         if (head.position.x == neck.position.x) {
             if (head.position.y > neck.position.y) {
                 dir = Direction.down;
