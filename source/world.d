@@ -62,24 +62,21 @@ private:
         sfRectangleShape* shape = sfRectangleShape_create();
         shape.sfRectangleShape_setSize(sfVector2f(m_blockSize, m_blockSize));
 
-        sfColor orangeLight = sfColor(255, 140, 0, 255);
-        sfColor orangeDark = sfColor(255, 165, 0, 255);
-
         sfColor fillColor;
 
         for (int x = 0; x < renderWindow.sfRenderWindow_getSize().x; x += m_blockSize) {
             for (int y = 0; y < renderWindow.sfRenderWindow_getSize().y; y += m_blockSize) {
                 if ((x / m_blockSize) % 2 == 0) {
                     if ((y / m_blockSize) % 2 == 0) {
-                        fillColor = orangeLight;
+                        fillColor = m_orangeLight;
                     } else {
-                        fillColor = orangeDark;
+                        fillColor = m_orangeDark;
                     }
                 } else {
                     if ((y / m_blockSize) % 2 != 0) {
-                        fillColor = orangeLight;
+                        fillColor = m_orangeLight;
                     } else {
-                        fillColor = orangeDark;
+                        fillColor = m_orangeDark;
                     }
                 }
 
@@ -112,4 +109,7 @@ private:
 
     sfSoundBuffer* m_soundBuffer;
     sfSound* m_sound;
+
+    sfColor m_orangeLight = sfColor(255, 140, 0, 255);
+    sfColor m_orangeDark = sfColor(255, 165, 0, 255);
 }
