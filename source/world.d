@@ -33,6 +33,7 @@ class World {
             player.extend();
             player.incScore();
             respawnApple();
+            playPowerupSound();
         }
 
         int gridSizeX = m_windowSize.x / m_blockSize;
@@ -93,6 +94,14 @@ private:
                 renderWindow.sfRenderWindow_drawRectangleShape(shape, null);
             }
         }
+    }
+
+    void playPowerupSound() {
+        sfSoundBuffer* buffer = sfSoundBuffer_createFromFile("powerup.wav");
+        sfSound* sound = sfSound_create();
+
+        sound.sfSound_setBuffer(buffer);
+        sound.sfSound_play();
     }
 
     sfVector2u m_windowSize;
