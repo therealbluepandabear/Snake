@@ -18,6 +18,14 @@ enum Direction {
 
 alias SnakeContainer = SnakeSegment[];
 
+ref SnakeSegment head(SnakeContainer container) {
+    return container[0];
+}
+
+ref SnakeSegment neck(SnakeContainer container) {
+    return container[1];
+}
+
 class Snake {
     this(int size) {
         this.m_size = size;
@@ -33,7 +41,7 @@ class Snake {
     }
 
     sfVector2i pos() {
-        return (!(m_snakeBody.length == 0)) ? m_snakeBody[0].position : sfVector2i(1, 1);
+        return (!(m_snakeBody.length == 0)) ? m_snakeBody.head.position : sfVector2i(1, 1);
     }
 
     int lives() {
@@ -119,13 +127,13 @@ class Snake {
         }
 
         if (m_dir == Direction.left) {
-            --m_snakeBody[0].position.x;
+            --m_snakeBody.head.position.x;
         } else if (m_dir == Direction.right) {
-            ++m_snakeBody[0].position.x;
+            ++m_snakeBody.head.position.x;
         } else if (m_dir == Direction.up) {
-            --m_snakeBody[0].position.y;
+            --m_snakeBody.head.position.y;
         } else if (m_dir == Direction.down) {
-            ++m_snakeBody[0].position.y;
+            ++m_snakeBody.head.position.y;
         }
     }
 
@@ -143,10 +151,8 @@ class Snake {
             return;
         }
 
-        SnakeSegment head = m_snakeBody[0];
-
         m_bodyRect.sfRectangleShape_setFillColor(sfBlue);
-        m_bodyRect.sfRectangleShape_setPosition(sfVector2f(head.position.x * m_size, head.position.y * m_size));
+        m_bodyRect.sfRectangleShape_setPosition(sfVector2f(m_snakeBody.head.position.x * m_size, m_snakeBody.head.position.y * m_size));
 
         renderWindow.sfRenderWindow_drawRectangleShape(m_bodyRect, null);
 
@@ -159,19 +165,16 @@ class Snake {
     }
 
     Direction getDirection() {
-        SnakeSegment head = m_snakeBody[0];
-        SnakeSegment neck = m_snakeBody[1];
-
         Direction dir = Direction.none;
 
-        if (head.position.x == neck.position.x) {
-            if (head.position.y > neck.position.y) {
+        if (m_snakeBody.head.position.x == m_snakeBody.neck.position.x) {
+            if (m_snakeBody.head.position.y > m_snakeBody.neck.position.y) {
                 dir = Direction.down;
             } else {
                 dir = Direction.up;
             }
-        } else if (head.position.y == neck.position.y) {
-            if (head.position.x > neck.position.x) {
+        } else if (m_snakeBody.head.position.y == m_snakeBody.neck.position.y) {
+            if (m_snakeBody.head.position.x > m_snakeBody.neck.position.x) {
                 dir = Direction.right;
             } else {
                 dir = Direction.left;
@@ -187,10 +190,8 @@ private:
             return;
         }
 
-        SnakeSegment head = m_snakeBody[0];
-
         for (int i = 1; i < m_snakeBody.length; ++i) {
-            if (m_snakeBody[i].position == head.position) {
+            if (m_snakeBody[i].position == m_snakeBody.head.position) {
                 lose();
                 break;
             }
