@@ -44,11 +44,11 @@ class Snake {
     }
 
     int lives() {
-        return lives;
+        return m_lives;
     }
 
     int score() {
-        return score;
+        return m_score;
     }
 
     void incScore() {
@@ -56,7 +56,7 @@ class Snake {
     }
 
     bool lost() {
-        return lost;
+        return m_lost;
     }
 
     void lose() {
