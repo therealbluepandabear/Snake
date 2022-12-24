@@ -130,10 +130,6 @@ class Snake {
     }
 
     void tick() {
-        if (m_snakeBody.length == 0) {
-            return;
-        }
-
         if (getDirection() == Direction.none) {
             return;
         }
