@@ -7,10 +7,20 @@ import window;
 import std.stdio;
 import std.format;
 import std.math;
+import std.conv;
 
 class Game {
     this() {
-        this.m_window = new Window("Snake", sfVector2u(800, 600));
+        this.m_window = new Window("Snake", sfVector2u(600, 600));
+
+        this.m_font = sfFont_createFromFile("nunito_black.ttf");
+        this.m_text = sfText_create();
+        m_text.sfText_setFont(m_font);
+        m_text.sfText_setCharacterSize(32);
+        m_text.sfText_setString("0");
+        m_text.sfText_setPosition(sfVector2f(24, 24));
+        m_text.sfText_setFillColor(sfWhite);
+
         setup();
 
         m_clock = sfClock_create();
@@ -43,6 +53,7 @@ class Game {
         }
 
         m_window.update();
+
         float timestep = 1.0f / m_snake.speed;
 
         if (m_elapsed >= timestep) {
@@ -60,6 +71,8 @@ class Game {
 
         m_world.render(m_window.renderWindow);
         m_snake.render(m_window.renderWindow);
+        m_text.sfText_setString(cast(const char*)to!wstring(m_snake.score));
+        m_window.renderWindow.sfRenderWindow_drawText(m_text, null);
 
         m_window.endDraw();
     }
@@ -75,4 +88,7 @@ private:
     Window m_window;
     sfClock* m_clock;
     float m_elapsed = 0;
+
+    sfFont* m_font;
+    sfText* m_text;
 }

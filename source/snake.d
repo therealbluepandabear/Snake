@@ -52,7 +52,7 @@ class Snake {
     }
 
     void incScore() {
-        m_score += 10;
+        ++m_score;
     }
 
     bool lost() {
