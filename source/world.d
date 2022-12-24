@@ -45,12 +45,6 @@ class World {
     }
 
     void update(Snake player) {
-
-        if (sfVector2i(0, 0) == sfVector2i(0, 0)) {
-            writeln(player.pos, " ", m_item);
-            stdout.flush();
-        }
-
         if (player.pos == m_item) {
             player.extend();
             player.incScore();
@@ -69,6 +63,8 @@ class World {
     }
 
     void render(sfRenderWindow* renderWindow) {
+        drawCheckerboardPattern(renderWindow);
+
         foreach (sfRectangleShape* rect; m_bounds) {
             renderWindow.sfRenderWindow_drawRectangleShape(rect, null);
         }
@@ -77,6 +73,40 @@ class World {
     }
 
 private:
+    void drawCheckerboardPattern(sfRenderWindow* renderWindow) {
+        int countX = 0;
+        int countY = 0;
+
+        sfRectangleShape* shape = sfRectangleShape_create();
+        sfColor fillColor = sfGreen;
+
+        for (int x = 1; x < renderWindow.sfRenderWindow_getSize().x; x += m_blockSize) {
+            for (int y = 1; y < renderWindow.sfRenderWindow_getSize().y; y += m_blockSize) {
+                if ((x / m_blockSize) % 2 == 0) {
+                    if ((y / m_blockSize) % 2 == 0) {
+                        fillColor = sfColor(255, 140, 0, 255);
+                    } else {
+                        fillColor = sfColor(255, 165, 0, 255);
+                    }
+                } else {
+                    if ((y / m_blockSize) % 2 != 0) {
+                        fillColor = sfColor(255, 140, 0, 255);
+                    } else {
+                        fillColor = sfColor(255, 165, 0, 255);
+                    }
+                }
+
+                shape.sfRectangleShape_setFillColor(fillColor);
+                shape.sfRectangleShape_setPosition(sfVector2f(m_blockSize + x, m_blockSize + y));
+                shape.sfRectangleShape_setSize(sfVector2f(m_blockSize, m_blockSize));
+
+                renderWindow.sfRenderWindow_drawRectangleShape(shape, null);
+
+                ++countY;
+            }
+        }
+    }
+
     sfVector2u m_windowSize;
     sfVector2i m_item;
     int m_blockSize;
