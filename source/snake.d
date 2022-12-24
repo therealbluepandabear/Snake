@@ -162,10 +162,10 @@ class Snake {
         SnakeSegment head = m_snakeBody[0];
         SnakeSegment neck = m_snakeBody[1];
 
-        Direction dir;
+        Direction dir = Direction.none;
 
         if (m_snakeBody.length <= 1) {
-            dir = Direction.none;
+            return dir;
         }
 
         if (head.position.x == neck.position.x) {
@@ -180,8 +180,6 @@ class Snake {
             } else {
                 dir = Direction.left;
             }
-        } else {
-            dir = Direction.none;
         }
 
         return dir;
