@@ -2,6 +2,7 @@ module snake;
 
 import bindbc.sfml;
 import std.algorithm;
+import std.stdio;
 
 struct SnakeSegment {
     this(int x, int y) {
@@ -27,14 +28,6 @@ class Snake {
         reset();
     }
 
-    void dir(Direction dir) {
-        this.m_dir = dir;
-    }
-
-    Direction dir() {
-        return m_dir;
-    }
-
     int speed() {
         return m_speed;
     }
@@ -57,6 +50,10 @@ class Snake {
 
     bool lost() {
         return m_lost;
+    }
+
+    void dir(Direction dir) {
+        this.m_dir = dir;
     }
 
     void lose() {
@@ -91,13 +88,13 @@ class Snake {
                 }
             }
         } else {
-            if (dir == Direction.up) {
+            if (m_dir == Direction.up) {
                 m_snakeBody ~= SnakeSegment(tailHead.position.x, tailHead.position.y + 1);
-            } else if (dir == Direction.down) {
+            } else if (m_dir == Direction.down) {
                 m_snakeBody ~= SnakeSegment(tailHead.position.x, tailHead.position.y - 1);
-            } else if (dir == Direction.left) {
+            } else if (m_dir == Direction.left) {
                 m_snakeBody ~= SnakeSegment(tailHead.position.x + 1, tailHead.position.y);
-            } else if (dir == Direction.right) {
+            } else if (m_dir == Direction.right) {
                 m_snakeBody ~= SnakeSegment(tailHead.position.x - 1, tailHead.position.y);
             }
         }
@@ -110,8 +107,6 @@ class Snake {
         m_snakeBody ~= SnakeSegment(5, 6);
         m_snakeBody ~= SnakeSegment(5, 5);
 
-        m_dir = Direction.none;
-
         this.m_speed = 10;
         this.m_lives = 3;
         this.m_score = 0;
@@ -123,13 +118,13 @@ class Snake {
             m_snakeBody[i].position = m_snakeBody[i - 1].position;
         }
 
-        if (dir == Direction.left) {
+        if (m_dir == Direction.left) {
             --m_snakeBody[0].position.x;
-        } else if (dir == Direction.right) {
+        } else if (m_dir == Direction.right) {
             ++m_snakeBody[0].position.x;
-        } else if (dir == Direction.up) {
+        } else if (m_dir == Direction.up) {
             --m_snakeBody[0].position.y;
-        } else if (dir == Direction.down) {
+        } else if (m_dir == Direction.down) {
             ++m_snakeBody[0].position.y;
         }
     }
@@ -139,7 +134,7 @@ class Snake {
             return;
         }
 
-        if (dir == Direction.none) {
+        if (getDirection() == Direction.none) {
             return;
         }
 
@@ -169,6 +164,38 @@ class Snake {
             m_bodyRect.sfRectangleShape_setPosition(sfVector2f(m_snakeBody[i].position.x * m_size, m_snakeBody[i].position.y * m_size));
             renderWindow.sfRenderWindow_drawRectangleShape(m_bodyRect, null);
         }
+
+        writeln(getDirection());
+        stdout.flush();
+    }
+
+    Direction getDirection() {
+        SnakeSegment head = m_snakeBody[0];
+        SnakeSegment neck = m_snakeBody[1];
+
+        Direction dir;
+
+        if (m_snakeBody.length <= 1) {
+            dir = Direction.none;
+        }
+
+        if (head.position.x == neck.position.x) {
+            if (head.position.y > neck.position.y) {
+                dir = Direction.down;
+            } else {
+                dir = Direction.up;
+            }
+        } else if (head.position.y == neck.position.y) {
+            if (head.position.x > neck.position.x) {
+                dir = Direction.right;
+            } else {
+                dir = Direction.left;
+            }
+        } else {
+            dir = Direction.none;
+        }
+
+        return dir;
     }
 
 private:
