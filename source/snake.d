@@ -147,10 +147,6 @@ class Snake {
     }
 
     void render(sfRenderWindow* renderWindow) {
-        if (m_snakeBody.length == 0) {
-            return;
-        }
-
         m_bodyRect.sfRectangleShape_setFillColor(sfBlue);
         m_bodyRect.sfRectangleShape_setPosition(sfVector2f(m_snakeBody.head.position.x * m_size, m_snakeBody.head.position.y * m_size));
 
