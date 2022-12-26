@@ -42,8 +42,11 @@ class World {
             m_player.pos.y < 0 ||
             m_player.pos.x > gridSizeX - 1 ||
             m_player.pos.y > gridSizeY - 1) {
-            m_snakeDeathSound.sfSound_play();
             m_player.lose();
+        }
+
+        if (m_player.lost) {
+            m_snakeDeathSound.sfSound_play();
         }
     }
 
