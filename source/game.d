@@ -57,7 +57,7 @@ class Game {
 
         float timestep = 1.0f / m_snake.speed;
 
-        if (m_elapsed >= timestep / 10) {
+        if (m_elapsed >= timestep) {
             m_snake.tick();
             m_world.update();
 

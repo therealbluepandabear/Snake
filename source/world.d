@@ -42,11 +42,6 @@ class World {
             playPowerupSound();
         }
 
-
-        respawnApple();
-        writeln(applePosValid());
-        stdout.flush();
-
         int gridSizeX = m_windowSize.x / m_blockSize;
         int gridSizeY = m_windowSize.y / m_blockSize;
 
