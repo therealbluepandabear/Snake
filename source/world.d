@@ -11,25 +11,16 @@ class World {
         this.m_blockSize = player.size;
         this.m_windowSize = windowSize;
 
-        this.m_soundBuffer = sfSoundBuffer_createFromFile("powerup.wav");
-        this.m_sound = sfSound_create();
-        this.m_sound.sfSound_setBuffer(m_soundBuffer);
-
-        this.m_appleShape = sfCircleShape_create();
-
+        initSound();
         this.m_player = player;
-
-        respawnApple();
-
-        m_appleShape.sfCircleShape_setFillColor(sfRed);
-        m_appleShape.sfCircleShape_setRadius(m_blockSize / 2);
+        initApple();
     }
 
     void respawnApple() {
         m_item = sfVector2i(uniform(0, m_windowSize.x / m_blockSize), uniform(0, m_windowSize.y / m_blockSize));
         m_appleShape.sfCircleShape_setPosition(sfVector2f(m_item.x * m_blockSize, m_item.y * m_blockSize));
 
-        if (!applePosValid()) {
+        if (!isApplePosValid()) {
             respawnApple();
         }
     }
@@ -99,7 +90,7 @@ private:
         }
     }
 
-    bool applePosValid() {
+    bool isApplePosValid() {
         bool valid = true;
 
         foreach (SnakeSegment segment; m_player.snakeBody) {
@@ -114,6 +105,19 @@ private:
 
     void playPowerupSound() {
         m_sound.sfSound_play();
+    }
+
+    void initSound() {
+        this.m_soundBuffer = sfSoundBuffer_createFromFile("powerup.wav");
+        this.m_sound = sfSound_create();
+        this.m_sound.sfSound_setBuffer(m_soundBuffer);
+    }
+
+    void initApple() {
+        this.m_appleShape = sfCircleShape_create();
+        m_appleShape.sfCircleShape_setFillColor(sfRed);
+        m_appleShape.sfCircleShape_setRadius(m_blockSize / 2);
+        respawnApple();
     }
 
     sfVector2u m_windowSize;
