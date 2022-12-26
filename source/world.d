@@ -11,7 +11,6 @@ class World {
     this(sfVector2u windowSize, Snake player) {
         this.m_blockSize = player.size;
         this.m_windowSize = windowSize;
-
         this.m_player = player;
 
         initSound();

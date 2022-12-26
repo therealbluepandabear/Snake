@@ -19,14 +19,6 @@ class Window {
         return m_isDone;
     }
 
-    bool isFullScreen() {
-        return m_isFullScreen;
-    }
-
-    sfVector2u windowSize() {
-        return m_windowSize;
-    }
-
     sfRenderWindow* renderWindow() {
         return m_renderWindow;
     }
