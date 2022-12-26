@@ -23,10 +23,6 @@ class World {
         m_appleShape.sfCircleShape_setRadius(m_blockSize / 2);
     }
 
-    int blockSize() {
-        return m_blockSize;
-    }
-
     void respawnApple() {
         m_item = sfVector2i(uniform(0, m_windowSize.x / m_blockSize), uniform(0, m_windowSize.y / m_blockSize));
         m_appleShape.sfCircleShape_setPosition(sfVector2f(m_item.x * m_blockSize, m_item.y * m_blockSize));

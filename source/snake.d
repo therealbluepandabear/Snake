@@ -44,10 +44,6 @@ class Snake {
         return (!(m_snakeBody.length == 0)) ? m_snakeBody.head.position : sfVector2i(1, 1);
     }
 
-    int lives() {
-        return m_lives;
-    }
-
     int score() {
         return m_score;
     }
@@ -116,12 +112,15 @@ class Snake {
         m_snakeBody ~= SnakeSegment(5, 5);
 
         this.m_speed = 10;
-        this.m_lives = 3;
         this.m_score = 0;
         this.m_lost = false;
     }
 
     void move() {
+        if (m_dir == Direction.none) {
+            return;
+        }
+
         for (int i = cast(int)(m_snakeBody.length - 1); i > 0; --i) {
             m_snakeBody[i].position = m_snakeBody[i - 1].position;
         }
@@ -196,9 +195,8 @@ private:
 
     SnakeContainer m_snakeBody;
     int m_size;
-    Direction m_dir;
+    Direction m_dir = Direction.none;
     int m_speed;
-    int m_lives;
     int m_score;
     bool m_lost;
     sfRectangleShape* m_bodyRect;
