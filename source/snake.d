@@ -108,7 +108,7 @@ class Snake {
         m_snakeBody ~= SnakeSegment(5, 5);
 
         this.m_speed = 10;
-        this.m_score = 10;
+        this.m_score = 0;
         this.m_lost = false;
     }
 
