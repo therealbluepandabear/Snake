@@ -60,6 +60,10 @@ class Snake {
         return m_lost;
     }
 
+    int size() {
+        return m_size;
+    }
+
     void dir(Direction dir) {
         this.m_dir = dir;
     }

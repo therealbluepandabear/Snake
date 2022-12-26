@@ -8,7 +8,7 @@ import std.random;
 
 class World {
     this(sfVector2u windowSize, Snake player) {
-        this.m_blockSize = 24;
+        this.m_blockSize = player.size;
         this.m_windowSize = windowSize;
 
         this.m_soundBuffer = sfSoundBuffer_createFromFile("powerup.wav");
