@@ -11,8 +11,9 @@ class World {
         this.m_blockSize = player.size;
         this.m_windowSize = windowSize;
 
-        initSound();
         this.m_player = player;
+
+        initSound();
         initApple();
     }
 
@@ -40,6 +41,7 @@ class World {
             m_player.pos.y < 0 ||
             m_player.pos.x > gridSizeX - 1 ||
             m_player.pos.y > gridSizeY - 1) {
+            m_snakeDeathSound.sfSound_play();
             m_player.lose();
         }
     }
@@ -104,13 +106,17 @@ private:
     }
 
     void playPowerupSound() {
-        m_sound.sfSound_play();
+        m_scoreSound.sfSound_play();
     }
 
     void initSound() {
-        this.m_soundBuffer = sfSoundBuffer_createFromFile("powerup.wav");
-        this.m_sound = sfSound_create();
-        this.m_sound.sfSound_setBuffer(m_soundBuffer);
+        this.m_scoreSoundBuffer = sfSoundBuffer_createFromFile("powerup.wav");
+        this.m_scoreSound = sfSound_create();
+        this.m_scoreSound.sfSound_setBuffer(m_scoreSoundBuffer);
+
+        this.m_snakeDeathSoundBuffer = sfSoundBuffer_createFromFile("snakedeath.wav");
+        this.m_snakeDeathSound = sfSound_create();
+        this.m_snakeDeathSound.sfSound_setBuffer(m_snakeDeathSoundBuffer);
     }
 
     void initApple() {
@@ -126,8 +132,11 @@ private:
 
     sfCircleShape* m_appleShape;
 
-    sfSoundBuffer* m_soundBuffer;
-    sfSound* m_sound;
+    sfSoundBuffer* m_scoreSoundBuffer;
+    sfSound* m_scoreSound;
+
+    sfSoundBuffer* m_snakeDeathSoundBuffer;
+    sfSound* m_snakeDeathSound;
 
     sfColor m_orangeLight = sfColor(255, 140, 0, 255);
     sfColor m_orangeDark = sfColor(255, 165, 0, 255);
