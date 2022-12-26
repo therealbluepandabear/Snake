@@ -64,10 +64,6 @@ class Snake {
         this.m_lost = true;
     }
 
-    void toggleLost() {
-        this.m_lost = !m_lost;
-    }
-
     void extend() {
         if (m_snakeBody.length == 0) {
             return;
