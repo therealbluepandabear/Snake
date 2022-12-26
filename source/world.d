@@ -5,6 +5,7 @@ import snake;
 import std.random;
 import std.stdio;
 import std.random;
+import std.string;
 
 class World {
     this(sfVector2u windowSize, Snake player) {
@@ -31,7 +32,7 @@ class World {
             m_player.extend();
             m_player.incScore();
             respawnApple();
-            playPowerupSound();
+            m_scoreSound.sfSound_play();
         }
 
         int gridSizeX = m_windowSize.x / m_blockSize;
@@ -105,18 +106,15 @@ private:
         return valid;
     }
 
-    void playPowerupSound() {
-        m_scoreSound.sfSound_play();
+    void createSound(ref sfSoundBuffer* soundBuffer, ref sfSound* sound, string src) {
+        soundBuffer = sfSoundBuffer_createFromFile(toStringz(src));
+        sound = sfSound_create();
+        sound.sfSound_setBuffer(soundBuffer);
     }
 
     void initSound() {
-        this.m_scoreSoundBuffer = sfSoundBuffer_createFromFile("powerup.wav");
-        this.m_scoreSound = sfSound_create();
-        this.m_scoreSound.sfSound_setBuffer(m_scoreSoundBuffer);
-
-        this.m_snakeDeathSoundBuffer = sfSoundBuffer_createFromFile("snakedeath.wav");
-        this.m_snakeDeathSound = sfSound_create();
-        this.m_snakeDeathSound.sfSound_setBuffer(m_snakeDeathSoundBuffer);
+        createSound(m_scoreSoundBuffer, m_scoreSound, Sounds.powerup);
+        createSound(m_snakeDeathSoundBuffer, m_snakeDeathSound, Sounds.death);
     }
 
     void initApple() {
@@ -124,6 +122,10 @@ private:
         m_appleShape.sfCircleShape_setFillColor(sfRed);
         m_appleShape.sfCircleShape_setRadius(m_blockSize / 2);
         respawnApple();
+    }
+
+    enum Sounds : string {
+        powerup = "powerup.wav", death = "snakedeath.wav"
     }
 
     sfVector2u m_windowSize;

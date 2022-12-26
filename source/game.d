@@ -73,7 +73,7 @@ class Game {
         m_world.render(m_window.renderWindow);
         m_snake.render(m_window.renderWindow);
 
-        m_text.sfText_setString(cast(const char*)toStringz(to!string(m_snake.score)));
+        m_text.sfText_setString(toStringz(to!string(m_snake.score)));
         m_window.renderWindow.sfRenderWindow_drawText(m_text, null);
 
         m_window.endDraw();
