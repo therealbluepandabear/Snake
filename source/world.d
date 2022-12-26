@@ -7,7 +7,7 @@ import std.stdio;
 import std.random;
 
 class World {
-    this(sfVector2u windowSize) {
+    this(sfVector2u windowSize, Snake player) {
         this.m_blockSize = 24;
         this.m_windowSize = windowSize;
 
@@ -16,6 +16,8 @@ class World {
         this.m_sound.sfSound_setBuffer(m_soundBuffer);
 
         this.m_appleShape = sfCircleShape_create();
+
+        this.m_player = player;
 
         respawnApple();
 
@@ -26,24 +28,33 @@ class World {
     void respawnApple() {
         m_item = sfVector2i(uniform(0, m_windowSize.x / m_blockSize), uniform(0, m_windowSize.y / m_blockSize));
         m_appleShape.sfCircleShape_setPosition(sfVector2f(m_item.x * m_blockSize, m_item.y * m_blockSize));
+
+        if (!applePosValid()) {
+            respawnApple();
+        }
     }
 
-    void update(Snake player) {
-        if (player.pos == m_item) {
-            player.extend();
-            player.incScore();
+    void update() {
+        if (m_player.pos == m_item) {
+            m_player.extend();
+            m_player.incScore();
             respawnApple();
             playPowerupSound();
         }
 
+
+        respawnApple();
+        writeln(applePosValid());
+        stdout.flush();
+
         int gridSizeX = m_windowSize.x / m_blockSize;
         int gridSizeY = m_windowSize.y / m_blockSize;
 
-        if (player.pos.x < 0 ||
-            player.pos.y < 0 ||
-            player.pos.x > gridSizeX - 1 ||
-            player.pos.y > gridSizeY - 1) {
-            player.lose();
+        if (m_player.pos.x < 0 ||
+            m_player.pos.y < 0 ||
+            m_player.pos.x > gridSizeX - 1 ||
+            m_player.pos.y > gridSizeY - 1) {
+            m_player.lose();
         }
     }
 
@@ -93,6 +104,19 @@ private:
         }
     }
 
+    bool applePosValid() {
+        bool valid = true;
+
+        foreach (SnakeSegment segment; m_player.snakeBody) {
+            if (segment.position.x == m_item.x && segment.position.y == m_item.y) {
+                valid = false;
+                break;
+            }
+        }
+
+        return valid;
+    }
+
     void playPowerupSound() {
         m_sound.sfSound_play();
     }
@@ -108,4 +132,6 @@ private:
 
     sfColor m_orangeLight = sfColor(255, 140, 0, 255);
     sfColor m_orangeDark = sfColor(255, 165, 0, 255);
+
+    Snake m_player;
 }

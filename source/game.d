@@ -57,9 +57,9 @@ class Game {
 
         float timestep = 1.0f / m_snake.speed;
 
-        if (m_elapsed >= timestep) {
+        if (m_elapsed >= timestep / 10) {
             m_snake.tick();
-            m_world.update(m_snake);
+            m_world.update();
 
             m_elapsed = 0;
         }
@@ -72,6 +72,7 @@ class Game {
 
         m_world.render(m_window.renderWindow);
         m_snake.render(m_window.renderWindow);
+
         m_text.sfText_setString(cast(const char*)toStringz(to!string(m_snake.score)));
         m_window.renderWindow.sfRenderWindow_drawText(m_text, null);
 
@@ -80,8 +81,8 @@ class Game {
 
 private:
     void setup() {
-        this.m_world = new World(m_window.renderWindow.sfRenderWindow_getSize());
         this.m_snake = new Snake(24);
+        this.m_world = new World(m_window.renderWindow.sfRenderWindow_getSize(), m_snake);
     }
 
     World m_world;

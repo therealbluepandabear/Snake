@@ -44,6 +44,10 @@ class Snake {
         return (!(m_snakeBody.length == 0)) ? m_snakeBody.head.position : sfVector2i(1, 1);
     }
 
+    SnakeContainer snakeBody() {
+        return m_snakeBody;
+    }
+
     int score() {
         return m_score;
     }
