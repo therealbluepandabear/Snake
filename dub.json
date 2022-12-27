@@ -13,5 +13,5 @@
 	],
 	"description": "A minimal D application.",
 	"license": "GNU General Public License v3.0",
-	"name": "snake",
+	"name": "snake"
 }
