@@ -58,7 +58,7 @@ class Game {
             _snake.tick();
             _world.update();
 
-            _elapsed = 0;
+            this._elapsed = 0;
         }
     }
 

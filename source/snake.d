@@ -112,9 +112,9 @@ class Snake {
     void reset() {
         this._snakeBody = SnakeContainer.init;
 
-        _snakeBody ~= SnakeSegment(5, 7);
-        _snakeBody ~= SnakeSegment(5, 6);
-        _snakeBody ~= SnakeSegment(5, 5);
+        _snakeBody ~= SnakeSegment(0, 0);
+        _snakeBody ~= SnakeSegment(0, 1);
+        //_snakeBody ~= SnakeSegment(5, 5);
 
         this._speed = 10;
         this._score = 0;
