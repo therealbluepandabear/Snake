@@ -17,11 +17,11 @@ class Game {
     this() {
         this._window = new Window("Snake", sfVector2u(600, 600));
 
-        _textbox = new Textbox(sfVector2f(24, 24));
+        this._textbox = new Textbox(sfVector2f(24, 24));
 
         setup();
 
-        _clock = sfClock_create();
+        this._clock = sfClock_create();
         _clock.sfClock_restart();
     }
 

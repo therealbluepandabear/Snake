@@ -31,7 +31,7 @@ class Snake {
     this(int size) {
         this._size = size;
 
-        _bodyRect = sfRectangleShape_create();
+        this._bodyRect = sfRectangleShape_create();
         _bodyRect.sfRectangleShape_setSize(sfVector2f(size, size));
 
         reset();
@@ -110,7 +110,7 @@ class Snake {
     }
 
     void reset() {
-        _snakeBody = SnakeContainer.init;
+        this._snakeBody = SnakeContainer.init;
 
         _snakeBody ~= SnakeSegment(5, 7);
         _snakeBody ~= SnakeSegment(5, 6);

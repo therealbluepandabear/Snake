@@ -5,7 +5,7 @@ import bindbc.sfml;
 
 // in the future more checks can be added when more drawable types are used throughout the program
 private bool isDrawable(T)(T obj) {
-    return is(T == sfCircleShape*) || is(T == sfRectangleShape*) || is(T == sfText*);
+    return (is(T == sfCircleShape*) || is(T == sfRectangleShape*) || is(T == sfText*));
 }
 
 void draw(T)(sfRenderWindow* renderWindow, T obj) {

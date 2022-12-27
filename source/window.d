@@ -51,10 +51,10 @@ class Window {
 
 private:
     void setup(const(string) title, const(sfVector2u) size) {
-        _windowTitle = title;
-        _windowSize = size;
-        _isFullScreen = false;
-        _isDone = false;
+        this._windowTitle = title;
+        this._windowSize = size;
+        this._isFullScreen = false;
+        this._isDone = false;
         create();
     }
 

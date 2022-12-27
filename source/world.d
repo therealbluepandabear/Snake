@@ -19,7 +19,7 @@ class World {
     }
 
     void respawnApple() {
-        _item = sfVector2i(uniform(0, _windowSize.x / _blockSize), uniform(0, _windowSize.y / _blockSize));
+        this._item = sfVector2i(uniform(0, _windowSize.x / _blockSize), uniform(0, _windowSize.y / _blockSize));
         _appleShape.sfCircleShape_setPosition(sfVector2f(_item.x * _blockSize, _item.y * _blockSize));
 
         if (!isApplePosValid()) {
