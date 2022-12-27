@@ -7,6 +7,7 @@ import std.conv;
 import bindbc.loader;
 import game;
 
+
 void main() {
 	loadSFML();
 

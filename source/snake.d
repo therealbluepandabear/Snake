@@ -3,6 +3,7 @@ module snake;
 import bindbc.sfml;
 import std.algorithm;
 import std.stdio;
+import sfmlextensions;
 
 struct SnakeSegment {
     this(int x, int y) {
@@ -153,13 +154,13 @@ class Snake {
         m_bodyRect.sfRectangleShape_setFillColor(sfBlue);
         m_bodyRect.sfRectangleShape_setPosition(sfVector2f(m_snakeBody.head.position.x * m_size, m_snakeBody.head.position.y * m_size));
 
-        renderWindow.sfRenderWindow_drawRectangleShape(m_bodyRect, null);
+        renderWindow.draw(m_bodyRect);
 
         m_bodyRect.sfRectangleShape_setFillColor(sfColor(173, 216, 230, 255));
 
         for (int i = 1; i < m_snakeBody.length; ++i) {
             m_bodyRect.sfRectangleShape_setPosition(sfVector2f(m_snakeBody[i].position.x * m_size, m_snakeBody[i].position.y * m_size));
-            renderWindow.sfRenderWindow_drawRectangleShape(m_bodyRect, null);
+            renderWindow.draw(m_bodyRect);
         }
     }
 

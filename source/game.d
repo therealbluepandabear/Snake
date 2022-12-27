@@ -9,18 +9,15 @@ import std.format;
 import std.math;
 import std.conv;
 import std.string;
+import sfmlextensions;
+import textbox;
+import std.random;
 
 class Game {
     this() {
         this.m_window = new Window("Snake", sfVector2u(600, 600));
 
-        this.m_font = sfFont_createFromFile("nunito_black.ttf");
-        this.m_text = sfText_create();
-        m_text.sfText_setFont(m_font);
-        m_text.sfText_setCharacterSize(32);
-        m_text.sfText_setString("0");
-        m_text.sfText_setPosition(sfVector2f(24, 24));
-        m_text.sfText_setFillColor(sfWhite);
+        _textbox = new Textbox(sfVector2f(24, 24));
 
         setup();
 
@@ -72,9 +69,7 @@ class Game {
 
         m_world.render(m_window.renderWindow);
         m_snake.render(m_window.renderWindow);
-
-        m_text.sfText_setString(toStringz(to!string(m_snake.score)));
-        m_window.renderWindow.sfRenderWindow_drawText(m_text, null);
+        _textbox.render(m_window.renderWindow, to!string(m_snake.score));
 
         m_window.endDraw();
     }
@@ -91,6 +86,5 @@ private:
     sfClock* m_clock;
     float m_elapsed = 0;
 
-    sfFont* m_font;
-    sfText* m_text;
+    Textbox _textbox;
 }

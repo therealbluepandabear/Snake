@@ -6,6 +6,7 @@ import std.random;
 import std.stdio;
 import std.random;
 import std.string;
+import sfmlextensions;
 
 class World {
     this(sfVector2u windowSize, Snake player) {
@@ -52,7 +53,7 @@ class World {
     void render(sfRenderWindow* renderWindow) {
         drawCheckerboardPattern(renderWindow);
 
-        renderWindow.sfRenderWindow_drawCircleShape(m_appleShape, null);
+        renderWindow.draw(m_appleShape);
     }
 
 private:
@@ -82,15 +83,15 @@ private:
 
                 if (y == 0) {
                     shape.sfRectangleShape_setPosition(sfVector2f(x, 0));
-                    renderWindow.sfRenderWindow_drawRectangleShape(shape, null);
+                    renderWindow.draw(shape);
                 } else if (x == 0) {
                     shape.sfRectangleShape_setPosition(sfVector2f(0, y));
-                    renderWindow.sfRenderWindow_drawRectangleShape(shape, null);
+                    renderWindow.draw(shape);
                 }
 
                 shape.sfRectangleShape_setPosition(sfVector2f(m_blockSize + x, m_blockSize + y));
 
-                renderWindow.sfRenderWindow_drawRectangleShape(shape, null);
+                renderWindow.draw(shape);
             }
         }
     }
