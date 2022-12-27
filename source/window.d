@@ -16,27 +16,27 @@ class Window {
     }
 
     bool isDone() {
-        return m_isDone;
+        return _isDone;
     }
 
     sfRenderWindow* renderWindow() {
-        return m_renderWindow;
+        return _renderWindow;
     }
 
     void beginDraw() {
-        m_renderWindow.sfRenderWindow_clear(sfBlack);
+        _renderWindow.sfRenderWindow_clear(sfBlack);
     }
 
     void endDraw() {
-        m_renderWindow.sfRenderWindow_display();
+        _renderWindow.sfRenderWindow_display();
     }
 
     void update() {
         sfEvent event;
 
-        while (m_renderWindow.sfRenderWindow_pollEvent(&event)) {
+        while (_renderWindow.sfRenderWindow_pollEvent(&event)) {
             if (event.type == sfEventType.sfEvtClosed) {
-                m_isDone = true;
+                _isDone = true;
             } else if ((event.type == sfEventType.sfEvtKeyPressed) && (event.key.code == sfKeyCode.sfKeyF5)) {
                 toggleFullscreen();
             }
@@ -44,33 +44,33 @@ class Window {
     }
 
     void toggleFullscreen() {
-        m_isFullScreen = !m_isFullScreen;
+        _isFullScreen = !_isFullScreen;
         destroy();
         create();
     }
 
 private:
     void setup(const(string) title, const(sfVector2u) size) {
-        m_windowTitle = title;
-        m_windowSize = size;
-        m_isFullScreen = false;
-        m_isDone = false;
+        _windowTitle = title;
+        _windowSize = size;
+        _isFullScreen = false;
+        _isDone = false;
         create();
     }
 
     void destroy() {
-        m_renderWindow.sfRenderWindow_close();
+        _renderWindow.sfRenderWindow_close();
     }
 
     void create() {
-        sfWindowStyle style = m_isFullScreen ? sfWindowStyle.sfFullscreen : sfWindowStyle.sfDefaultStyle;
-        m_renderWindow = sfRenderWindow_create(sfVideoMode(m_windowSize.x, m_windowSize.y, 32), cast(const char*)m_windowTitle, style, null);
+        sfWindowStyle style = _isFullScreen ? sfWindowStyle.sfFullscreen : sfWindowStyle.sfDefaultStyle;
+        _renderWindow = sfRenderWindow_create(sfVideoMode(_windowSize.x, _windowSize.y, 32), cast(const char*)_windowTitle, style, null);
     }
 
-    sfRenderWindow* m_renderWindow;
-    sfVector2u m_windowSize;
-    string m_windowTitle;
-    bool m_isDone;
-    bool m_isFullScreen;
+    sfRenderWindow* _renderWindow;
+    sfVector2u _windowSize;
+    string _windowTitle;
+    bool _isDone;
+    bool _isFullScreen;
 }
 

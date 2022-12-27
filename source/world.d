@@ -10,17 +10,17 @@ import sfmlextensions;
 
 class World {
     this(sfVector2u windowSize, Snake player) {
-        this.m_blockSize = player.size;
-        this.m_windowSize = windowSize;
-        this.m_player = player;
+        this._blockSize = player.size;
+        this._windowSize = windowSize;
+        this._player = player;
 
         initSound();
         initApple();
     }
 
     void respawnApple() {
-        m_item = sfVector2i(uniform(0, m_windowSize.x / m_blockSize), uniform(0, m_windowSize.y / m_blockSize));
-        m_appleShape.sfCircleShape_setPosition(sfVector2f(m_item.x * m_blockSize, m_item.y * m_blockSize));
+        _item = sfVector2i(uniform(0, _windowSize.x / _blockSize), uniform(0, _windowSize.y / _blockSize));
+        _appleShape.sfCircleShape_setPosition(sfVector2f(_item.x * _blockSize, _item.y * _blockSize));
 
         if (!isApplePosValid()) {
             respawnApple();
@@ -28,54 +28,54 @@ class World {
     }
 
     void update() {
-        if (m_player.pos == m_item) {
-            m_player.extend();
-            m_player.incScore();
+        if (_player.pos == _item) {
+            _player.extend();
+            _player.incScore();
             respawnApple();
-            m_scoreSound.sfSound_play();
+            _scoreSound.sfSound_play();
         }
 
-        int gridSizeX = m_windowSize.x / m_blockSize;
-        int gridSizeY = m_windowSize.y / m_blockSize;
+        int gridSizeX = _windowSize.x / _blockSize;
+        int gridSizeY = _windowSize.y / _blockSize;
 
-        if (m_player.pos.x < 0 ||
-            m_player.pos.y < 0 ||
-            m_player.pos.x > gridSizeX - 1 ||
-            m_player.pos.y > gridSizeY - 1) {
-            m_player.lose();
+        if (_player.pos.x < 0 ||
+            _player.pos.y < 0 ||
+            _player.pos.x > gridSizeX - 1 ||
+            _player.pos.y > gridSizeY - 1) {
+            _player.lose();
         }
 
-        if (m_player.lost) {
-            m_snakeDeathSound.sfSound_play();
+        if (_player.lost) {
+            _snakeDeathSound.sfSound_play();
         }
     }
 
     void render(sfRenderWindow* renderWindow) {
         drawCheckerboardPattern(renderWindow);
 
-        renderWindow.draw(m_appleShape);
+        renderWindow.draw(_appleShape);
     }
 
 private:
     void drawCheckerboardPattern(sfRenderWindow* renderWindow) {
         sfRectangleShape* shape = sfRectangleShape_create();
-        shape.sfRectangleShape_setSize(sfVector2f(m_blockSize, m_blockSize));
+        shape.sfRectangleShape_setSize(sfVector2f(_blockSize, _blockSize));
 
         sfColor fillColor;
 
-        for (int x = 0; x < renderWindow.sfRenderWindow_getSize().x; x += m_blockSize) {
-            for (int y = 0; y < renderWindow.sfRenderWindow_getSize().y; y += m_blockSize) {
-                if ((x / m_blockSize) % 2 == 0) {
-                    if ((y / m_blockSize) % 2 == 0) {
-                        fillColor = m_orangeLight;
+        for (int x = 0; x < renderWindow.sfRenderWindow_getSize().x; x += _blockSize) {
+            for (int y = 0; y < renderWindow.sfRenderWindow_getSize().y; y += _blockSize) {
+                if ((x / _blockSize) % 2 == 0) {
+                    if ((y / _blockSize) % 2 == 0) {
+                        fillColor = _orangeLight;
                     } else {
-                        fillColor = m_orangeDark;
+                        fillColor = _orangeDark;
                     }
                 } else {
-                    if ((y / m_blockSize) % 2 != 0) {
-                        fillColor = m_orangeLight;
+                    if ((y / _blockSize) % 2 != 0) {
+                        fillColor = _orangeLight;
                     } else {
-                        fillColor = m_orangeDark;
+                        fillColor = _orangeDark;
                     }
                 }
 
@@ -89,7 +89,7 @@ private:
                     renderWindow.draw(shape);
                 }
 
-                shape.sfRectangleShape_setPosition(sfVector2f(m_blockSize + x, m_blockSize + y));
+                shape.sfRectangleShape_setPosition(sfVector2f(_blockSize + x, _blockSize + y));
 
                 renderWindow.draw(shape);
             }
@@ -99,8 +99,8 @@ private:
     bool isApplePosValid() {
         bool valid = true;
 
-        foreach (SnakeSegment segment; m_player.snakeBody) {
-            if (segment.position.x == m_item.x && segment.position.y == m_item.y) {
+        foreach (SnakeSegment segment; _player.snakeBody) {
+            if (segment.position.x == _item.x && segment.position.y == _item.y) {
                 valid = false;
                 break;
             }
@@ -116,14 +116,14 @@ private:
     }
 
     void initSound() {
-        createSound(m_scoreSoundBuffer, m_scoreSound, Sounds.powerup);
-        createSound(m_snakeDeathSoundBuffer, m_snakeDeathSound, Sounds.death);
+        createSound(_scoreSoundBuffer, _scoreSound, Sounds.powerup);
+        createSound(_snakeDeathSoundBuffer, _snakeDeathSound, Sounds.death);
     }
 
     void initApple() {
-        this.m_appleShape = sfCircleShape_create();
-        m_appleShape.sfCircleShape_setFillColor(sfRed);
-        m_appleShape.sfCircleShape_setRadius(m_blockSize / 2);
+        this._appleShape = sfCircleShape_create();
+        _appleShape.sfCircleShape_setFillColor(sfRed);
+        _appleShape.sfCircleShape_setRadius(_blockSize / 2);
         respawnApple();
     }
 
@@ -131,20 +131,20 @@ private:
         powerup = "powerup.wav", death = "snakedeath.wav"
     }
 
-    sfVector2u m_windowSize;
-    sfVector2i m_item;
-    int m_blockSize;
+    sfVector2u _windowSize;
+    sfVector2i _item;
+    int _blockSize;
 
-    sfCircleShape* m_appleShape;
+    sfCircleShape* _appleShape;
 
-    sfSoundBuffer* m_scoreSoundBuffer;
-    sfSound* m_scoreSound;
+    sfSoundBuffer* _scoreSoundBuffer;
+    sfSound* _scoreSound;
 
-    sfSoundBuffer* m_snakeDeathSoundBuffer;
-    sfSound* m_snakeDeathSound;
+    sfSoundBuffer* _snakeDeathSoundBuffer;
+    sfSound* _snakeDeathSound;
 
-    sfColor m_orangeLight = sfColor(255, 140, 0, 255);
-    sfColor m_orangeDark = sfColor(255, 165, 0, 255);
+    sfColor _orangeLight = sfColor(255, 140, 0, 255);
+    sfColor _orangeDark = sfColor(255, 165, 0, 255);
 
-    Snake m_player;
+    Snake _player;
 }

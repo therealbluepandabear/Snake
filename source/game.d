@@ -15,76 +15,76 @@ import std.random;
 
 class Game {
     this() {
-        this.m_window = new Window("Snake", sfVector2u(600, 600));
+        this._window = new Window("Snake", sfVector2u(600, 600));
 
         _textbox = new Textbox(sfVector2f(24, 24));
 
         setup();
 
-        m_clock = sfClock_create();
-        m_clock.sfClock_restart();
+        _clock = sfClock_create();
+        _clock.sfClock_restart();
     }
 
     Window window() {
-        return m_window;
+        return _window;
     }
 
     void handleInput() {
-        if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyUp) && (m_snake.getDirection() != Direction.down)) {
-            m_snake.dir = Direction.up;
-        } else if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyDown) && (m_snake.getDirection() != Direction.up)) {
-            m_snake.dir = Direction.down;
-        } else if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyLeft) && (m_snake.getDirection() != Direction.right)) {
-            m_snake.dir = Direction.left;
-        } else if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyRight) && (m_snake.getDirection() != Direction.left)) {
-            m_snake.dir = Direction.right;
+        if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyUp) && (_snake.getDirection() != Direction.down)) {
+            _snake.dir = Direction.up;
+        } else if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyDown) && (_snake.getDirection() != Direction.up)) {
+            _snake.dir = Direction.down;
+        } else if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyLeft) && (_snake.getDirection() != Direction.right)) {
+            _snake.dir = Direction.left;
+        } else if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyRight) && (_snake.getDirection() != Direction.left)) {
+            _snake.dir = Direction.right;
         }
     }
 
     void restartClock() {
-        m_elapsed += sfTime_asSeconds(m_clock.sfClock_restart());
+        _elapsed += sfTime_asSeconds(_clock.sfClock_restart());
     }
 
     void update() {
-        if (m_snake.lost) {
+        if (_snake.lost) {
             setup();
         }
 
-        m_window.update();
+        _window.update();
 
-        float timestep = 1.0f / m_snake.speed;
+        float timestep = 1.0f / _snake.speed;
 
-        if (m_elapsed >= timestep) {
-            m_snake.tick();
-            m_world.update();
+        if (_elapsed >= timestep) {
+            _snake.tick();
+            _world.update();
 
-            m_elapsed = 0;
+            _elapsed = 0;
         }
     }
 
     void render() {
         handleInput();
 
-        m_window.beginDraw();
+        _window.beginDraw();
 
-        m_world.render(m_window.renderWindow);
-        m_snake.render(m_window.renderWindow);
-        _textbox.render(m_window.renderWindow, to!string(m_snake.score));
+        _world.render(_window.renderWindow);
+        _snake.render(_window.renderWindow);
+        _textbox.render(_window.renderWindow, to!string(_snake.score));
 
-        m_window.endDraw();
+        _window.endDraw();
     }
 
 private:
     void setup() {
-        this.m_snake = new Snake(24);
-        this.m_world = new World(m_window.renderWindow.sfRenderWindow_getSize(), m_snake);
+        this._snake = new Snake(24);
+        this._world = new World(_window.renderWindow.sfRenderWindow_getSize(), _snake);
     }
 
-    World m_world;
-    Snake m_snake;
-    Window m_window;
-    sfClock* m_clock;
-    float m_elapsed = 0;
+    World _world;
+    Snake _snake;
+    Window _window;
+    sfClock* _clock;
+    float _elapsed = 0;
 
     Textbox _textbox;
 }

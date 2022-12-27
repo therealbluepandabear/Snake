@@ -29,115 +29,115 @@ ref SnakeSegment neck(SnakeContainer container) {
 
 class Snake {
     this(int size) {
-        this.m_size = size;
+        this._size = size;
 
-        m_bodyRect = sfRectangleShape_create();
-        m_bodyRect.sfRectangleShape_setSize(sfVector2f(size, size));
+        _bodyRect = sfRectangleShape_create();
+        _bodyRect.sfRectangleShape_setSize(sfVector2f(size, size));
 
         reset();
     }
 
     int speed() {
-        return m_speed;
+        return _speed;
     }
 
     sfVector2i pos() {
-        return (!(m_snakeBody.length == 0)) ? m_snakeBody.head.position : sfVector2i(1, 1);
+        return (!(_snakeBody.length == 0)) ? _snakeBody.head.position : sfVector2i(1, 1);
     }
 
     SnakeContainer snakeBody() {
-        return m_snakeBody;
+        return _snakeBody;
     }
 
     int score() {
-        return m_score;
+        return _score;
     }
 
     void incScore() {
-        ++m_score;
+        ++_score;
     }
 
     bool lost() {
-        return m_lost;
+        return _lost;
     }
 
     int size() {
-        return m_size;
+        return _size;
     }
 
     void dir(Direction dir) {
-        this.m_dir = dir;
+        this._dir = dir;
     }
 
     void lose() {
-        this.m_lost = true;
+        this._lost = true;
     }
 
     void extend() {
-        if (m_snakeBody.length == 0) {
+        if (_snakeBody.length == 0) {
             return;
         }
 
-        SnakeSegment tailHead = m_snakeBody[m_snakeBody.length - 1];
+        SnakeSegment tailHead = _snakeBody[_snakeBody.length - 1];
 
-        if (m_snakeBody.length > 1) {
-            SnakeSegment tailBone = m_snakeBody[m_snakeBody.length - 2];
+        if (_snakeBody.length > 1) {
+            SnakeSegment tailBone = _snakeBody[_snakeBody.length - 2];
 
             if (tailHead.position.x == tailBone.position.x) {
                 if (tailHead.position.y > tailBone.position.y) {
-                    m_snakeBody ~= SnakeSegment(tailHead.position.x, tailHead.position.y + 1);
+                    _snakeBody ~= SnakeSegment(tailHead.position.x, tailHead.position.y + 1);
                 } else {
-                    m_snakeBody ~= SnakeSegment(tailHead.position.x, tailHead.position.y - 1);
+                    _snakeBody ~= SnakeSegment(tailHead.position.x, tailHead.position.y - 1);
                 }
             } else if (tailHead.position.y == tailBone.position.y) {
                 if (tailHead.position.x > tailBone.position.x) {
-                    m_snakeBody ~= SnakeSegment(tailHead.position.x + 1, tailHead.position.y);
+                    _snakeBody ~= SnakeSegment(tailHead.position.x + 1, tailHead.position.y);
                 } else {
-                    m_snakeBody ~= SnakeSegment(tailHead.position.x - 1, tailHead.position.y);
+                    _snakeBody ~= SnakeSegment(tailHead.position.x - 1, tailHead.position.y);
                 }
             }
         } else {
-            if (m_dir == Direction.up) {
-                m_snakeBody ~= SnakeSegment(tailHead.position.x, tailHead.position.y + 1);
-            } else if (m_dir == Direction.down) {
-                m_snakeBody ~= SnakeSegment(tailHead.position.x, tailHead.position.y - 1);
-            } else if (m_dir == Direction.left) {
-                m_snakeBody ~= SnakeSegment(tailHead.position.x + 1, tailHead.position.y);
-            } else if (m_dir == Direction.right) {
-                m_snakeBody ~= SnakeSegment(tailHead.position.x - 1, tailHead.position.y);
+            if (_dir == Direction.up) {
+                _snakeBody ~= SnakeSegment(tailHead.position.x, tailHead.position.y + 1);
+            } else if (_dir == Direction.down) {
+                _snakeBody ~= SnakeSegment(tailHead.position.x, tailHead.position.y - 1);
+            } else if (_dir == Direction.left) {
+                _snakeBody ~= SnakeSegment(tailHead.position.x + 1, tailHead.position.y);
+            } else if (_dir == Direction.right) {
+                _snakeBody ~= SnakeSegment(tailHead.position.x - 1, tailHead.position.y);
             }
         }
     }
 
     void reset() {
-        m_snakeBody = SnakeContainer.init;
+        _snakeBody = SnakeContainer.init;
 
-        m_snakeBody ~= SnakeSegment(5, 7);
-        m_snakeBody ~= SnakeSegment(5, 6);
-        m_snakeBody ~= SnakeSegment(5, 5);
+        _snakeBody ~= SnakeSegment(5, 7);
+        _snakeBody ~= SnakeSegment(5, 6);
+        _snakeBody ~= SnakeSegment(5, 5);
 
-        this.m_speed = 10;
-        this.m_score = 0;
-        this.m_lost = false;
+        this._speed = 10;
+        this._score = 0;
+        this._lost = false;
     }
 
     void move() {
-        if (m_dir == Direction.none) {
+        if (_dir == Direction.none) {
             return;
         }
 
-        for (int i = cast(int)(m_snakeBody.length - 1); i > 0; --i) {
-            m_snakeBody[i].position = m_snakeBody[i - 1].position;
+        for (int i = cast(int)(_snakeBody.length - 1); i > 0; --i) {
+            _snakeBody[i].position = _snakeBody[i - 1].position;
         }
 
-        if (m_dir == Direction.left) {
-            --m_snakeBody.head.position.x;
-        } else if (m_dir == Direction.right) {
-            ++m_snakeBody.head.position.x;
-        } else if (m_dir == Direction.up) {
-            --m_snakeBody.head.position.y;
-        } else if (m_dir == Direction.down) {
-            ++m_snakeBody.head.position.y;
+        if (_dir == Direction.left) {
+            --_snakeBody.head.position.x;
+        } else if (_dir == Direction.right) {
+            ++_snakeBody.head.position.x;
+        } else if (_dir == Direction.up) {
+            --_snakeBody.head.position.y;
+        } else if (_dir == Direction.down) {
+            ++_snakeBody.head.position.y;
         }
     }
 
@@ -151,30 +151,30 @@ class Snake {
     }
 
     void render(sfRenderWindow* renderWindow) {
-        m_bodyRect.sfRectangleShape_setFillColor(sfBlue);
-        m_bodyRect.sfRectangleShape_setPosition(sfVector2f(m_snakeBody.head.position.x * m_size, m_snakeBody.head.position.y * m_size));
+        _bodyRect.sfRectangleShape_setFillColor(sfBlue);
+        _bodyRect.sfRectangleShape_setPosition(sfVector2f(_snakeBody.head.position.x * _size, _snakeBody.head.position.y * _size));
 
-        renderWindow.draw(m_bodyRect);
+        renderWindow.draw(_bodyRect);
 
-        m_bodyRect.sfRectangleShape_setFillColor(sfColor(173, 216, 230, 255));
+        _bodyRect.sfRectangleShape_setFillColor(sfColor(173, 216, 230, 255));
 
-        for (int i = 1; i < m_snakeBody.length; ++i) {
-            m_bodyRect.sfRectangleShape_setPosition(sfVector2f(m_snakeBody[i].position.x * m_size, m_snakeBody[i].position.y * m_size));
-            renderWindow.draw(m_bodyRect);
+        for (int i = 1; i < _snakeBody.length; ++i) {
+            _bodyRect.sfRectangleShape_setPosition(sfVector2f(_snakeBody[i].position.x * _size, _snakeBody[i].position.y * _size));
+            renderWindow.draw(_bodyRect);
         }
     }
 
     Direction getDirection() {
         Direction dir = Direction.none;
 
-        if (m_snakeBody.head.position.x == m_snakeBody.neck.position.x) {
-            if (m_snakeBody.head.position.y > m_snakeBody.neck.position.y) {
+        if (_snakeBody.head.position.x == _snakeBody.neck.position.x) {
+            if (_snakeBody.head.position.y > _snakeBody.neck.position.y) {
                 dir = Direction.down;
             } else {
                 dir = Direction.up;
             }
-        } else if (m_snakeBody.head.position.y == m_snakeBody.neck.position.y) {
-            if (m_snakeBody.head.position.x > m_snakeBody.neck.position.x) {
+        } else if (_snakeBody.head.position.y == _snakeBody.neck.position.y) {
+            if (_snakeBody.head.position.x > _snakeBody.neck.position.x) {
                 dir = Direction.right;
             } else {
                 dir = Direction.left;
@@ -186,23 +186,23 @@ class Snake {
 
 private:
     void checkCollision() {
-        if (m_snakeBody.length < 5) {
+        if (_snakeBody.length < 5) {
             return;
         }
 
-        for (int i = 1; i < m_snakeBody.length; ++i) {
-            if (m_snakeBody[i].position == m_snakeBody.head.position) {
+        for (int i = 1; i < _snakeBody.length; ++i) {
+            if (_snakeBody[i].position == _snakeBody.head.position) {
                 lose();
                 break;
             }
         }
     }
 
-    SnakeContainer m_snakeBody;
-    int m_size;
-    Direction m_dir = Direction.none;
-    int m_speed;
-    int m_score;
-    bool m_lost;
-    sfRectangleShape* m_bodyRect;
+    SnakeContainer _snakeBody;
+    int _size;
+    Direction _dir = Direction.none;
+    int _speed;
+    int _score;
+    bool _lost;
+    sfRectangleShape* _bodyRect;
 }
