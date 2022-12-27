@@ -12,6 +12,6 @@
 		"SFML_250"
 	],
 	"description": "A minimal D application.",
-	"license": "proprietary",
-	"name": "snake"
+	"license": "GNU General Public License v3.0",
+	"name": "snake",
 }
