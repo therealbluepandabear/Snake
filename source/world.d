@@ -7,6 +7,7 @@ import std.stdio;
 import std.random;
 import std.string;
 import sfmlextensions;
+import food;
 
 class World {
     this(sfVector2u windowSize, int blockSpan, Snake player) {
@@ -16,23 +17,30 @@ class World {
         this._blockSize = cast(float)_windowSize.x / _blockSpan;
 
         initSound();
-        initApple();
+        initFood();
     }
 
-    void respawnApple() {
-        this._item = sfVector2i(uniform(0, _blockSpan), uniform(0, _blockSpan));
-        _appleShape.sfCircleShape_setPosition(sfVector2f(_item.x * _blockSize, _item.y * _blockSize));
+    sfVector2u windowSize() {
+        return _windowSize;
+    }
 
-        if (!isApplePosValid()) {
-            respawnApple();
-        }
+    int blockSpan()  {
+        return _blockSpan;
+    }
+
+    float blockSize()  {
+        return _blockSize;
+    }
+
+    Snake player() {
+        return _player;
     }
 
     void update() {
-        if (_player.pos == _item) {
+        if (_player.pos == _food.position) {
             _player.extend();
             _player.incScore();
-            respawnApple();
+            _food.respawn();
             _scoreSound.sfSound_play();
         }
 
@@ -50,8 +58,7 @@ class World {
 
     void render(sfRenderWindow* renderWindow) {
         drawCheckerboardPattern(renderWindow);
-
-        renderWindow.draw(_appleShape);
+        _food.render(renderWindow);
     }
 
 private:
@@ -91,7 +98,7 @@ private:
         bool valid = true;
 
         foreach (SnakeSegment segment; _player.snakeBody) {
-            if (segment.position.x == _item.x && segment.position.y == _item.y) {
+            if (segment.position.x == _food.position.x && segment.position.y == _food.position.y) {
                 valid = false;
                 break;
             }
@@ -111,23 +118,20 @@ private:
         createSound(_snakeDeathSoundBuffer, _snakeDeathSound, Sounds.death);
     }
 
-    void initApple() {
-        this._appleShape = sfCircleShape_create();
-        _appleShape.sfCircleShape_setFillColor(sfRed);
-        _appleShape.sfCircleShape_setRadius((cast(float)_windowSize.x / _blockSpan) / 2);
-        respawnApple();
+    void initFood() {
+        this._food = new Food(this);
     }
 
     enum Sounds : string {
         powerup = "powerup.wav", death = "snakedeath.wav"
     }
 
+    Food _food;
+
     sfVector2u _windowSize;
-    sfVector2i _item;
+
     int _blockSpan;
     float _blockSize;
-
-    sfCircleShape* _appleShape;
 
     sfSoundBuffer* _scoreSoundBuffer;
     sfSound* _scoreSound;
