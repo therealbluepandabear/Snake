@@ -65,6 +65,8 @@ private:
     void create() {
         sfWindowStyle style = _isFullScreen ? sfWindowStyle.sfFullscreen : sfWindowStyle.sfDefaultStyle;
         this._renderWindow = sfRenderWindow_create(sfVideoMode(_windowSize.x, _windowSize.y, 32), cast(const char*)_windowTitle, style, null);
+        _renderWindow.sfRenderWindow_setVerticalSyncEnabled(true);
+
     }
 
     sfRenderWindow* _renderWindow;
