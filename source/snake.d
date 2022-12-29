@@ -150,14 +150,13 @@ class Snake {
     }
 
     void render(sfRenderWindow* renderWindow) {
-        _bodyRect.sfRectangleShape_setFillColor(sfBlue);
-        _bodyRect.sfRectangleShape_setPosition(sfVector2f(_snakeBody.head.position.x * _size, _snakeBody.head.position.y * _size));
+        for (int i = 0; i < _snakeBody.length; ++i) {
+            if (i == 0) {
+                _bodyRect.sfRectangleShape_setFillColor(sfBlue);
+            } else {
+                _bodyRect.sfRectangleShape_setFillColor(sfColor(173, 216, 230, 255));
+            }
 
-        renderWindow.draw(_bodyRect);
-
-        _bodyRect.sfRectangleShape_setFillColor(sfColor(173, 216, 230, 255));
-
-        for (int i = 1; i < _snakeBody.length; ++i) {
             _bodyRect.sfRectangleShape_setPosition(sfVector2f(_snakeBody[i].position.x * _size, _snakeBody[i].position.y * _size));
             renderWindow.draw(_bodyRect);
         }
