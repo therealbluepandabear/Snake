@@ -36,16 +36,16 @@ class Food {
 
 private:
     bool isFoodPosValid() {
-        bool valid = true;
+        bool isValid = true;
 
         foreach (SnakeSegment segment; _world.player.snakeBody) {
             if (segment.position == _foodShape.sfCircleShape_getPosition().toVector2i()) {
-                valid = false;
+                isValid = false;
                 break;
             }
         }
 
-        return valid;
+        return isValid;
     }
 
     World _world;
