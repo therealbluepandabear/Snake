@@ -98,7 +98,7 @@ private:
         bool valid = true;
 
         foreach (SnakeSegment segment; _player.snakeBody) {
-            if (segment.position.x == _food.position.x && segment.position.y == _food.position.y) {
+            if (segment.position == _food.position) {
                 valid = false;
                 break;
             }

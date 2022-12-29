@@ -5,6 +5,7 @@ import bindbc.sfml;
 import std.random;
 import sfmlextensions;
 import snake;
+import std.stdio;
 
 class Food {
     this(World world) {
@@ -38,7 +39,7 @@ private:
         bool valid = true;
 
         foreach (SnakeSegment segment; _world.player.snakeBody) {
-            if (segment.position.x == _foodShape.sfCircleShape_getPosition.x && segment.position.y == _foodShape.sfCircleShape_getPosition.y) {
+            if (segment.position == _foodShape.sfCircleShape_getPosition().toVector2i()) {
                 valid = false;
                 break;
             }

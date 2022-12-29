@@ -19,3 +19,7 @@ void draw(T)(sfRenderWindow* renderWindow, T obj) {
         renderWindow.sfRenderWindow_drawText(cast(sfText*)obj, null);
     }
 }
+
+sfVector2i toVector2i(sfVector2f vector) {
+    return sfVector2i(cast(int)vector.x, cast(int)vector.y);
+}
