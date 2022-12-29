@@ -28,7 +28,7 @@ ref SnakeSegment neck(SnakeContainer container) {
 }
 
 class Snake {
-    this(int size) {
+    this(float size) {
         this._size = size;
 
         this._bodyRect = sfRectangleShape_create();
@@ -61,7 +61,7 @@ class Snake {
         return _lost;
     }
 
-    int size() {
+    float size() {
         return _size;
     }
 
@@ -114,7 +114,6 @@ class Snake {
 
         _snakeBody ~= SnakeSegment(0, 0);
         _snakeBody ~= SnakeSegment(0, 1);
-        //_snakeBody ~= SnakeSegment(5, 5);
 
         this._speed = 10;
         this._score = 0;
@@ -199,7 +198,7 @@ private:
     }
 
     SnakeContainer _snakeBody;
-    int _size;
+    float _size;
     Direction _dir = Direction.none;
     int _speed;
     int _score;

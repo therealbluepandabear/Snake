@@ -16,7 +16,6 @@ import std.random;
 class Game {
     this() {
         this._window = new Window("Snake", sfVector2u(600, 600));
-
         this._textbox = new Textbox(sfVector2f(24, 24));
 
         setup();
@@ -76,8 +75,11 @@ class Game {
 
 private:
     void setup() {
-        this._snake = new Snake(24);
-        this._world = new World(_window.renderWindow.sfRenderWindow_getSize(), _snake);
+        int blockSpan = 20;
+        float dim = cast(float)(_window.renderWindow.sfRenderWindow_getSize().x);
+
+        this._snake = new Snake(dim / blockSpan);
+        this._world = new World(_window.renderWindow.sfRenderWindow_getSize(), blockSpan, _snake);
     }
 
     World _world;

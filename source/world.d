@@ -9,17 +9,18 @@ import std.string;
 import sfmlextensions;
 
 class World {
-    this(sfVector2u windowSize, Snake player) {
-        this._blockSize = player.size;
+    this(sfVector2u windowSize, int blockSpan, Snake player) {
+        this._blockSpan = blockSpan;
         this._windowSize = windowSize;
         this._player = player;
+        this._blockSize = cast(float)_windowSize.x / _blockSpan;
 
         initSound();
         initApple();
     }
 
     void respawnApple() {
-        this._item = sfVector2i(uniform(0, _windowSize.x / _blockSize), uniform(0, _windowSize.y / _blockSize));
+        this._item = sfVector2i(uniform(0, _blockSpan), uniform(0, _blockSpan));
         _appleShape.sfCircleShape_setPosition(sfVector2f(_item.x * _blockSize, _item.y * _blockSize));
 
         if (!isApplePosValid()) {
@@ -35,13 +36,10 @@ class World {
             _scoreSound.sfSound_play();
         }
 
-        int gridSizeX = _windowSize.x / _blockSize;
-        int gridSizeY = _windowSize.y / _blockSize;
-
         if (_player.pos.x < 0 ||
             _player.pos.y < 0 ||
-            _player.pos.x > gridSizeX - 1 ||
-            _player.pos.y > gridSizeY - 1) {
+            _player.pos.x > _blockSpan - 1 ||
+            _player.pos.y > _blockSpan - 1) {
             _player.lose();
         }
 
@@ -61,18 +59,20 @@ private:
         sfRectangleShape* shape = sfRectangleShape_create();
         shape.sfRectangleShape_setSize(sfVector2f(_blockSize, _blockSize));
 
+        float dim = shape.sfRectangleShape_getSize().x;
+
         sfColor fillColor;
 
-        for (int x = 0; x < renderWindow.sfRenderWindow_getSize().x; x += _blockSize) {
-            for (int y = 0; y < renderWindow.sfRenderWindow_getSize().y; y += _blockSize) {
-                if ((x / _blockSize) % 2 == 0) {
-                    if ((y / _blockSize) % 2 == 0) {
+        for (float x = 0; x < _blockSpan; ++x) {
+            for (float y = 0; y < _blockSpan; ++y) {
+                if (x % 2 == 0) {
+                    if (y % 2 == 0) {
                         fillColor = _orangeLight;
                     } else {
                         fillColor = _orangeDark;
                     }
                 } else {
-                    if ((y / _blockSize) % 2 != 0) {
+                    if (y % 2 != 0) {
                         fillColor = _orangeLight;
                     } else {
                         fillColor = _orangeDark;
@@ -80,16 +80,7 @@ private:
                 }
 
                 shape.sfRectangleShape_setFillColor(fillColor);
-
-                if (y == 0) {
-                    shape.sfRectangleShape_setPosition(sfVector2f(x, 0));
-                    renderWindow.draw(shape);
-                } else if (x == 0) {
-                    shape.sfRectangleShape_setPosition(sfVector2f(0, y));
-                    renderWindow.draw(shape);
-                }
-
-                shape.sfRectangleShape_setPosition(sfVector2f(_blockSize + x, _blockSize + y));
+                shape.sfRectangleShape_setPosition(sfVector2f(dim * x, dim * y));
 
                 renderWindow.draw(shape);
             }
@@ -123,7 +114,7 @@ private:
     void initApple() {
         this._appleShape = sfCircleShape_create();
         _appleShape.sfCircleShape_setFillColor(sfRed);
-        _appleShape.sfCircleShape_setRadius(_blockSize / 2);
+        _appleShape.sfCircleShape_setRadius((cast(float)_windowSize.x / _blockSpan) / 2);
         respawnApple();
     }
 
@@ -133,7 +124,8 @@ private:
 
     sfVector2u _windowSize;
     sfVector2i _item;
-    int _blockSize;
+    int _blockSpan;
+    float _blockSize;
 
     sfCircleShape* _appleShape;
 
