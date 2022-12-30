@@ -37,17 +37,17 @@ class World {
     }
 
     void update() {
-        if (_player.pos == _food.position) {
+        if (_player.position == _food.position) {
             _player.extend();
             _player.incScore();
             _food.respawn();
             _scoreSound.sfSound_play();
         }
 
-        if (_player.pos.x < 0 ||
-            _player.pos.y < 0 ||
-            _player.pos.x > _blockSpan - 1 ||
-            _player.pos.y > _blockSpan - 1) {
+        if (_player.position.x < 0 ||
+            _player.position.y < 0 ||
+            _player.position.x > _blockSpan - 1 ||
+            _player.position.y > _blockSpan - 1) {
             _player.lose();
         }
 
@@ -126,8 +126,6 @@ private:
         powerup = "powerup.wav", death = "snakedeath.wav"
     }
 
-    Food _food;
-
     sfVector2u _windowSize;
 
     int _blockSpan;
@@ -143,4 +141,5 @@ private:
     sfColor _orangeDark = sfColor(255, 165, 0, 255);
 
     Snake _player;
+    Food _food;
 }

@@ -41,7 +41,7 @@ class Snake {
         return _speed;
     }
 
-    sfVector2i pos() {
+    sfVector2i position() {
         return (!(_snakeBody.length == 0)) ? _snakeBody.head.position : sfVector2i(1, 1);
     }
 
