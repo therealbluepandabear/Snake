@@ -4,6 +4,8 @@ import bindbc.sfml;
 import std.algorithm;
 import std.stdio;
 import sfmlextensions;
+import std.algorithm;
+import std.string;
 
 struct SnakeSegment {
     this(int x, int y) {
@@ -27,12 +29,28 @@ ref SnakeSegment neck(SnakeContainer container) {
     return container[1];
 }
 
+bool isEdgeSegment(SnakeContainer container, SnakeSegment snakeSegment) {
+    long indx = container.countUntil(snakeSegment);
+
+    return (indx > 0 && indx < (container.length - 1) &&
+           ((snakeSegment.position.x == container[indx - 1].position.x && snakeSegment.position.y == container[indx + 1].position.y) ||
+           (snakeSegment.position.y == container[indx - 1].position.y && snakeSegment.position.x == container[indx + 1].position.x)));
+}
+
 class Snake {
     this(float size) {
         this._size = size;
 
-        this._bodyRect = sfRectangleShape_create();
-        _bodyRect.sfRectangleShape_setSize(sfVector2f(size, size));
+        createSprite(_snakeHeadUpSprite, _snakeHeadUpTexture, "snake_head_up.png");
+        createSprite(_snakeHeadDownSprite, _snakeHeadDownTexture, "snake_head_down.png");
+        createSprite(_snakeHeadLeftSprite, _snakeHeadLeftTexture, "snake_head_left.png");
+        createSprite(_snakeHeadRightSprite, _snakeHeadRightTexture, "snake_head_right.png");
+        createSprite(_snakeBodySprite1, _snakeBodyTexture1, "snake_body_1.png");
+        createSprite(_snakeBodySprite2, _snakeBodyTexture2, "snake_body_2.png");
+        createSprite(_snakeEdgeNESprite, _snakeEdgeNETexture, "snake_edge_ne.png");
+        createSprite(_snakeEdgeNWSprite, _snakeEdgeNWTexture, "snake_edge_nw.png");
+        createSprite(_snakeEdgeSESprite, _snakeEdgeSETexture, "snake_edge_se.png");
+        createSprite(_snakeEdgeSWSprite, _snakeEdgeSWTexture, "snake_edge_sw.png");
 
         reset();
     }
@@ -115,7 +133,7 @@ class Snake {
         _snakeBody ~= SnakeSegment(0, 0);
         _snakeBody ~= SnakeSegment(0, 1);
 
-        this._speed = 10;
+        this._speed = 4;
         this._score = 0;
         this._lost = false;
     }
@@ -150,15 +168,41 @@ class Snake {
     }
 
     void render(sfRenderWindow* renderWindow) {
-        for (int i = 0; i < _snakeBody.length; ++i) {
-            if (i == 0) {
-                _bodyRect.sfRectangleShape_setFillColor(sfBlue);
+        foreach (indx, snakeSegment; _snakeBody) {
+            sfSprite* sprite;
+
+            if (indx == 0) {
+                if (getDirection() == Direction.up || getDirection() == Direction.none) {
+                    sprite = _snakeHeadUpSprite;
+                } else if (getDirection() == Direction.down) {
+                    sprite = _snakeHeadDownSprite;
+                } else if (getDirection() == Direction.left) {
+                    sprite = _snakeHeadLeftSprite;
+                } else if (getDirection() == Direction.right) {
+                    sprite = _snakeHeadRightSprite;
+                }
+            } else if (_snakeBody.isEdgeSegment(snakeSegment)) {
+                if ((_snakeBody[indx - 1].position.x < snakeSegment.position.x || _snakeBody[indx + 1].position.x < snakeSegment.position.x) &&
+                    (_snakeBody[indx + 1].position.y > snakeSegment.position.y || _snakeBody[indx - 1].position.y > snakeSegment.position.y)) {
+                    sprite = _snakeEdgeNESprite;
+                } else if ((_snakeBody[indx - 1].position.x > snakeSegment.position.x || _snakeBody[indx + 1].position.x > snakeSegment.position.x) &&
+                          (_snakeBody[indx + 1].position.y > snakeSegment.position.y || _snakeBody[indx - 1].position.y > snakeSegment.position.y)) {
+                    sprite = _snakeEdgeNWSprite;
+                } else if ((_snakeBody[indx - 1].position.x < snakeSegment.position.x || _snakeBody[indx + 1].position.x < snakeSegment.position.x) &&
+                    (_snakeBody[indx + 1].position.y < snakeSegment.position.y || _snakeBody[indx - 1].position.y < snakeSegment.position.y)) {
+                    sprite = _snakeEdgeSESprite;
+                } else if ((_snakeBody[indx - 1].position.x > snakeSegment.position.x || _snakeBody[indx + 1].position.x > snakeSegment.position.x) &&
+                    (_snakeBody[indx + 1].position.y < snakeSegment.position.y || _snakeBody[indx - 1].position.y < snakeSegment.position.y)) {
+                    sprite = _snakeEdgeSWSprite;
+                }
+            } else if (indx % 2 == 0) {
+                sprite = _snakeBodySprite2;
             } else {
-                _bodyRect.sfRectangleShape_setFillColor(sfColor(173, 216, 230, 255));
+                sprite = _snakeBodySprite1;
             }
 
-            _bodyRect.sfRectangleShape_setPosition(sfVector2f(_snakeBody[i].position.x * _size, _snakeBody[i].position.y * _size));
-            renderWindow.draw(_bodyRect);
+            sprite.sfSprite_setPosition(sfVector2f(snakeSegment.position.x * _size, snakeSegment.position.y * _size));
+            renderWindow.draw(sprite);
         }
     }
 
@@ -196,11 +240,37 @@ private:
         }
     }
 
+    void createSprite(ref sfSprite* sprite, ref sfTexture* texture, string src) {
+        texture = sfTexture_createFromFile(toStringz(src), null);
+        sprite = sfSprite_create();
+        sprite.sfSprite_setTexture(texture, 0);
+        sprite.sizeToBounds(texture, sfVector2f(size, size));
+    }
+
     SnakeContainer _snakeBody;
     float _size;
     Direction _dir = Direction.none;
     int _speed;
     int _score;
     bool _lost;
-    sfRectangleShape* _bodyRect;
+    sfTexture* _snakeHeadUpTexture;
+    sfSprite* _snakeHeadUpSprite;
+    sfTexture* _snakeHeadDownTexture;
+    sfSprite* _snakeHeadDownSprite;
+    sfTexture* _snakeHeadLeftTexture;
+    sfSprite* _snakeHeadLeftSprite;
+    sfTexture* _snakeHeadRightTexture;
+    sfSprite* _snakeHeadRightSprite;
+    sfTexture* _snakeBodyTexture1;
+    sfSprite* _snakeBodySprite1;
+    sfTexture* _snakeBodyTexture2;
+    sfSprite* _snakeBodySprite2;
+    sfTexture* _snakeEdgeNETexture;
+    sfSprite* _snakeEdgeNESprite;
+    sfTexture* _snakeEdgeNWTexture;
+    sfSprite* _snakeEdgeNWSprite;
+    sfTexture* _snakeEdgeSETexture;
+    sfSprite* _snakeEdgeSESprite;
+    sfTexture* _snakeEdgeSWTexture;
+    sfSprite* _snakeEdgeSWSprite;
 }

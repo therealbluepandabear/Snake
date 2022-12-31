@@ -52,12 +52,14 @@ class Game {
         _window.update();
 
         float timestep = 1.0f / _snake.speed;
+        float div = 10;
+        float transitionTimestep = timestep / div;
 
         if (_elapsed >= timestep) {
             _snake.tick();
             _world.update();
 
-            this._elapsed = 0;
+            this._elapsed -= timestep;
         }
     }
 
@@ -75,7 +77,7 @@ class Game {
 
 private:
     void setup() {
-        int blockSpan = 20;
+        int blockSpan = 10;
         float dim = cast(float)(_window.renderWindow.sfRenderWindow_getSize().x);
 
         this._snake = new Snake(dim / blockSpan);
@@ -87,6 +89,5 @@ private:
     Window _window;
     sfClock* _clock;
     float _elapsed = 0;
-
     Textbox _textbox;
 }
