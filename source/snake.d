@@ -19,6 +19,10 @@ enum Direction {
     none, up, down, left, right
 }
 
+enum EdgeDirection {
+    north_east, north_west, south_east, south_west, none
+}
+
 alias SnakeContainer = SnakeSegment[];
 
 ref SnakeSegment head(SnakeContainer container) {
@@ -36,6 +40,28 @@ bool isEdgeSegment(SnakeContainer container, SnakeSegment snakeSegment) {
            ((snakeSegment.position.x == container[indx - 1].position.x && snakeSegment.position.y == container[indx + 1].position.y) ||
            (snakeSegment.position.y == container[indx - 1].position.y && snakeSegment.position.x == container[indx + 1].position.x)));
 }
+
+EdgeDirection getEdgeDirection(SnakeContainer container, SnakeSegment snakeSegment) {
+    EdgeDirection edgeDirection;
+    long indx = container.countUntil(snakeSegment);
+
+    if ((container[indx - 1].position.x < snakeSegment.position.x || container[indx + 1].position.x < snakeSegment.position.x) &&
+        (container[indx + 1].position.y > snakeSegment.position.y || container[indx - 1].position.y > snakeSegment.position.y)) {
+        edgeDirection = EdgeDirection.north_east;
+    } else if ((container[indx - 1].position.x > snakeSegment.position.x || container[indx + 1].position.x > snakeSegment.position.x) &&
+        (container[indx + 1].position.y > snakeSegment.position.y || container[indx - 1].position.y > snakeSegment.position.y)) {
+        edgeDirection = EdgeDirection.north_west;
+    } else if ((container[indx - 1].position.x < snakeSegment.position.x || container[indx + 1].position.x < snakeSegment.position.x) &&
+        (container[indx + 1].position.y < snakeSegment.position.y || container[indx - 1].position.y < snakeSegment.position.y)) {
+        edgeDirection = EdgeDirection.south_east;
+    } else if ((container[indx - 1].position.x > snakeSegment.position.x || container[indx + 1].position.x > snakeSegment.position.x) &&
+        (container[indx + 1].position.y < snakeSegment.position.y || container[indx - 1].position.y < snakeSegment.position.y)) {
+        edgeDirection = EdgeDirection.south_west;
+    }
+
+    return edgeDirection;
+}
+
 
 class Snake {
     this(float size) {
@@ -182,17 +208,16 @@ class Snake {
                     sprite = _snakeHeadRightSprite;
                 }
             } else if (_snakeBody.isEdgeSegment(snakeSegment)) {
-                if ((_snakeBody[indx - 1].position.x < snakeSegment.position.x || _snakeBody[indx + 1].position.x < snakeSegment.position.x) &&
-                    (_snakeBody[indx + 1].position.y > snakeSegment.position.y || _snakeBody[indx - 1].position.y > snakeSegment.position.y)) {
+                EdgeDirection edgeDirection = _snakeBody.getEdgeDirection(snakeSegment);
+                writeln(edgeDirection); stdout.flush();
+
+                if (edgeDirection == EdgeDirection.north_east) {
                     sprite = _snakeEdgeNESprite;
-                } else if ((_snakeBody[indx - 1].position.x > snakeSegment.position.x || _snakeBody[indx + 1].position.x > snakeSegment.position.x) &&
-                          (_snakeBody[indx + 1].position.y > snakeSegment.position.y || _snakeBody[indx - 1].position.y > snakeSegment.position.y)) {
+                } else if (edgeDirection == EdgeDirection.north_west) {
                     sprite = _snakeEdgeNWSprite;
-                } else if ((_snakeBody[indx - 1].position.x < snakeSegment.position.x || _snakeBody[indx + 1].position.x < snakeSegment.position.x) &&
-                    (_snakeBody[indx + 1].position.y < snakeSegment.position.y || _snakeBody[indx - 1].position.y < snakeSegment.position.y)) {
+                } else if (edgeDirection == EdgeDirection.south_east) {
                     sprite = _snakeEdgeSESprite;
-                } else if ((_snakeBody[indx - 1].position.x > snakeSegment.position.x || _snakeBody[indx + 1].position.x > snakeSegment.position.x) &&
-                    (_snakeBody[indx + 1].position.y < snakeSegment.position.y || _snakeBody[indx - 1].position.y < snakeSegment.position.y)) {
+                } else if (edgeDirection == EdgeDirection.south_west) {
                     sprite = _snakeEdgeSWSprite;
                 }
             } else if (indx % 2 == 0) {
