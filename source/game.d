@@ -29,13 +29,13 @@ class Game {
     }
 
     void handleInput() {
-        if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyUp) && (_snake.getDirection() != Direction.down)) {
+        if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyUp) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyW))  && (_snake.getDirection() != Direction.down)) {
             _snake.dir = Direction.up;
-        } else if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyDown) && (_snake.getDirection() != Direction.up)) {
+        } else if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyDown) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyS)) && (_snake.getDirection() != Direction.up)) {
             _snake.dir = Direction.down;
-        } else if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyLeft) && (_snake.getDirection() != Direction.right)) {
+        } else if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyLeft) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyA))  && (_snake.getDirection() != Direction.right)) {
             _snake.dir = Direction.left;
-        } else if (sfKeyboard_isKeyPressed(sfKeyCode.sfKeyRight) && (_snake.getDirection() != Direction.left)) {
+        } else if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyRight) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyD)) && (_snake.getDirection() != Direction.left)) {
             _snake.dir = Direction.right;
         }
     }
