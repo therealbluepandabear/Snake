@@ -9,7 +9,7 @@ import sfmlextensions;
 
 class Textbox {
     this(sfVector2f pos) {
-        this._text = sfText_create();
+        _text = sfText_create();
         _text.sfText_setFont(sfFont_createFromFile("nunito_black.ttf"));
         _text.sfText_setCharacterSize(24);
         _text.sfText_setColor(sfWhite);

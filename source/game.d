@@ -15,12 +15,12 @@ import std.random;
 
 class Game {
     this() {
-        this._window = new Window("Snake", sfVector2u(600, 600));
-        this._textbox = new Textbox(sfVector2f(24, 24));
+        _window = new Window("Snake", sfVector2u(600, 600));
+        _textbox = new Textbox(sfVector2f(24, 24));
 
         setup();
 
-        this._clock = sfClock_create();
+        _clock = sfClock_create();
         _clock.sfClock_restart();
     }
 
@@ -59,7 +59,7 @@ class Game {
             _snake.tick();
             _world.update();
 
-            this._elapsed -= timestep;
+            _elapsed -= timestep;
         }
     }
 
@@ -77,11 +77,11 @@ class Game {
 
 private:
     void setup() {
-        int blockSpan = 20;
+        int blockSpan = 3;
         float dim = cast(float)(_window.renderWindow.sfRenderWindow_getSize().x);
 
-        this._snake = new Snake(dim / blockSpan);
-        this._world = new World(_window.renderWindow.sfRenderWindow_getSize(), blockSpan, _snake);
+        _snake = new Snake(dim / blockSpan);
+        _world = new World(_window.renderWindow.sfRenderWindow_getSize(), blockSpan, _snake);
     }
 
     World _world;

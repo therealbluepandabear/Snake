@@ -63,7 +63,7 @@ EdgeDirection getEdgeDirection(SnakeContainer container, SnakeSegment snakeSegme
 
 class Snake {
     this(float size) {
-        this._size = size;
+        _size = size;
 
         createSprite(_snakeHeadUpSprite, _snakeHeadUpTexture, "snake_head_up.png");
         createSprite(_snakeHeadDownSprite, _snakeHeadDownTexture, "snake_head_down.png");
@@ -108,11 +108,11 @@ class Snake {
     }
 
     void dir(Direction dir) {
-        this._dir = dir;
+        _dir = dir;
     }
 
     void lose() {
-        this._lost = true;
+        _lost = true;
     }
 
     void extend() {
@@ -152,14 +152,14 @@ class Snake {
     }
 
     void reset() {
-        this._snakeBody = SnakeContainer.init;
+        _snakeBody = SnakeContainer.init;
 
         _snakeBody ~= SnakeSegment(0, 0);
         _snakeBody ~= SnakeSegment(0, 1);
 
-        this._speed = 6;
-        this._score = 0;
-        this._lost = false;
+        _speed = 2;
+        _score = 0;
+        _lost = false;
     }
 
     void move() {

@@ -11,10 +11,10 @@ import food;
 
 class World {
     this(sfVector2u windowSize, int blockSpan, Snake player) {
-        this._blockSpan = blockSpan;
-        this._windowSize = windowSize;
-        this._player = player;
-        this._blockSize = cast(float)_windowSize.x / _blockSpan;
+        _blockSpan = blockSpan;
+        _windowSize = windowSize;
+        _player = player;
+        _blockSize = cast(float)_windowSize.x / _blockSpan;
 
         initSound();
         initFood();
@@ -119,7 +119,7 @@ private:
     }
 
     void initFood() {
-        this._food = new Food(this);
+        _food = new Food(this);
     }
 
     enum Sounds : string {

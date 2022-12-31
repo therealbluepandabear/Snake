@@ -44,17 +44,17 @@ class Window {
     }
 
     void toggleFullscreen() {
-        this._isFullScreen = !_isFullScreen;
+        _isFullScreen = !_isFullScreen;
         destroy();
         create();
     }
 
 private:
     void setup(string title, sfVector2u size) {
-        this._windowTitle = title;
-        this._windowSize = size;
-        this._isFullScreen = false;
-        this._isDone = false;
+        _windowTitle = title;
+        _windowSize = size;
+        _isFullScreen = false;
+        _isDone = false;
         create();
     }
 
@@ -64,7 +64,7 @@ private:
 
     void create() {
         sfWindowStyle style = _isFullScreen ? sfWindowStyle.sfFullscreen : sfWindowStyle.sfDefaultStyle;
-        this._renderWindow = sfRenderWindow_create(sfVideoMode(_windowSize.x, _windowSize.y, 32), cast(const char*)_windowTitle, style, null);
+        _renderWindow = sfRenderWindow_create(sfVideoMode(_windowSize.x, _windowSize.y, 32), cast(const char*)_windowTitle, style, null);
 
     }
 
