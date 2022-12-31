@@ -10,10 +10,10 @@ import std.stdio;
 class Food {
     this(World world) {
         this._world = world;
-        this._foodShape = sfCircleShape_create();
-
-        _foodShape.sfCircleShape_setFillColor(sfRed);
-        _foodShape.sfCircleShape_setRadius((cast(float)world.windowSize.x / world.blockSpan) / 2);
+        this._appleTexture = sfTexture_createFromFile("apple.png", null);
+        this._appleSprite = sfSprite_create();
+        _appleSprite.sfSprite_setTexture(_appleTexture, 0);
+        _appleSprite.sizeToBounds(_appleTexture, sfVector2f_splat(cast(float)(world.windowSize.x / world.blockSpan)));
         respawn();
     }
 
@@ -23,7 +23,7 @@ class Food {
 
     void respawn() {
         this._position = sfVector2i(uniform(0, _world.blockSpan), uniform(0, _world.blockSpan));
-        _foodShape.sfCircleShape_setPosition(sfVector2f(_position.x * _world.blockSize, _position.y * _world.blockSize));
+        _appleSprite.sfSprite_setPosition(sfVector2f(_position.x * _world.blockSize, _position.y * _world.blockSize));
 
         if (!isFoodPosValid()) {
             respawn();
@@ -31,7 +31,7 @@ class Food {
     }
 
     void render(sfRenderWindow* renderWindow) {
-        renderWindow.draw(_foodShape);
+        renderWindow.draw(_appleSprite);
     }
 
 private:
@@ -39,7 +39,7 @@ private:
         bool isValid = true;
 
         foreach (SnakeSegment segment; _world.player.snakeBody) {
-            if (segment.position == _foodShape.sfCircleShape_getPosition().toVector2i()) {
+            if (segment.position == _appleSprite.sfSprite_getPosition().toVector2i()) {
                 isValid = false;
                 break;
             }
@@ -49,6 +49,7 @@ private:
     }
 
     World _world;
-    sfCircleShape* _foodShape;
     sfVector2i _position;
+    sfTexture* _appleTexture;
+    sfSprite* _appleSprite;
 }

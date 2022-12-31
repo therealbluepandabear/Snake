@@ -26,6 +26,10 @@ sfVector2i toVector2i(sfVector2f vector) {
     return sfVector2i(cast(int)vector.x, cast(int)vector.y);
 }
 
+sfVector2f sfVector2f_splat(float size) {
+    return sfVector2f(size, size);
+}
+
 void sizeToBounds(sfSprite* sprite, sfTexture* texture, sfVector2f bounds) {
     sprite.sfSprite_setScale(sfVector2f(bounds.x / texture.sfTexture_getSize().x, bounds.y / texture.sfTexture_getSize().y));
 }

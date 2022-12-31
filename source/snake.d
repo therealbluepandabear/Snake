@@ -157,7 +157,7 @@ class Snake {
         _snakeBody ~= SnakeSegment(0, 0);
         _snakeBody ~= SnakeSegment(0, 1);
 
-        this._speed = 4;
+        this._speed = 6;
         this._score = 0;
         this._lost = false;
     }

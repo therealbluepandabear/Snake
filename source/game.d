@@ -77,7 +77,7 @@ class Game {
 
 private:
     void setup() {
-        int blockSpan = 10;
+        int blockSpan = 20;
         float dim = cast(float)(_window.renderWindow.sfRenderWindow_getSize().x);
 
         this._snake = new Snake(dim / blockSpan);
