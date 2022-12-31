@@ -1,7 +1,7 @@
 # Snake
 
-![image](https://user-images.githubusercontent.com/50536495/209489514-bf61ca83-b3f6-47f1-b2bc-b21225ab12c8.png)
+![image](https://user-images.githubusercontent.com/50536495/210126699-1eb651d0-0b2a-4f1c-b0bc-e2ce35af76b2.png)
 
 Snake game written using SFML D bindings.
 
-Sounds licensed under CC BY (https://creativecommons.org/licenses/by/4.0/).
+Sounds and images are licensed under CC BY (https://creativecommons.org/licenses/by/4.0/).
