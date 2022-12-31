@@ -55,8 +55,6 @@ EdgeDirection getEdgeDirection(SnakeContainer container, SnakeSegment snakeSegme
     } else if ((container[indx - 1].position.x > snakeSegment.position.x || container[indx + 1].position.x > snakeSegment.position.x) &&
         (container[indx + 1].position.y < snakeSegment.position.y || container[indx - 1].position.y < snakeSegment.position.y)) {
         edgeDirection = EdgeDirection.south_west;
-    } else {
-        edgeDirection = EdgeDirection.none;
     }
 
     return edgeDirection;
@@ -209,7 +207,6 @@ class Snake {
                 }
             } else if (_snakeBody.getEdgeDirection(snakeSegment) != EdgeDirection.none) {
                 EdgeDirection edgeDirection = _snakeBody.getEdgeDirection(snakeSegment);
-                writeln(edgeDirection); stdout.flush();
 
                 if (edgeDirection == EdgeDirection.north_east) {
                     sprite = _snakeEdgeNESprite;
