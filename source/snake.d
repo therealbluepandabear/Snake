@@ -33,17 +33,15 @@ ref SnakeSegment neck(SnakeContainer container) {
     return container[1];
 }
 
-bool isEdgeSegment(SnakeContainer container, SnakeSegment snakeSegment) {
-    long indx = container.countUntil(snakeSegment);
-
-    return (indx > 0 && indx < (container.length - 1) &&
-           ((snakeSegment.position.x == container[indx - 1].position.x && snakeSegment.position.y == container[indx + 1].position.y) ||
-           (snakeSegment.position.y == container[indx - 1].position.y && snakeSegment.position.x == container[indx + 1].position.x)));
-}
-
 EdgeDirection getEdgeDirection(SnakeContainer container, SnakeSegment snakeSegment) {
     EdgeDirection edgeDirection;
     long indx = container.countUntil(snakeSegment);
+
+    if (!(indx > 0 && indx < (container.length - 1) &&
+        ((snakeSegment.position.x == container[indx - 1].position.x && snakeSegment.position.y == container[indx + 1].position.y) ||
+        (snakeSegment.position.y == container[indx - 1].position.y && snakeSegment.position.x == container[indx + 1].position.x)))) {
+        return EdgeDirection.none;
+    }
 
     if ((container[indx - 1].position.x < snakeSegment.position.x || container[indx + 1].position.x < snakeSegment.position.x) &&
         (container[indx + 1].position.y > snakeSegment.position.y || container[indx - 1].position.y > snakeSegment.position.y)) {
@@ -57,6 +55,8 @@ EdgeDirection getEdgeDirection(SnakeContainer container, SnakeSegment snakeSegme
     } else if ((container[indx - 1].position.x > snakeSegment.position.x || container[indx + 1].position.x > snakeSegment.position.x) &&
         (container[indx + 1].position.y < snakeSegment.position.y || container[indx - 1].position.y < snakeSegment.position.y)) {
         edgeDirection = EdgeDirection.south_west;
+    } else {
+        edgeDirection = EdgeDirection.none;
     }
 
     return edgeDirection;
@@ -207,7 +207,7 @@ class Snake {
                 } else if (getDirection() == Direction.right) {
                     sprite = _snakeHeadRightSprite;
                 }
-            } else if (_snakeBody.isEdgeSegment(snakeSegment)) {
+            } else if (_snakeBody.getEdgeDirection(snakeSegment) != EdgeDirection.none) {
                 EdgeDirection edgeDirection = _snakeBody.getEdgeDirection(snakeSegment);
                 writeln(edgeDirection); stdout.flush();
 
