@@ -18,20 +18,20 @@ class BottomPanel {
         _rect.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, height));
         _rect.sfRectangleShape_setPosition(sfVector2f(0, renderWindow.sfRenderWindow_getSize().y - height));
 
-        sfVector2f spriteSize = sfVector2f_splat(50);
+        sfVector2f spriteSize = sfVector2fExt_splat(50);
         float spritePosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - spriteSize.y) / 2);
         int margin = 24;
 
         _highScoreTexture = sfTexture_createFromFile("trophy.png", null);
         _highScoreSprite = sfSprite_create();
         _highScoreSprite.sfSprite_setTexture(_highScoreTexture, 0);
-        _highScoreSprite.sizeToBounds(_highScoreTexture, spriteSize);
+        _highScoreSprite.sfSpriteExt_sizeToBounds(_highScoreTexture, spriteSize);
         _highScoreSprite.sfSprite_setPosition(sfVector2f(margin * 9, spritePosY));
 
         _scoreTexture = sfTexture_createFromFile("apple.png", null);
         _scoreSprite = sfSprite_create();
         _scoreSprite.sfSprite_setTexture(_scoreTexture, 0);
-        _scoreSprite.sizeToBounds(_scoreTexture, spriteSize);
+        _scoreSprite.sfSpriteExt_sizeToBounds(_scoreTexture, spriteSize);
         _scoreSprite.sfSprite_setPosition(sfVector2f(margin, spritePosY));
 
         float txtPosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - 24) / 2);
@@ -41,9 +41,9 @@ class BottomPanel {
     }
 
     void render() {
-        _renderWindow.draw(_rect);
-        _renderWindow.draw(_highScoreSprite);
-        _renderWindow.draw(_scoreSprite);
+        _renderWindow.sfRenderWindowExt_draw(_rect);
+        _renderWindow.sfRenderWindowExt_draw(_highScoreSprite);
+        _renderWindow.sfRenderWindowExt_draw(_scoreSprite);
 
         _scoreTextbox.render(_renderWindow, to!string(_gameStatistics._score()));
         _highScoreTextbox.render(_renderWindow, to!string(_gameStatistics._highScore()));

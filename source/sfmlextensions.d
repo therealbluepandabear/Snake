@@ -8,7 +8,7 @@ private bool isDrawable(T)(T obj) {
     return (is(T == sfCircleShape*) || is(T == sfRectangleShape*) || is(T == sfText*) || is(T == sfSprite*));
 }
 
-void draw(T)(sfRenderWindow* renderWindow, T obj) {
+void sfRenderWindowExt_draw(T)(sfRenderWindow* renderWindow, T obj) {
     assert(isDrawable(obj), format("Cannot call any draw method on type %s", T.stringof));
 
     if (is(T == sfCircleShape*)) {
@@ -22,14 +22,14 @@ void draw(T)(sfRenderWindow* renderWindow, T obj) {
     }
 }
 
-sfVector2i toVector2i(sfVector2f vector) {
+sfVector2i sfVector2fExt_toVector2i(sfVector2f vector) {
     return sfVector2i(cast(int)vector.x, cast(int)vector.y);
 }
 
-sfVector2f sfVector2f_splat(float size) {
+sfVector2f sfVector2fExt_splat(float size) {
     return sfVector2f(size, size);
 }
 
-void sizeToBounds(sfSprite* sprite, sfTexture* texture, sfVector2f bounds) {
+void sfSpriteExt_sizeToBounds(sfSprite* sprite, sfTexture* texture, sfVector2f bounds) {
     sprite.sfSprite_setScale(sfVector2f(bounds.x / texture.sfTexture_getSize().x, bounds.y / texture.sfTexture_getSize().y));
 }

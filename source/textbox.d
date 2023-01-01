@@ -22,7 +22,7 @@ class Textbox {
 
     void render(sfRenderWindow* renderWindow, string content) {
         _text.sfText_setString(toStringz(content));
-        renderWindow.draw(_text);
+        renderWindow.sfRenderWindowExt_draw(_text);
     }
 
 private:

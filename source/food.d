@@ -13,7 +13,7 @@ class Food {
         _appleTexture = sfTexture_createFromFile("apple.png", null);
         _appleSprite = sfSprite_create();
         _appleSprite.sfSprite_setTexture(_appleTexture, 0);
-        _appleSprite.sizeToBounds(_appleTexture, sfVector2f_splat(cast(float)(world.windowSize.x / world.blockSpan)));
+        _appleSprite.sfSpriteExt_sizeToBounds(_appleTexture, sfVector2fExt_splat(cast(float)(world.windowSize.x / world.blockSpan)));
 
         respawn();
     }
@@ -32,7 +32,7 @@ class Food {
     }
 
     void render(sfRenderWindow* renderWindow) {
-        renderWindow.draw(_appleSprite);
+        renderWindow.sfRenderWindowExt_draw(_appleSprite);
     }
 
 private:

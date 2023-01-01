@@ -224,7 +224,7 @@ class Snake {
             }
 
             sprite.sfSprite_setPosition(sfVector2f(snakeSegment.position.x * _size, snakeSegment.position.y * _size));
-            renderWindow.draw(sprite);
+            renderWindow.sfRenderWindowExt_draw(sprite);
         }
     }
 
@@ -266,7 +266,7 @@ private:
         texture = sfTexture_createFromFile(toStringz(src), null);
         sprite = sfSprite_create();
         sprite.sfSprite_setTexture(texture, 0);
-        sprite.sizeToBounds(texture, sfVector2f(size, size));
+        sprite.sfSpriteExt_sizeToBounds(texture, sfVector2f(size, size));
     }
 
     SnakeContainer _snakeBody;

@@ -89,7 +89,7 @@ private:
                 shape.sfRectangleShape_setFillColor(fillColor);
                 shape.sfRectangleShape_setPosition(sfVector2f(dim * x, dim * y));
 
-                renderWindow.draw(shape);
+                renderWindow.sfRenderWindowExt_draw(shape);
             }
         }
     }
