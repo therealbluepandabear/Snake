@@ -36,8 +36,8 @@ class BottomPanel {
 
         float txtPosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - 24) / 2);
 
-        _textboxes = [new Textbox(sfVector2f(_scoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY)),
-                      new Textbox(sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY))];
+        _scoreTextbox = new Textbox(sfVector2f(_scoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
+        _highScoreTextbox = new Textbox(sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
     }
 
     void render() {
@@ -45,14 +45,15 @@ class BottomPanel {
         _renderWindow.draw(_highScoreSprite);
         _renderWindow.draw(_scoreSprite);
 
-        _textboxes[0].render(_renderWindow, to!string(_gameStatistics._score()));
-        _textboxes[1].render(_renderWindow, to!string(_gameStatistics._highScore()));
+        _scoreTextbox.render(_renderWindow, to!string(_gameStatistics._score()));
+        _highScoreTextbox.render(_renderWindow, to!string(_gameStatistics._highScore()));
     }
 
 private:
     GameStatistics _gameStatistics;
     sfRectangleShape* _rect;
-    Textbox[2] _textboxes;
+    Textbox _scoreTextbox;
+    Textbox _highScoreTextbox;
     sfRenderWindow* _renderWindow;
     sfTexture* _highScoreTexture;
     sfSprite* _highScoreSprite;
