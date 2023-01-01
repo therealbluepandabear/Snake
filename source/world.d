@@ -127,19 +127,14 @@ private:
     }
 
     sfVector2u _windowSize;
-
     int _blockSpan;
     float _blockSize;
-
     sfSoundBuffer* _scoreSoundBuffer;
     sfSound* _scoreSound;
-
     sfSoundBuffer* _snakeDeathSoundBuffer;
     sfSound* _snakeDeathSound;
-
     sfColor _orangeLight = sfColor(255, 140, 0, 255);
     sfColor _orangeDark = sfColor(255, 165, 0, 255);
-
     Snake _player;
     Food _food;
 }

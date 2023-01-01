@@ -12,16 +12,21 @@ import std.string;
 import sfmlextensions;
 import textbox;
 import std.random;
+import gamestatistics;
+import bottompanel;
 
 class Game {
     this() {
-        _window = new Window("Snake", sfVector2u(600, 600));
-        _textbox = new Textbox(sfVector2f(24, 24));
+        int bottomPanelHeight = 100;
+        int size = 600;
 
+        _window = new Window("Snake", sfVector2u(size, size + bottomPanelHeight));
         setup();
 
         _clock = sfClock_create();
         _clock.sfClock_restart();
+
+        _bottomPanel = new BottomPanel(GameStatistics((() => _snake.score), (() => _highScore)), _window.renderWindow, bottomPanelHeight);
     }
 
     Window window() {
@@ -70,17 +75,19 @@ class Game {
 
         _world.render(_window.renderWindow);
         _snake.render(_window.renderWindow);
-        _textbox.render(_window.renderWindow, to!string(_snake.score));
+        _bottomPanel.render();
 
         _window.endDraw();
     }
 
 private:
     void setup() {
-        int blockSpan = 3;
-        float dim = cast(float)(_window.renderWindow.sfRenderWindow_getSize().x);
+        if (_snake !is null && _snake.score > _highScore) {
+            _highScore = _snake.score;
+        }
 
-        _snake = new Snake(dim / blockSpan);
+        int blockSpan = 12;
+        _snake = new Snake(cast(float)(_window.renderWindow.sfRenderWindow_getSize().x) / blockSpan);
         _world = new World(_window.renderWindow.sfRenderWindow_getSize(), blockSpan, _snake);
     }
 
@@ -89,5 +96,6 @@ private:
     Window _window;
     sfClock* _clock;
     float _elapsed = 0;
-    Textbox _textbox;
+    BottomPanel _bottomPanel;
+    int _highScore;
 }
