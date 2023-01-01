@@ -18,7 +18,7 @@ class BottomPanel {
         _rect.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, height));
         _rect.sfRectangleShape_setPosition(sfVector2f(0, renderWindow.sfRenderWindow_getSize().y - height));
 
-        sfVector2f spriteSize = sfVector2f(50, 50);
+        sfVector2f spriteSize = sfVector2f_splat(50);
         float spritePosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - spriteSize.y) / 2);
         int margin = 24;
 
@@ -36,9 +36,8 @@ class BottomPanel {
 
         float txtPosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - 24) / 2);
 
-        _textboxes = [
-            new Textbox(sfVector2f(_scoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY)),
-            new Textbox(sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY))];
+        _textboxes = [new Textbox(sfVector2f(_scoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY)),
+                      new Textbox(sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY))];
     }
 
     void render() {
