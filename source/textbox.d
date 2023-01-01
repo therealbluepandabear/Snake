@@ -16,6 +16,10 @@ class Textbox {
         _text.sfText_setPosition(pos);
     }
 
+    sfText* text() {
+        return _text;
+    }
+
     void render(sfRenderWindow* renderWindow, string content) {
         _text.sfText_setString(toStringz(content));
         renderWindow.draw(_text);
