@@ -41,6 +41,8 @@ class Button {
     }
 
     void update(sfEvent event, sfRenderWindow* renderWindow) {
+        assert(_onButtonClick != null, "_onButtonClick must not be null");
+
         sfVector2i mousePosition = sfMouse_getPositionRenderWindow(renderWindow);
 
         if (isMousePositionInBounds(mousePosition)) {
