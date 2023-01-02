@@ -9,7 +9,6 @@ class Button {
     this(sfColor backgroundColor, sfColor colorHover, sfVector2f position, string text, void delegate() onButtonClick) {
         _backgroundColor = backgroundColor;
         _colorHover = colorHover;
-
         _onButtonClick = onButtonClick;
 
         _rect = sfRectangleShape_create();
@@ -17,7 +16,8 @@ class Button {
         _rect.sfRectangleShape_setSize(sfVector2f(150, 50));
         _rect.sfRectangleShape_setPosition(position);
 
-        _textbox = new Textbox(sfVector2fExt_splat(0), text);
+        _textbox = new Textbox();
+        _textbox.setText(text);
         _textbox.setPosition(_rect.sfRectangleShapeExt_getCenter(_textbox.getSize(), sfVector2f(0, -3)));
     }
 
@@ -38,11 +38,11 @@ class Button {
                 _rect.sfRectangleShape_setFillColor(_colorHover);
             }
 
-            if (event.type == sfEventType.sfEvtMouseButtonPressed && _excOnButtonClick) {
+            if (event.type == sfEventType.sfEvtMouseButtonPressed && _executeOnButtonClick) {
                 _onButtonClick();
-                _excOnButtonClick = false;
+                _executeOnButtonClick = false;
             } else if (event.type == sfEventType.sfEvtMouseButtonReleased) {
-                _excOnButtonClick = true;
+                _executeOnButtonClick = true;
             }
         } else {
             _rect.sfRectangleShape_setFillColor(_backgroundColor);
@@ -67,5 +67,5 @@ private:
     sfColor _backgroundColor;
     sfColor _colorHover;
     void delegate() _onButtonClick;
-    bool _excOnButtonClick = true;
+    bool _executeOnButtonClick = true;
 }

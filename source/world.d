@@ -14,10 +14,15 @@ class World {
         _blockSpan = blockSpan;
         _windowSize = windowSize;
         _player = player;
-        _blockSize = cast(float)_windowSize.x / _blockSpan;
+        _blockSize = cast(float)(_windowSize.x) / _blockSpan;
 
-        initSound();
-        initFood();
+        _orangeLight = sfColor_fromRGB(255, 140, 0);
+        _orangeDark = sfColor_fromRGB(255, 165, 0);
+
+        createSound(_scoreSoundBuffer, _scoreSound, Sounds.powerup);
+        createSound(_snakeDeathSoundBuffer, _snakeDeathSound, Sounds.death);
+
+        _food = new Food(this);
     }
 
     sfVector2u windowSize() {
@@ -113,15 +118,6 @@ private:
         sound.sfSound_setBuffer(soundBuffer);
     }
 
-    void initSound() {
-        createSound(_scoreSoundBuffer, _scoreSound, Sounds.powerup);
-        createSound(_snakeDeathSoundBuffer, _snakeDeathSound, Sounds.death);
-    }
-
-    void initFood() {
-        _food = new Food(this);
-    }
-
     enum Sounds : string {
         powerup = "powerup.wav", death = "snakedeath.wav"
     }
@@ -133,8 +129,8 @@ private:
     sfSound* _scoreSound;
     sfSoundBuffer* _snakeDeathSoundBuffer;
     sfSound* _snakeDeathSound;
-    sfColor _orangeLight = sfColor(255, 140, 0, 255);
-    sfColor _orangeDark = sfColor(255, 165, 0, 255);
+    sfColor _orangeLight;
+    sfColor _orangeDark;
     Snake _player;
     Food _food;
 }

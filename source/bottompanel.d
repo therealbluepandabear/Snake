@@ -15,39 +15,38 @@ class BottomPanel {
         _gameStatistics = gameStatistics;
 
         _rect = sfRectangleShape_create();
-        _rect.sfRectangleShape_setFillColor(sfColor(64, 190, 92, 255));
+        _rect.sfRectangleShape_setFillColor(sfColor_fromRGB(64, 190, 92));
         _rect.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, height));
         _rect.sfRectangleShape_setPosition(sfVector2f(0, renderWindow.sfRenderWindow_getSize().y - height));
 
         sfVector2f spriteSize = sfVector2fExt_splat(50);
-        float spritePosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - spriteSize.y) / 2);
         int margin = 24;
 
         _highScoreTexture = sfTexture_createFromFile("trophy.png", null);
         _highScoreSprite = sfSprite_create();
         _highScoreSprite.sfSprite_setTexture(_highScoreTexture, 0);
         _highScoreSprite.sfSpriteExt_sizeToBounds(_highScoreTexture, spriteSize);
-        _highScoreSprite.sfSprite_setPosition(sfVector2f(margin * 9, spritePosY));
+        _highScoreSprite.sfSprite_setPosition(sfVector2f(margin * 9, _rect.sfRectangleShapeExt_getCenter(_highScoreSprite.sfSpriteExt_getSize()).y));
 
         _scoreTexture = sfTexture_createFromFile("apple.png", null);
         _scoreSprite = sfSprite_create();
         _scoreSprite.sfSprite_setTexture(_scoreTexture, 0);
         _scoreSprite.sfSpriteExt_sizeToBounds(_scoreTexture, spriteSize);
-        _scoreSprite.sfSprite_setPosition(sfVector2f(margin, spritePosY));
+        _scoreSprite.sfSprite_setPosition(sfVector2f(margin,  _rect.sfRectangleShapeExt_getCenter(_scoreSprite.sfSpriteExt_getSize()).y));
 
         float txtPosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - 24) / 2);
 
-        _scoreTextbox = new Textbox(sfVector2f(_scoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
-        _highScoreTextbox = new Textbox(sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
+        _scoreTextbox = new Textbox();
+        _scoreTextbox.setPosition(sfVector2f(_scoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
 
-        float btnPosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - 50) / 2);
-        float btnPosX = renderWindow.sfRenderWindow_getSize().x - 200;
+        _highScoreTextbox = new Textbox();
+        _highScoreTextbox.setPosition(sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
 
         void delegate() onButtonClick = {
 
         };
 
-        _settingsButton = new Button(sfColor(189, 183, 107, 255), sfColor(166, 159, 74, 255), sfVector2fExt_splat(0), "Settings", onButtonClick);
+        _settingsButton = new Button(sfColor_fromRGB(189, 183, 107), sfColor_fromRGB(166, 159, 74), sfVector2fExt_splat(0), "Settings", onButtonClick);
         _settingsButton.setPosition(sfVector2f(_rect.sfRectangleShape_getSize().x - _settingsButton.getSize().x - margin, _rect.sfRectangleShapeExt_getCenter(_settingsButton.getSize()).y));
     }
 
