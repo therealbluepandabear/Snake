@@ -7,9 +7,10 @@ import gamestatistics;
 import textbox;
 import std.conv;
 import std.stdio;
+import button;
 
 class BottomPanel {
-    this(GameStatistics gameStatistics, sfRenderWindow* renderWindow, int height) {
+    this(sfRenderWindow* renderWindow, GameStatistics gameStatistics, int height) {
         _renderWindow = renderWindow;
         _gameStatistics = gameStatistics;
 
@@ -38,6 +39,20 @@ class BottomPanel {
 
         _scoreTextbox = new Textbox(sfVector2f(_scoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
         _highScoreTextbox = new Textbox(sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
+
+        float btnPosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - 50) / 2);
+        float btnPosX = renderWindow.sfRenderWindow_getSize().x - 200;
+
+        void delegate() func = {
+            writeln("i");
+            stdout.flush();
+        };
+
+        _settingsButton = new Button(sfColor(189, 183, 107, 255), sfColor(166, 159, 74, 255), sfVector2f(btnPosX, btnPosY), "Settings", func);
+    }
+
+    void update(sfEvent event) {
+        _settingsButton.update(event, _renderWindow);
     }
 
     void render() {
@@ -45,13 +60,17 @@ class BottomPanel {
         _renderWindow.sfRenderWindowExt_draw(_highScoreSprite);
         _renderWindow.sfRenderWindowExt_draw(_scoreSprite);
 
-        _scoreTextbox.render(_renderWindow, to!string(_gameStatistics._score()));
-        _highScoreTextbox.render(_renderWindow, to!string(_gameStatistics._highScore()));
+        _scoreTextbox.setText(to!string(_gameStatistics._score()));
+        _scoreTextbox.render(_renderWindow);
+        _highScoreTextbox.setText(to!string(_gameStatistics._highScore()));
+        _highScoreTextbox.render(_renderWindow);
+        _settingsButton.render(_renderWindow);
     }
 
 private:
     GameStatistics _gameStatistics;
     sfRectangleShape* _rect;
+    Button _settingsButton;
     Textbox _scoreTextbox;
     Textbox _highScoreTextbox;
     sfRenderWindow* _renderWindow;

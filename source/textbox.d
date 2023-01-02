@@ -8,20 +8,30 @@ import std.string;
 import sfmlextensions;
 
 class Textbox {
-    this(sfVector2f pos) {
+    this(sfVector2f position, string text = "") {
         _text = sfText_create();
         _text.sfText_setFont(sfFont_createFromFile("nunito_black.ttf"));
         _text.sfText_setCharacterSize(24);
         _text.sfText_setColor(sfWhite);
-        _text.sfText_setPosition(pos);
+        _text.sfText_setPosition(position);
+        _text.sfText_setString(toStringz(text));
     }
 
-    sfText* text() {
-        return _text;
+    void setText(string text) {
+        _text.sfText_setString(toStringz(text));
     }
 
-    void render(sfRenderWindow* renderWindow, string content) {
-        _text.sfText_setString(toStringz(content));
+    void setPosition(sfVector2f position) {
+        _text.sfText_setPosition(position);
+    }
+
+    sfVector2f getSize() {
+        const auto bounds = _text.sfText_getLocalBounds();
+        return sfVector2f(bounds.width, bounds.height);
+    }
+
+    void render(sfRenderWindow* renderWindow) {
+        assert(_text.sfText_getString() != "", "text must not be null");
         renderWindow.sfRenderWindowExt_draw(_text);
     }
 

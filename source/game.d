@@ -26,7 +26,7 @@ class Game {
         _clock = sfClock_create();
         _clock.sfClock_restart();
 
-        _bottomPanel = new BottomPanel(GameStatistics((() => _snake.score), (() => _highScore)), _window.renderWindow, bottomPanelHeight);
+        _bottomPanel = new BottomPanel(_window.renderWindow, GameStatistics((() => _snake.score), (() => _highScore)), bottomPanelHeight);
     }
 
     Window window() {
@@ -55,6 +55,7 @@ class Game {
         }
 
         _window.update();
+        _bottomPanel.update(_window.event);
 
         float timestep = 1.0f / _snake.speed;
         float div = 10;

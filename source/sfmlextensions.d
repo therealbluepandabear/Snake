@@ -33,3 +33,9 @@ sfVector2f sfVector2fExt_splat(float size) {
 void sfSpriteExt_sizeToBounds(sfSprite* sprite, sfTexture* texture, sfVector2f bounds) {
     sprite.sfSprite_setScale(sfVector2f(bounds.x / texture.sfTexture_getSize().x, bounds.y / texture.sfTexture_getSize().y));
 }
+
+sfVector2f sfRectangleShapeExt_getCenter(sfRectangleShape* rect, sfVector2f bounds, sfVector2f offset = sfVector2fExt_splat(0)) {
+    return sfVector2f(
+            ((rect.sfRectangleShape_getPosition().x + rect.sfRectangleShape_getSize().x / 2) - (bounds.x / 2)) + offset.x,
+            ((rect.sfRectangleShape_getPosition().y + rect.sfRectangleShape_getSize().y / 2) - (bounds.y / 2)) + offset.y);
+}

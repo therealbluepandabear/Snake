@@ -1,6 +1,8 @@
 module window;
 
 import bindbc.sfml;
+import std.stdio;
+import std.string;
 
 class Window {
     this() {
@@ -23,6 +25,10 @@ class Window {
         return _renderWindow;
     }
 
+    sfEvent event() {
+        return _event;
+    }
+
     void beginDraw() {
         _renderWindow.sfRenderWindow_clear(sfBlack);
     }
@@ -32,12 +38,10 @@ class Window {
     }
 
     void update() {
-        sfEvent event;
-
-        while (_renderWindow.sfRenderWindow_pollEvent(&event)) {
-            if (event.type == sfEventType.sfEvtClosed) {
+        while (_renderWindow.sfRenderWindow_pollEvent(&_event)) {
+            if (_event.type == sfEventType.sfEvtClosed) {
                 _isDone = true;
-            } else if ((event.type == sfEventType.sfEvtKeyPressed) && (event.key.code == sfKeyCode.sfKeyF5)) {
+            } else if ((_event.type == sfEventType.sfEvtKeyPressed) && (_event.key.code == sfKeyCode.sfKeyF5)) {
                 toggleFullscreen();
             }
         }
@@ -64,8 +68,7 @@ private:
 
     void create() {
         sfWindowStyle style = _isFullScreen ? sfWindowStyle.sfFullscreen : sfWindowStyle.sfDefaultStyle;
-        _renderWindow = sfRenderWindow_create(sfVideoMode(_windowSize.x, _windowSize.y, 32), cast(const char*)_windowTitle, style, null);
-
+        _renderWindow = sfRenderWindow_create(sfVideoMode(_windowSize.x, _windowSize.y, 32), toStringz(_windowTitle), style, null);
     }
 
     sfRenderWindow* _renderWindow;
@@ -73,5 +76,6 @@ private:
     string _windowTitle;
     bool _isDone;
     bool _isFullScreen;
+    sfEvent _event;
 }
 
