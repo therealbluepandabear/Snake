@@ -33,7 +33,7 @@ class Button {
     void update(sfEvent event, sfRenderWindow* renderWindow) {
         sfVector2i mousePosition = sfMouse_getPositionRenderWindow(renderWindow);
 
-        if (mousePositionInBounds(mousePosition)) {
+        if (isMousePositionInBounds(mousePosition)) {
             if (event.type == sfEventType.sfEvtMouseMoved) {
                 _rect.sfRectangleShape_setFillColor(_colorHover);
             }
@@ -55,7 +55,7 @@ class Button {
     }
 
 private:
-    bool mousePositionInBounds(sfVector2i mousePosition) {
+    bool isMousePositionInBounds(sfVector2i mousePosition) {
         return (mousePosition.x >= _rect.sfRectangleShape_getPosition().x &&
                 mousePosition.x <= _rect.sfRectangleShape_getPosition().x + _rect.sfRectangleShape_getSize().x &&
                 mousePosition.y >= _rect.sfRectangleShape_getPosition().y &&
