@@ -21,6 +21,15 @@ class Button {
         _textbox.setPosition(_rect.sfRectangleShapeExt_getCenter(_textbox.getSize(), sfVector2f(0, -3)));
     }
 
+    sfVector2f getSize() {
+        return _rect.sfRectangleShape_getSize();
+    }
+
+    void setPosition(sfVector2f position) {
+        _rect.sfRectangleShape_setPosition(position);
+        _textbox.setPosition(sfVector2f(_textbox.getPosition().x + position.x, _textbox.getPosition().y + position.y));
+    }
+
     void update(sfEvent event, sfRenderWindow* renderWindow) {
         sfVector2i mousePosition = sfMouse_getPositionRenderWindow(renderWindow);
 

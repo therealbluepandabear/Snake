@@ -43,12 +43,12 @@ class BottomPanel {
         float btnPosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - 50) / 2);
         float btnPosX = renderWindow.sfRenderWindow_getSize().x - 200;
 
-        void delegate() func = {
-            writeln("i");
-            stdout.flush();
+        void delegate() onButtonClick = {
+
         };
 
-        _settingsButton = new Button(sfColor(189, 183, 107, 255), sfColor(166, 159, 74, 255), sfVector2f(btnPosX, btnPosY), "Settings", func);
+        _settingsButton = new Button(sfColor(189, 183, 107, 255), sfColor(166, 159, 74, 255), sfVector2fExt_splat(0), "Settings", onButtonClick);
+        _settingsButton.setPosition(sfVector2f(_rect.sfRectangleShape_getSize().x - _settingsButton.getSize().x - margin, _rect.sfRectangleShapeExt_getCenter(_settingsButton.getSize()).y));
     }
 
     void update(sfEvent event) {

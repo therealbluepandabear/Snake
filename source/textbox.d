@@ -25,6 +25,10 @@ class Textbox {
         _text.sfText_setPosition(position);
     }
 
+    sfVector2f getPosition() {
+        return _text.sfText_getPosition();
+    }
+
     sfVector2f getSize() {
         const auto bounds = _text.sfText_getLocalBounds();
         return sfVector2f(bounds.width, bounds.height);
