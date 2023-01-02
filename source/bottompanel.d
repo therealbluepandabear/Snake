@@ -43,11 +43,12 @@ class BottomPanel {
         _highScoreTextbox.setPosition(sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
 
         void delegate() onButtonClick = {
-
+            writeln("Hi"); stdout.flush();
         };
 
         _settingsButton = new Button();
         _settingsButton.setText("Settings");
+        _settingsButton.setOnButtonClick(onButtonClick);
         _settingsButton.setColor(sfColor_fromRGB(189, 183, 107));
         _settingsButton.setColorHover(sfColor_fromRGB(166, 159, 74));
         _settingsButton.setPosition(sfVector2f(_rect.sfRectangleShape_getSize().x - _settingsButton.getSize().x - margin, _rect.sfRectangleShapeExt_getCenter(_settingsButton.getSize()).y));
