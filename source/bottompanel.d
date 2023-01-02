@@ -46,7 +46,10 @@ class BottomPanel {
 
         };
 
-        _settingsButton = new Button(sfColor_fromRGB(189, 183, 107), sfColor_fromRGB(166, 159, 74), sfVector2fExt_splat(0), "Settings", onButtonClick);
+        _settingsButton = new Button();
+        _settingsButton.setText("Settings");
+        _settingsButton.setColor(sfColor_fromRGB(189, 183, 107));
+        _settingsButton.setColorHover(sfColor_fromRGB(166, 159, 74));
         _settingsButton.setPosition(sfVector2f(_rect.sfRectangleShape_getSize().x - _settingsButton.getSize().x - margin, _rect.sfRectangleShapeExt_getCenter(_settingsButton.getSize()).y));
     }
 

@@ -4,30 +4,40 @@ import bindbc.sfml;
 import textbox;
 import sfmlextensions;
 import std.stdio;
+import roundrect;
 
 class Button {
-    this(sfColor backgroundColor, sfColor colorHover, sfVector2f position, string text, void delegate() onButtonClick) {
-        _backgroundColor = backgroundColor;
-        _colorHover = colorHover;
-        _onButtonClick = onButtonClick;
-
+    this() {
         _rect = sfRectangleShape_create();
-        _rect.sfRectangleShape_setFillColor(backgroundColor);
         _rect.sfRectangleShape_setSize(sfVector2f(150, 50));
-        _rect.sfRectangleShape_setPosition(position);
-
+        _rect.sfRectangleShape_setPosition(sfVector2f(150, 50));
+        _rect.sfRectangleShape_setFillColor(sfRed);
         _textbox = new Textbox();
-        _textbox.setText(text);
-        _textbox.setPosition(_rect.sfRectangleShapeExt_getCenter(_textbox.getSize(), sfVector2f(0, -3)));
     }
 
     sfVector2f getSize() {
         return _rect.sfRectangleShape_getSize();
     }
 
+    void setText(string text) {
+        _textbox.setText(text);
+    }
+
+    void setOnButtonClick(void delegate() onButtonClick) {
+        _onButtonClick = onButtonClick;
+    }
+
     void setPosition(sfVector2f position) {
         _rect.sfRectangleShape_setPosition(position);
-        _textbox.setPosition(sfVector2f(_textbox.getPosition().x + position.x, _textbox.getPosition().y + position.y));
+        _textbox.setPosition(_rect.sfRectangleShapeExt_getCenter(_textbox.getSize(), sfVector2f(0, -3)));
+    }
+
+    void setColorHover(sfColor colorHover) {
+        _colorHover = colorHover;
+    }
+
+    void setColor(sfColor color) {
+        _color = color;
     }
 
     void update(sfEvent event, sfRenderWindow* renderWindow) {
@@ -45,12 +55,12 @@ class Button {
                 _executeOnButtonClick = true;
             }
         } else {
-            _rect.sfRectangleShape_setFillColor(_backgroundColor);
+            _rect.sfRectangleShape_setFillColor(_color);
         }
     }
 
     void render(sfRenderWindow* renderWindow) {
-        renderWindow.sfRenderWindowExt_draw(_rect);
+        _rect.sfRectangleShapeExt_toRoundRect(10).render(renderWindow);
         _textbox.render(renderWindow);
     }
 
@@ -64,7 +74,7 @@ private:
 
     Textbox _textbox;
     sfRectangleShape* _rect;
-    sfColor _backgroundColor;
+    sfColor _color;
     sfColor _colorHover;
     void delegate() _onButtonClick;
     bool _executeOnButtonClick = true;

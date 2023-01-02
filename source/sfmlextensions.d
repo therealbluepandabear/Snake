@@ -2,6 +2,7 @@ module sfmlextensions;
 
 import std.string;
 import bindbc.sfml;
+import roundrect;
 
 // in the future more checks can be added when more drawable types are used throughout the program
 private bool isDrawable(T)(T obj) {
@@ -42,4 +43,8 @@ sfVector2f sfRectangleShapeExt_getCenter(sfRectangleShape* rect, sfVector2f boun
     return sfVector2f(
             ((rect.sfRectangleShape_getPosition().x + rect.sfRectangleShape_getSize().x / 2) - (bounds.x / 2)) + offset.x,
             ((rect.sfRectangleShape_getPosition().y + rect.sfRectangleShape_getSize().y / 2) - (bounds.y / 2)) + offset.y);
+}
+
+RoundRect sfRectangleShapeExt_toRoundRect(sfRectangleShape* rect, float cornerRadius) {
+    return new RoundRect(cornerRadius, rect.sfRectangleShape_getSize(), rect.sfRectangleShape_getPosition(), rect.sfRectangleShape_getFillColor());
 }

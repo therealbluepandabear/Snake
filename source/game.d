@@ -87,7 +87,7 @@ private:
             _highScore = _snake.score;
         }
 
-        int blockSpan = 12;
+        int blockSpan = 5;
         _snake = new Snake(cast(float)(_window.renderWindow.sfRenderWindow_getSize().x) / blockSpan);
         _world = new World(_window.renderWindow.sfRenderWindow_getSize(), blockSpan, _snake);
     }
