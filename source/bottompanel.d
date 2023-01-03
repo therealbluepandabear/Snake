@@ -8,16 +8,17 @@ import textbox;
 import std.conv;
 import std.stdio;
 import button;
+import settingswindow;
 
 class BottomPanel {
     this(sfRenderWindow* renderWindow, GameStatistics gameStatistics, int height) {
         _renderWindow = renderWindow;
         _gameStatistics = gameStatistics;
 
-        _rect = sfRectangleShape_create();
-        _rect.sfRectangleShape_setFillColor(sfColor_fromRGB(64, 190, 92));
-        _rect.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, height));
-        _rect.sfRectangleShape_setPosition(sfVector2f(0, renderWindow.sfRenderWindow_getSize().y - height));
+        _backgroundRect = sfRectangleShape_create();
+        _backgroundRect.sfRectangleShape_setFillColor(sfColor_fromRGB(64, 190, 92));
+        _backgroundRect.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, height));
+        _backgroundRect.sfRectangleShape_setPosition(sfVector2f(0, renderWindow.sfRenderWindow_getSize().y - height));
 
         sfVector2f spriteSize = sfVector2fExt_splat(50);
         int margin = 24;
@@ -26,13 +27,13 @@ class BottomPanel {
         _highScoreSprite = sfSprite_create();
         _highScoreSprite.sfSprite_setTexture(_highScoreTexture, 0);
         _highScoreSprite.sfSpriteExt_sizeToBounds(_highScoreTexture, spriteSize);
-        _highScoreSprite.sfSprite_setPosition(sfVector2f(margin * 9, _rect.sfRectangleShapeExt_getCenter(_highScoreSprite.sfSpriteExt_getSize()).y));
+        _highScoreSprite.sfSprite_setPosition(sfVector2f(margin * 9, _backgroundRect.sfRectangleShapeExt_getCenter(_highScoreSprite.sfSpriteExt_getSize()).y));
 
         _scoreTexture = sfTexture_createFromFile("apple.png", null);
         _scoreSprite = sfSprite_create();
         _scoreSprite.sfSprite_setTexture(_scoreTexture, 0);
         _scoreSprite.sfSpriteExt_sizeToBounds(_scoreTexture, spriteSize);
-        _scoreSprite.sfSprite_setPosition(sfVector2f(margin,  _rect.sfRectangleShapeExt_getCenter(_scoreSprite.sfSpriteExt_getSize()).y));
+        _scoreSprite.sfSprite_setPosition(sfVector2f(margin,  _backgroundRect.sfRectangleShapeExt_getCenter(_scoreSprite.sfSpriteExt_getSize()).y));
 
         float txtPosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - 24) / 2);
 
@@ -42,8 +43,10 @@ class BottomPanel {
         _highScoreTextbox = new Textbox();
         _highScoreTextbox.setPosition(sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
 
+        _settingsWindow = new SettingsWindow(_renderWindow, sfColor_fromRGB(189, 183, 107), sfColor_fromRGB(166, 159, 74));
+
         void delegate() onButtonClick = {
-            writeln("Hi"); stdout.flush();
+            showSettingsWindow = true;
         };
 
         _settingsButton = new Button();
@@ -51,7 +54,7 @@ class BottomPanel {
         _settingsButton.setOnButtonClick(onButtonClick);
         _settingsButton.setColor(sfColor_fromRGB(189, 183, 107));
         _settingsButton.setColorHover(sfColor_fromRGB(166, 159, 74));
-        _settingsButton.setPosition(sfVector2f(_rect.sfRectangleShape_getSize().x - _settingsButton.getSize().x - margin, _rect.sfRectangleShapeExt_getCenter(_settingsButton.getSize()).y));
+        _settingsButton.setPosition(sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _settingsButton.getSize().x - margin, _backgroundRect.sfRectangleShapeExt_getCenter(_settingsButton.getSize()).y));
     }
 
     void update(sfEvent event) {
@@ -59,20 +62,26 @@ class BottomPanel {
     }
 
     void render() {
-        _renderWindow.sfRenderWindowExt_draw(_rect);
+        _renderWindow.sfRenderWindowExt_draw(_backgroundRect);
         _renderWindow.sfRenderWindowExt_draw(_highScoreSprite);
         _renderWindow.sfRenderWindowExt_draw(_scoreSprite);
 
         _scoreTextbox.setText(to!string(_gameStatistics._score()));
-        _scoreTextbox.render(_renderWindow);
         _highScoreTextbox.setText(to!string(_gameStatistics._highScore()));
+
+        _scoreTextbox.render(_renderWindow);
         _highScoreTextbox.render(_renderWindow);
         _settingsButton.render(_renderWindow);
+
+        if (showSettingsWindow) {
+            _settingsWindow.render();
+        }
     }
 
 private:
     GameStatistics _gameStatistics;
-    sfRectangleShape* _rect;
+    sfRectangleShape* _backgroundRect;
+    SettingsWindow _settingsWindow;
     Button _settingsButton;
     Textbox _scoreTextbox;
     Textbox _highScoreTextbox;
@@ -81,4 +90,5 @@ private:
     sfSprite* _highScoreSprite;
     sfTexture* _scoreTexture;
     sfSprite* _scoreSprite;
+    bool showSettingsWindow = false;
 }

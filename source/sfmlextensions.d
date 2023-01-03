@@ -27,6 +27,10 @@ sfVector2i sfVector2fExt_toVector2i(sfVector2f vector) {
     return sfVector2i(cast(int)vector.x, cast(int)vector.y);
 }
 
+sfVector2f sfVector2uExt_toVector2f(sfVector2u vector) {
+    return sfVector2f(cast(float)vector.x, cast(float)vector.y);
+}
+
 sfVector2f sfVector2fExt_splat(float size) {
     return sfVector2f(size, size);
 }
