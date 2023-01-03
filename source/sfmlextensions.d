@@ -58,3 +58,7 @@ sfVector2f sfRectangleShapeExt_getCenter(sfRectangleShape* rect, sfVector2f boun
 RoundRect sfRectangleShapeExt_toRoundRect(sfRectangleShape* rect, float cornerRadius) {
     return new RoundRect(cornerRadius, rect.sfRectangleShape_getSize(), rect.sfRectangleShape_getPosition(), rect.sfRectangleShape_getFillColor());
 }
+
+sfColor sfColorExt_255(ubyte r, ubyte g, ubyte b) {
+    return sfColor(r, g, b, 255);
+}

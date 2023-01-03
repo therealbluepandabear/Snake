@@ -16,7 +16,7 @@ class BottomPanel {
         _gameStatistics = gameStatistics;
 
         _backgroundRect = sfRectangleShape_create();
-        _backgroundRect.sfRectangleShape_setFillColor(sfColor_fromRGB(64, 190, 92));
+        _backgroundRect.sfRectangleShape_setFillColor(Colors.shade_4);
         _backgroundRect.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, height));
         _backgroundRect.sfRectangleShape_setPosition(sfVector2f(0, renderWindow.sfRenderWindow_getSize().y - height));
 
@@ -47,7 +47,7 @@ class BottomPanel {
             showSettingsWindow = false;
         };
 
-        _settingsWindow = new SettingsWindow(_renderWindow, sfColor_fromRGB(189, 183, 107), sfColor_fromRGB(64, 190, 92), onBackButtonClick);
+        _settingsWindow = new SettingsWindow(_renderWindow, Colors.shade_1, Colors.shade_4, onBackButtonClick);
 
         void delegate() onButtonClick = {
             showSettingsWindow = true;
@@ -56,8 +56,8 @@ class BottomPanel {
         _settingsButton = new Button();
         _settingsButton.setText("Settings");
         _settingsButton.setOnButtonClick(onButtonClick);
-        _settingsButton.setColor(sfColor_fromRGB(189, 183, 107));
-        _settingsButton.setColorHover(sfColor_fromRGB(166, 159, 74));
+        _settingsButton.setColor(Colors.shade_2);
+        _settingsButton.setColorHover(Colors.shade_3);
         _settingsButton.setPosition(sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _settingsButton.getSize().x - margin, _backgroundRect.sfRectangleShapeExt_getCenter(_settingsButton.getSize()).y));
     }
 
@@ -84,6 +84,13 @@ class BottomPanel {
     }
 
 private:
+    enum Colors : sfColor {
+        shade_1 = sfColorExt_255(189, 183, 107),
+        shade_2 = sfColorExt_255(189, 183, 107),
+        shade_3 = sfColorExt_255(166, 159, 74),
+        shade_4 = sfColorExt_255(64, 190, 92)
+    }
+
     GameStatistics _gameStatistics;
     sfRectangleShape* _backgroundRect;
     SettingsWindow _settingsWindow;
