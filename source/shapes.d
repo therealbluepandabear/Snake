@@ -1,15 +1,9 @@
-module roundrect;
+module shapes;
 
 import bindbc.sfml;
 import sfmlextensions;
 
-void roundRectExt_renderArray(RoundRect[] arr, sfRenderWindow* renderWindow) {
-    foreach (RoundRect rect; arr) {
-        rect.render(renderWindow);
-    }
-}
-
-class RoundRect {
+struct RoundRect {
     this(float cornerRadius, sfVector2f size, sfVector2f position, sfColor color) {
         assert((cornerRadius <= size.x / 2) && (cornerRadius <= size.y / 2), "cornerRadius too large");
 

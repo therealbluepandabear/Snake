@@ -9,9 +9,13 @@ import std.conv;
 import std.stdio;
 import button;
 import settingswindow;
+import world;
+import gamesettings;
+import snake;
+import game;
 
 class BottomPanel {
-    this(sfRenderWindow* renderWindow, GameStatistics gameStatistics, int height) {
+    this(sfRenderWindow* renderWindow, GameStatistics gameStatistics, int height, Game game) {
         _renderWindow = renderWindow;
         _gameStatistics = gameStatistics;
 
@@ -47,7 +51,13 @@ class BottomPanel {
             showSettingsWindow = false;
         };
 
-        _settingsWindow = new SettingsWindow(_renderWindow, Colors.shade_1, Colors.shade_4, onBackButtonClick);
+        void delegate() onBoardSizeButtonClick = {
+            showSettingsWindow = false;
+            GameSettings.boardSize = BoardSize.small;
+            game.setup();
+        };
+
+        _settingsWindow = new SettingsWindow(_renderWindow, Colors.shade_1, Colors.shade_4, onBackButtonClick, onBoardSizeButtonClick);
 
         void delegate() onButtonClick = {
             showSettingsWindow = true;

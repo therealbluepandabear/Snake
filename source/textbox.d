@@ -41,6 +41,8 @@ class Textbox {
     }
 
     void render(sfRenderWindow* renderWindow) {
+        assert(_text.sfText_getString() != "", "text must not be empty");
+
         renderWindow.sfRenderWindowExt_draw(_text);
     }
 

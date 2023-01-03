@@ -4,11 +4,15 @@ import bindbc.sfml;
 import sfmlextensions;
 import textbox;
 import std.stdio;
-import roundrect;
+import shapes;
 import button;
+import std.typecons;
+import std.traits;
+import std.string;
+import gamesettings;
 
 class SettingsWindow {
-    this(sfRenderWindow* renderWindow, sfColor backgroundColor, sfColor secondaryColor, void delegate() onBackButtonClick) {
+    this(sfRenderWindow* renderWindow, sfColor backgroundColor, sfColor secondaryColor, void delegate() onBackButtonClick, void delegate() onBoardSizeButtonClick) {
         _renderWindow = renderWindow;
 
         _backgroundRect = sfRectangleShape_create();
@@ -22,18 +26,9 @@ class SettingsWindow {
         _colorRect.sfRectangleShape_setFillColor(secondaryColor);
         _colorRect.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, margin * 3));
 
-        _colorTextbox = new Textbox();
-        _colorTextbox.setText("Color");
-        _colorTextbox.setPosition(sfVector2fExt_splat(margin));
-
-        _colors[0] = sfBlue;
-        _colors[1] = sfRed;
-        _colors[2] = sfGreen;
-
-        int size = 30;
-        foreach (indx, ref RoundRect roundRect; _colorList) {
-            roundRect = new RoundRect(8, sfVector2fExt_splat(size), sfVector2f(margin + size * indx + margin / 2 * indx, _colorRect.sfRectangleShape_getSize().y + margin), _colors[indx]);
-        }
+        _boardSizeTextbox = new Textbox();
+        _boardSizeTextbox.setText("Board Size");
+        _boardSizeTextbox.setPosition(sfVector2fExt_splat(margin));
 
         _backButton = new Button();
         _backButton.setText("Back");
@@ -41,18 +36,36 @@ class SettingsWindow {
         _backButton.setColor(sfColor_fromRGB(189, 183, 107));
         _backButton.setColorHover(sfColor_fromRGB(166, 159, 74));
         _backButton.setOnButtonClick(onBackButtonClick);
+
+        BoardSize[] arr = cast(BoardSize[])[EnumMembers!BoardSize];
+
+        foreach (indx, ref Button button; _boardSizeButtons) {
+            button = new Button();
+            button.setText(format("%sx%s", arr[indx][0], arr[indx][1]));
+            button.setPosition(sfVector2f(margin + button.getSize().x * indx + margin * indx, _colorRect.sfRectangleShape_getPosition().y + _colorRect.sfRectangleShape_getSize().y + margin));
+            button.setColor(secondaryColor);
+            button.setColorHover(sfColor_fromRGB(166, 159, 74));
+            button.setOnButtonClick(onBoardSizeButtonClick);
+        }
     }
 
     void update(sfEvent event) {
         _backButton.update(event, _renderWindow);
+
+        foreach (Button button; _boardSizeButtons) {
+            button.update(event, _renderWindow);
+        }
     }
 
     void render() {
         _renderWindow.sfRenderWindowExt_draw(_backgroundRect);
         _renderWindow.sfRenderWindowExt_draw(_colorRect);
-        _colorTextbox.render(_renderWindow);
+        _boardSizeTextbox.render(_renderWindow);
         _backButton.render(_renderWindow);
-        _colorList.roundRectExt_renderArray(_renderWindow);
+
+        foreach (Button button; _boardSizeButtons) {
+            button.render(_renderWindow);
+        }
     }
 
 private:
@@ -60,7 +73,6 @@ private:
     sfRenderWindow* _renderWindow;
     sfRectangleShape* _colorRect;
     Button _backButton;
-    Textbox _colorTextbox;
-    RoundRect[3] _colorList;
-    sfColor[3] _colors;
+    Textbox _boardSizeTextbox;
+    Button[3] _boardSizeButtons;
 }

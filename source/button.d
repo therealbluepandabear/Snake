@@ -4,23 +4,17 @@ import bindbc.sfml;
 import textbox;
 import sfmlextensions;
 import std.stdio;
-import roundrect;
+import shapes;
 
 class Button {
     this() {
         _rect = sfRectangleShape_create();
-        _rect.sfRectangleShape_setSize(sfVector2f(150, 50));
-        _rect.sfRectangleShape_setPosition(sfVector2f(150, 50));
-        _rect.sfRectangleShape_setFillColor(sfRed);
         _textbox = new Textbox();
-    }
-
-    sfVector2f getSize() {
-        return _rect.sfRectangleShape_getSize();
     }
 
     void setText(string text) {
         _textbox.setText(text);
+        _rect.sfRectangleShape_setSize(sfVector2f(_textbox.getSize().x + 48, 50));
     }
 
     void setOnButtonClick(void delegate() onButtonClick) {
@@ -38,6 +32,11 @@ class Button {
 
     void setColor(sfColor color) {
         _color = color;
+        _rect.sfRectangleShape_setFillColor(color);
+    }
+
+    sfVector2f getSize() {
+        return _rect.sfRectangleShape_getSize();
     }
 
     void update(sfEvent event, sfRenderWindow* renderWindow) {
