@@ -23,6 +23,12 @@ void sfRenderWindowExt_draw(T)(sfRenderWindow* renderWindow, T obj) {
     }
 }
 
+void sfRenderWindowExt_drawArray(T)(sfRenderWindow* renderWindow, T[] arr) {
+    foreach (T t; arr) {
+        renderWindow.sfRenderWindowExt_draw(t);
+    }
+}
+
 sfVector2i sfVector2fExt_toVector2i(sfVector2f vector) {
     return sfVector2i(cast(int)vector.x, cast(int)vector.y);
 }

@@ -46,12 +46,8 @@ class RoundRect {
     }
 
     void render(sfRenderWindow* renderWindow) {
-        foreach (sfCircleShape* circle; _circles) {
-            renderWindow.sfRenderWindowExt_draw(circle);
-        }
-        foreach (sfRectangleShape* rect; _rects) {
-            renderWindow.sfRenderWindowExt_draw(rect);
-        }
+        renderWindow.sfRenderWindowExt_drawArray(_circles);
+        renderWindow.sfRenderWindowExt_drawArray(_rects);
     }
 
 private:
