@@ -29,7 +29,7 @@ class Button {
 
     void setPosition(sfVector2f position) {
         _rect.sfRectangleShape_setPosition(position);
-        _textbox.setPosition(_rect.sfRectangleShapeExt_getCenter(_textbox.getSize(), sfVector2f(0, -3)));
+        _textbox.setPosition(_rect.sfRectangleShapeExt_getCenter(_textbox.getSize(), sfVector2f(0, -4)));
     }
 
     void setColorHover(sfColor colorHover) {

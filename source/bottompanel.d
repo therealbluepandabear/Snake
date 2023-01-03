@@ -43,7 +43,11 @@ class BottomPanel {
         _highScoreTextbox = new Textbox();
         _highScoreTextbox.setPosition(sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
 
-        _settingsWindow = new SettingsWindow(_renderWindow, sfColor_fromRGB(189, 183, 107), sfColor_fromRGB(166, 159, 74));
+        void delegate() onBackButtonClick = {
+            showSettingsWindow = false;
+        };
+
+        _settingsWindow = new SettingsWindow(_renderWindow, sfColor_fromRGB(189, 183, 107), sfColor_fromRGB(64, 190, 92), onBackButtonClick);
 
         void delegate() onButtonClick = {
             showSettingsWindow = true;
@@ -59,6 +63,7 @@ class BottomPanel {
 
     void update(sfEvent event) {
         _settingsButton.update(event, _renderWindow);
+        _settingsWindow.update(event);
     }
 
     void render() {
