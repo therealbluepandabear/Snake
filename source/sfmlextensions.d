@@ -3,14 +3,15 @@ module sfmlextensions;
 import std.string;
 import bindbc.sfml;
 import shapes;
+import std.stdio;
 
 // in the future more checks can be added when more drawable types are used throughout the program
-private bool isDrawable(T)(T obj) {
-    return (is(T == sfCircleShape*) || is(T == sfRectangleShape*) || is(T == sfText*) || is(T == sfSprite*));
+template isDrawable(T) {
+    enum isDrawable = is(T == sfCircleShape*) || is(T == sfRectangleShape*) || is(T == sfText*) || is(T == sfSprite*);
 }
 
-void sfRenderWindowExt_draw(T)(sfRenderWindow* renderWindow, T obj) {
-    assert(isDrawable(obj), format("Cannot call any draw method on type %s", T.stringof));
+void sfRenderWindowExt_draw(T)(sfRenderWindow* renderWindow, T obj, string caller = __FUNCTION__) {
+    static assert(isDrawable!T, format("Cannot call any draw method on type %s", T.stringof));
 
     if (is(T == sfCircleShape*)) {
         renderWindow.sfRenderWindow_drawCircleShape(cast(sfCircleShape*)obj, null);
