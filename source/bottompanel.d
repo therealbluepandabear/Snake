@@ -86,7 +86,7 @@ class BottomPanel {
 
         _scoreTextbox.render(_renderWindow);
         _highScoreTextbox.render(_renderWindow);
-        _settingsButton.render(_renderWindow);
+        _renderWindow.sfRenderWindowExt_draw(_settingsButton);
 
         if (showSettingsWindow) {
             _settingsWindow.render();

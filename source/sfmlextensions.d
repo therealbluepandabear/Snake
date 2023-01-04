@@ -4,23 +4,46 @@ import std.string;
 import bindbc.sfml;
 import shapes;
 import std.stdio;
+import button;
+import textbox;
+import shapes;
 
-// in the future more checks can be added when more drawable types are used throughout the program
-template isDrawable(T) {
-    enum isDrawable = is(T == sfCircleShape*) || is(T == sfRectangleShape*) || is(T == sfText*) || is(T == sfSprite*);
-}
+enum isDrawable(T) = is(T == sfCircleShape*) || is(T == sfRectangleShape*) || is(T == sfText*) || is(T == sfSprite*) || is(T == Button) || is(T == Textbox) || is(T == RoundRect);
 
-void sfRenderWindowExt_draw(T)(sfRenderWindow* renderWindow, T obj, string caller = __FUNCTION__) {
+void sfRenderWindowExt_draw(T)(sfRenderWindow* renderWindow, T drawable) {
     static assert(isDrawable!T, format("Cannot call any draw method on type %s", T.stringof));
 
-    if (is(T == sfCircleShape*)) {
-        renderWindow.sfRenderWindow_drawCircleShape(cast(sfCircleShape*)obj, null);
-    } else if (is(T == sfRectangleShape*)) {
-        renderWindow.sfRenderWindow_drawRectangleShape(cast(sfRectangleShape*)obj, null);
-    } else if (is(T == sfText*)) {
-        renderWindow.sfRenderWindow_drawText(cast(sfText*)obj, null);
-    } else if (is(T == sfSprite*)) {
-        renderWindow.sfRenderWindow_drawSprite(cast(sfSprite*)obj, null);
+    static if (is(T == sfCircleShape*)) {
+        renderWindow.sfRenderWindow_drawCircleShape(drawable, null);
+    } else static if (is(T == sfRectangleShape*)) {
+        renderWindow.sfRenderWindow_drawRectangleShape(drawable, null);
+    } else static if (is(T == sfText*)) {
+        renderWindow.sfRenderWindow_drawText(drawable, null);
+    } else static if (is(T == sfSprite*)) {
+        renderWindow.sfRenderWindow_drawSprite(drawable, null);
+    } else static if (is(T == Button) || is(T == Textbox) || is(T == RoundRect)) {
+        drawable.render(renderWindow);
+    }
+}
+
+
+sfVector2f sfDrawableExt_getSize(T)(T drawable) {
+    static assert(isDrawable!T, format("Cannot call any getSize method on type %s", T.stringof));
+
+    sfVector2f size = sfVector2f(0, 0);
+
+    static if (is(T == Button)) {
+        size = drawable.size;
+    }
+
+    return size;
+}
+
+void sfDrawableExt_setPosition(T)(T drawable, sfVector2f vector) {
+    static assert(isDrawable!T, format("Cannot call any setPosition method on type %s", T.stringof));
+
+    static if (is(T == Button)) {
+        drawable.position = vector;
     }
 }
 

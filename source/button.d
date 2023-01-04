@@ -34,13 +34,17 @@ class Button {
     }
 
     void render(sfRenderWindow* renderWindow) {
-        _rect.sfRectangleShapeExt_toRoundRect(10).render(renderWindow);
-        _textbox.render(renderWindow);
+        renderWindow.sfRenderWindowExt_draw(_rect.sfRectangleShapeExt_toRoundRect(10));
+        renderWindow.sfRenderWindowExt_draw(_textbox);
     }
 
     @property {
         sfVector2f size() {
             return _rect.sfRectangleShape_getSize();
+        }
+
+        sfVector2f position() {
+            return _rect.sfRectangleShape_getPosition();
         }
 
         void text(string text) {

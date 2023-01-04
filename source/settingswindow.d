@@ -10,6 +10,7 @@ import std.typecons;
 import std.traits;
 import std.string;
 import gamesettings;
+import row;
 
 class SettingsWindow {
     this(sfRenderWindow* renderWindow, sfColor backgroundColor, sfColor secondaryColor, void delegate() onBackButtonClick, void delegate() onBoardSizeButtonClick) {
@@ -38,21 +39,21 @@ class SettingsWindow {
         _backButton.onButtonClick = onBackButtonClick;
 
         const(BoardSize[]) arr = cast(BoardSize[])[EnumMembers!BoardSize];
+        _boardSizeRow = new Row!(Button)(sfVector2f(margin, _colorRect.sfRectangleShape_getPosition().y + _colorRect.sfRectangleShape_getSize().y + margin));
 
-        foreach (indx, ref Button button; _boardSizeButtons) {
-            button = new Button();
+        foreach (indx; 0..arr.length) {
+            Button button = new Button();
             button.text = format("%sx%s", arr[indx][0], arr[indx][1]);
-            button.position = sfVector2f(margin + button.size.x * indx + margin * indx, _colorRect.sfRectangleShape_getPosition().y + _colorRect.sfRectangleShape_getSize().y + margin);
-            button.color = secondaryColor;
             button.colorHover = sfColor_fromRGB(166, 159, 74);
             button.onButtonClick = onBoardSizeButtonClick;
+            _boardSizeRow.addChild(button);
         }
     }
 
     void update(sfEvent event) {
         _backButton.update(event, _renderWindow);
 
-        foreach (Button button; _boardSizeButtons) {
+        foreach (Button button; _boardSizeRow.children) {
             button.update(event, _renderWindow);
         }
     }
@@ -60,12 +61,9 @@ class SettingsWindow {
     void render() {
         _renderWindow.sfRenderWindowExt_draw(_backgroundRect);
         _renderWindow.sfRenderWindowExt_draw(_colorRect);
-        _boardSizeTextbox.render(_renderWindow);
-        _backButton.render(_renderWindow);
-
-        foreach (Button button; _boardSizeButtons) {
-            button.render(_renderWindow);
-        }
+        _renderWindow.sfRenderWindowExt_draw(_boardSizeTextbox);
+        _renderWindow.sfRenderWindowExt_draw(_backButton);
+        _boardSizeRow.render(_renderWindow);
     }
 
     private {
@@ -74,6 +72,6 @@ class SettingsWindow {
         sfRectangleShape* _colorRect;
         Button _backButton;
         Textbox _boardSizeTextbox;
-        Button[3] _boardSizeButtons;
+        Row!(Button) _boardSizeRow;
     }
 }

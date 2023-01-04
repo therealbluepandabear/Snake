@@ -15,6 +15,7 @@ import std.random;
 import gamestatistics;
 import bottompanel;
 import gamesettings;
+import row;
 
 class Game {
     this() {
