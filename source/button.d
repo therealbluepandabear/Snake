@@ -12,33 +12,6 @@ class Button {
         _textbox = new Textbox();
     }
 
-    void setText(string text) {
-        _textbox.setText(text);
-        _rect.sfRectangleShape_setSize(sfVector2f(_textbox.getSize().x + 48, 50));
-    }
-
-    void setOnButtonClick(void delegate() onButtonClick) {
-        _onButtonClick = onButtonClick;
-    }
-
-    void setPosition(sfVector2f position) {
-        _rect.sfRectangleShape_setPosition(position);
-        _textbox.setPosition(_rect.sfRectangleShapeExt_getCenter(_textbox.getSize(), sfVector2f(0, -4)));
-    }
-
-    void setColorHover(sfColor colorHover) {
-        _colorHover = colorHover;
-    }
-
-    void setColor(sfColor color) {
-        _color = color;
-        _rect.sfRectangleShape_setFillColor(color);
-    }
-
-    sfVector2f getSize() {
-        return _rect.sfRectangleShape_getSize();
-    }
-
     void update(sfEvent event, sfRenderWindow* renderWindow) {
         assert(_onButtonClick != null, "_onButtonClick must not be null");
 
@@ -65,18 +38,48 @@ class Button {
         _textbox.render(renderWindow);
     }
 
-private:
-    bool isMousePositionInBounds(sfVector2i mousePosition) {
-        return (mousePosition.x >= _rect.sfRectangleShape_getPosition().x &&
-                mousePosition.x <= _rect.sfRectangleShape_getPosition().x + _rect.sfRectangleShape_getSize().x &&
-                mousePosition.y >= _rect.sfRectangleShape_getPosition().y &&
-                mousePosition.y <= _rect.sfRectangleShape_getPosition().y + _rect.sfRectangleShape_getSize().y);
+    @property {
+        sfVector2f size() {
+            return _rect.sfRectangleShape_getSize();
+        }
+
+        void text(string text) {
+            _textbox.text = text;
+            _rect.sfRectangleShape_setSize(sfVector2f(_textbox.size.x + 48, 50));
+        }
+
+        void onButtonClick(void delegate() onButtonClick) {
+            _onButtonClick = onButtonClick;
+        }
+
+        void position(sfVector2f position) {
+            _rect.sfRectangleShape_setPosition(position);
+            _textbox.position = _rect.sfRectangleShapeExt_getCenter(_textbox.size, sfVector2f(0, -4));
+        }
+
+        void colorHover(sfColor colorHover) {
+            _colorHover = colorHover;
+        }
+
+        void color(sfColor color) {
+            _color = color;
+            _rect.sfRectangleShape_setFillColor(color);
+        }
     }
 
-    Textbox _textbox;
-    sfRectangleShape* _rect;
-    sfColor _color;
-    sfColor _colorHover;
-    void delegate() _onButtonClick;
-    bool _executeOnButtonClick = true;
+    private {
+        bool isMousePositionInBounds(sfVector2i mousePosition) {
+            return (mousePosition.x >= _rect.sfRectangleShape_getPosition().x &&
+                    mousePosition.x <= _rect.sfRectangleShape_getPosition().x + _rect.sfRectangleShape_getSize().x &&
+                    mousePosition.y >= _rect.sfRectangleShape_getPosition().y &&
+                    mousePosition.y <= _rect.sfRectangleShape_getPosition().y + _rect.sfRectangleShape_getSize().y);
+        }
+
+        Textbox _textbox;
+        sfRectangleShape* _rect;
+        sfColor _color;
+        sfColor _colorHover;
+        void delegate() _onButtonClick;
+        bool _executeOnButtonClick = true;
+    }
 }

@@ -42,10 +42,10 @@ class BottomPanel {
         float txtPosY = renderWindow.sfRenderWindow_getSize().y - height + ((height - 24) / 2);
 
         _scoreTextbox = new Textbox();
-        _scoreTextbox.setPosition(sfVector2f(_scoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
+        _scoreTextbox.position = sfVector2f(_scoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY);
 
         _highScoreTextbox = new Textbox();
-        _highScoreTextbox.setPosition(sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY));
+        _highScoreTextbox.position = sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY);
 
         void delegate() onBackButtonClick = {
             showSettingsWindow = false;
@@ -64,11 +64,11 @@ class BottomPanel {
         };
 
         _settingsButton = new Button();
-        _settingsButton.setText("Settings");
-        _settingsButton.setOnButtonClick(onButtonClick);
-        _settingsButton.setColor(Colors.shade_2);
-        _settingsButton.setColorHover(Colors.shade_3);
-        _settingsButton.setPosition(sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _settingsButton.getSize().x - margin, _backgroundRect.sfRectangleShapeExt_getCenter(_settingsButton.getSize()).y));
+        _settingsButton.text = "Settings";
+        _settingsButton.onButtonClick = onButtonClick;
+        _settingsButton.color = Colors.shade_2;
+        _settingsButton.colorHover = Colors.shade_3;
+        _settingsButton.position = sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _settingsButton.size.x - margin, _backgroundRect.sfRectangleShapeExt_getCenter(_settingsButton.size).y);
     }
 
     void update(sfEvent event) {
@@ -81,8 +81,8 @@ class BottomPanel {
         _renderWindow.sfRenderWindowExt_draw(_highScoreSprite);
         _renderWindow.sfRenderWindowExt_draw(_scoreSprite);
 
-        _scoreTextbox.setText(to!string(_gameStatistics._score()));
-        _highScoreTextbox.setText(to!string(_gameStatistics._highScore()));
+        _scoreTextbox.text = to!string(_gameStatistics._score());
+        _highScoreTextbox.text = to!string(_gameStatistics._highScore());
 
         _scoreTextbox.render(_renderWindow);
         _highScoreTextbox.render(_renderWindow);
@@ -93,24 +93,25 @@ class BottomPanel {
         }
     }
 
-private:
-    enum Colors : sfColor {
-        shade_1 = sfColorExt_255(189, 183, 107),
-        shade_2 = sfColorExt_255(189, 183, 107),
-        shade_3 = sfColorExt_255(166, 159, 74),
-        shade_4 = sfColorExt_255(64, 190, 92)
-    }
+    private {
+        enum Colors : sfColor {
+            shade_1 = sfColorExt_255(189, 183, 107),
+            shade_2 = sfColorExt_255(189, 183, 107),
+            shade_3 = sfColorExt_255(166, 159, 74),
+            shade_4 = sfColorExt_255(64, 190, 92)
+        }
 
-    GameStatistics _gameStatistics;
-    sfRectangleShape* _backgroundRect;
-    SettingsWindow _settingsWindow;
-    Button _settingsButton;
-    Textbox _scoreTextbox;
-    Textbox _highScoreTextbox;
-    sfRenderWindow* _renderWindow;
-    sfTexture* _highScoreTexture;
-    sfSprite* _highScoreSprite;
-    sfTexture* _scoreTexture;
-    sfSprite* _scoreSprite;
-    bool showSettingsWindow = false;
+        GameStatistics _gameStatistics;
+        sfRectangleShape* _backgroundRect;
+        SettingsWindow _settingsWindow;
+        Button _settingsButton;
+        Textbox _scoreTextbox;
+        Textbox _highScoreTextbox;
+        sfRenderWindow* _renderWindow;
+        sfTexture* _highScoreTexture;
+        sfSprite* _highScoreSprite;
+        sfTexture* _scoreTexture;
+        sfSprite* _scoreSprite;
+        bool showSettingsWindow = false;
+    }
 }

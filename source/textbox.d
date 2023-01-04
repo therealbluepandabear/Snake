@@ -15,37 +15,38 @@ class Textbox {
         _text.sfText_setCharacterSize(TextSize.medium);
     }
 
-    enum TextSize {
+    enum TextSize : short {
         small = 12, medium = 24, large = 36
     }
 
-    void setText(string text) {
-        _text.sfText_setString(toStringz(text));
-    }
-
-    void setTextSize(TextSize textSize) {
-        _text.sfText_setCharacterSize(textSize);
-    }
-
-    void setPosition(sfVector2f position) {
-        _text.sfText_setPosition(position);
-    }
-
-    sfVector2f getPosition() {
-        return _text.sfText_getPosition();
-    }
-
-    sfVector2f getSize() {
-        sfFloatRect bounds = _text.sfText_getLocalBounds();
-        return sfVector2f(bounds.width, bounds.height);
-    }
-
     void render(sfRenderWindow* renderWindow) {
-        assert(_text.sfText_getString() != "", "text must not be empty");
-
         renderWindow.sfRenderWindowExt_draw(_text);
     }
 
-private:
-    sfText* _text;
+    @property {
+        sfVector2f position() {
+            return _text.sfText_getPosition();
+        }
+
+        sfVector2f size() {
+            sfFloatRect bounds = _text.sfText_getLocalBounds();
+            return sfVector2f(bounds.width, bounds.height);
+        }
+
+        void text(string text) {
+            _text.sfText_setString(toStringz(text));
+        }
+
+        void textSize(TextSize textSize) {
+            _text.sfText_setCharacterSize(textSize);
+        }
+
+        void position(sfVector2f position) {
+            _text.sfText_setPosition(position);
+        }
+    }
+
+    private {
+        sfText* _text;
+    }
 }

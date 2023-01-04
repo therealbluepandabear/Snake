@@ -50,7 +50,8 @@ struct RoundRect {
         renderWindow.sfRenderWindowExt_drawArray(_rects);
     }
 
-private:
-    sfCircleShape*[4] _circles;
-    sfRectangleShape*[2] _rects;
+    private {
+        sfCircleShape*[4] _circles;
+        sfRectangleShape*[2] _rects;
+    }
 }

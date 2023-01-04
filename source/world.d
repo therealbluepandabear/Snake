@@ -26,22 +26,6 @@ class World {
         _food = new Food(this);
     }
 
-    sfVector2u windowSize() {
-        return _windowSize;
-    }
-
-    int blockSpan()  {
-        return _blockSpan;
-    }
-
-    float blockSize()  {
-        return _blockSize;
-    }
-
-    Snake player() {
-        return _player;
-    }
-
     void update() {
         if (_player.position == _food.position) {
             _player.extend();
@@ -67,71 +51,90 @@ class World {
         _food.render(renderWindow);
     }
 
-private:
-    void drawCheckerboardPattern(sfRenderWindow* renderWindow) {
-        sfRectangleShape* shape = sfRectangleShape_create();
-        shape.sfRectangleShape_setSize(sfVector2f(_blockSize, _blockSize));
+    @property {
+        sfVector2u windowSize() {
+            return _windowSize;
+        }
 
-        float dim = shape.sfRectangleShape_getSize().x;
+        int blockSpan()  {
+            return _blockSpan;
+        }
 
-        sfColor fillColor;
+        float blockSize()  {
+            return _blockSize;
+        }
 
-        for (float x = 0; x < _blockSpan; ++x) {
-            for (float y = 0; y < _blockSpan; ++y) {
-                if (x % 2 == 0) {
-                    if (y % 2 == 0) {
-                        fillColor = _orangeLight;
+        Snake player() {
+            return _player;
+        }
+    }
+
+    private {
+        void drawCheckerboardPattern(sfRenderWindow* renderWindow) {
+            sfRectangleShape* shape = sfRectangleShape_create();
+            shape.sfRectangleShape_setSize(sfVector2f(_blockSize, _blockSize));
+
+            float dim = shape.sfRectangleShape_getSize().x;
+
+            sfColor fillColor;
+
+            for (float x = 0; x < _blockSpan; ++x) {
+                for (float y = 0; y < _blockSpan; ++y) {
+                    if (x % 2 == 0) {
+                        if (y % 2 == 0) {
+                            fillColor = _orangeLight;
+                        } else {
+                            fillColor = _orangeDark;
+                        }
                     } else {
-                        fillColor = _orangeDark;
+                        if (y % 2 != 0) {
+                            fillColor = _orangeLight;
+                        } else {
+                            fillColor = _orangeDark;
+                        }
                     }
-                } else {
-                    if (y % 2 != 0) {
-                        fillColor = _orangeLight;
-                    } else {
-                        fillColor = _orangeDark;
-                    }
+
+                    shape.sfRectangleShape_setFillColor(fillColor);
+                    shape.sfRectangleShape_setPosition(sfVector2f(dim * x, dim * y));
+
+                    renderWindow.sfRenderWindowExt_draw(shape);
                 }
-
-                shape.sfRectangleShape_setFillColor(fillColor);
-                shape.sfRectangleShape_setPosition(sfVector2f(dim * x, dim * y));
-
-                renderWindow.sfRenderWindowExt_draw(shape);
-            }
-        }
-    }
-
-    bool isApplePosValid() {
-        bool valid = true;
-
-        foreach (SnakeSegment segment; _player.snakeBody) {
-            if (segment.position == _food.position) {
-                valid = false;
-                break;
             }
         }
 
-        return valid;
-    }
+        bool isApplePosValid() {
+            bool valid = true;
 
-    void createSound(ref sfSoundBuffer* soundBuffer, ref sfSound* sound, string src) {
-        soundBuffer = sfSoundBuffer_createFromFile(toStringz(src));
-        sound = sfSound_create();
-        sound.sfSound_setBuffer(soundBuffer);
-    }
+            foreach (SnakeSegment segment; _player.snakeBody) {
+                if (segment.position == _food.position) {
+                    valid = false;
+                    break;
+                }
+            }
 
-    enum Sounds : string {
-        powerup = "powerup.wav", death = "snakedeath.wav"
-    }
+            return valid;
+        }
 
-    sfVector2u _windowSize;
-    int _blockSpan;
-    float _blockSize;
-    sfSoundBuffer* _scoreSoundBuffer;
-    sfSound* _scoreSound;
-    sfSoundBuffer* _snakeDeathSoundBuffer;
-    sfSound* _snakeDeathSound;
-    sfColor _orangeLight;
-    sfColor _orangeDark;
-    Snake _player;
-    Food _food;
+        void createSound(ref sfSoundBuffer* soundBuffer, ref sfSound* sound, string src) {
+            soundBuffer = sfSoundBuffer_createFromFile(toStringz(src));
+            sound = sfSound_create();
+            sound.sfSound_setBuffer(soundBuffer);
+        }
+
+        enum Sounds : string {
+            powerup = "powerup.wav", death = "snakedeath.wav"
+        }
+
+        sfVector2u _windowSize;
+        int _blockSpan;
+        float _blockSize;
+        sfSoundBuffer* _scoreSoundBuffer;
+        sfSound* _scoreSound;
+        sfSoundBuffer* _snakeDeathSoundBuffer;
+        sfSound* _snakeDeathSound;
+        sfColor _orangeLight;
+        sfColor _orangeDark;
+        Snake _player;
+        Food _food;
+    }
 }

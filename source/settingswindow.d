@@ -27,25 +27,25 @@ class SettingsWindow {
         _colorRect.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, margin * 3));
 
         _boardSizeTextbox = new Textbox();
-        _boardSizeTextbox.setText("Board Size");
-        _boardSizeTextbox.setPosition(sfVector2fExt_splat(margin));
+        _boardSizeTextbox.text = "Board Size";
+        _boardSizeTextbox.position = sfVector2fExt_splat(margin);
 
         _backButton = new Button();
-        _backButton.setText("Back");
-        _backButton.setPosition(sfVector2f(_renderWindow.sfRenderWindow_getSize().x - _backButton.getSize().x - margin, _colorRect.sfRectangleShapeExt_getCenter(_backButton.getSize()).y));
-        _backButton.setColor(sfColor_fromRGB(189, 183, 107));
-        _backButton.setColorHover(sfColor_fromRGB(166, 159, 74));
-        _backButton.setOnButtonClick(onBackButtonClick);
+        _backButton.text = "Back";
+        _backButton.position = sfVector2f(_renderWindow.sfRenderWindow_getSize().x - _backButton.size.x - margin, _colorRect.sfRectangleShapeExt_getCenter(_backButton.size).y);
+        _backButton.color = sfColor_fromRGB(189, 183, 107);
+        _backButton.colorHover = sfColor_fromRGB(166, 159, 74);
+        _backButton.onButtonClick = onBackButtonClick;
 
-        BoardSize[] arr = cast(BoardSize[])[EnumMembers!BoardSize];
+        const(BoardSize[]) arr = cast(BoardSize[])[EnumMembers!BoardSize];
 
         foreach (indx, ref Button button; _boardSizeButtons) {
             button = new Button();
-            button.setText(format("%sx%s", arr[indx][0], arr[indx][1]));
-            button.setPosition(sfVector2f(margin + button.getSize().x * indx + margin * indx, _colorRect.sfRectangleShape_getPosition().y + _colorRect.sfRectangleShape_getSize().y + margin));
-            button.setColor(secondaryColor);
-            button.setColorHover(sfColor_fromRGB(166, 159, 74));
-            button.setOnButtonClick(onBoardSizeButtonClick);
+            button.text = format("%sx%s", arr[indx][0], arr[indx][1]);
+            button.position = sfVector2f(margin + button.size.x * indx + margin * indx, _colorRect.sfRectangleShape_getPosition().y + _colorRect.sfRectangleShape_getSize().y + margin);
+            button.color = secondaryColor;
+            button.colorHover = sfColor_fromRGB(166, 159, 74);
+            button.onButtonClick = onBoardSizeButtonClick;
         }
     }
 
@@ -68,11 +68,12 @@ class SettingsWindow {
         }
     }
 
-private:
-    sfRectangleShape* _backgroundRect;
-    sfRenderWindow* _renderWindow;
-    sfRectangleShape* _colorRect;
-    Button _backButton;
-    Textbox _boardSizeTextbox;
-    Button[3] _boardSizeButtons;
+    private {
+        sfRectangleShape* _backgroundRect;
+        sfRenderWindow* _renderWindow;
+        sfRectangleShape* _colorRect;
+        Button _backButton;
+        Textbox _boardSizeTextbox;
+        Button[3] _boardSizeButtons;
+    }
 }

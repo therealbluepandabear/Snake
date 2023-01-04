@@ -91,12 +91,14 @@ class Game {
         _snake = new Snake(cast(float)(_window.renderWindow.sfRenderWindow_getSize().x) / blockSpan);
         _world = new World(_window.renderWindow.sfRenderWindow_getSize(), blockSpan, _snake);
     }
-private:
-    World _world;
-    Snake _snake;
-    Window _window;
-    sfClock* _clock;
-    float _elapsed = 0;
-    BottomPanel _bottomPanel;
-    int _highScore;
+
+    private {
+        World _world;
+        Snake _snake;
+        Window _window;
+        sfClock* _clock;
+        float _elapsed = 0;
+        BottomPanel _bottomPanel;
+        int _highScore;
+    }
 }

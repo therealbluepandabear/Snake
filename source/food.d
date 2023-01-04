@@ -18,10 +18,6 @@ class Food {
         respawn();
     }
 
-    sfVector2i position() {
-        return _position;
-    }
-
     void respawn() {
         _position = sfVector2i(uniform(0, _world.blockSpan), uniform(0, _world.blockSpan));
         _appleSprite.sfSprite_setPosition(sfVector2f(_position.x * _world.blockSize, _position.y * _world.blockSize));
@@ -35,19 +31,26 @@ class Food {
         renderWindow.sfRenderWindowExt_draw(_appleSprite);
     }
 
-private:
-    bool isFoodPosValid() {
-        foreach (SnakeSegment segment; _world.player.snakeBody) {
-            if (segment.position == _position) {
-                return false;
-            }
+    @property {
+        sfVector2i position() {
+            return _position;
         }
-
-        return true;
     }
 
-    World _world;
-    sfVector2i _position;
-    sfTexture* _appleTexture;
-    sfSprite* _appleSprite;
+    private {
+        bool isFoodPosValid() {
+            foreach (SnakeSegment segment; _world.player.snakeBody) {
+                if (segment.position == _position) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        World _world;
+        sfVector2i _position;
+        sfTexture* _appleTexture;
+        sfSprite* _appleSprite;
+    }
 }

@@ -17,18 +17,6 @@ class Window {
         destroy();
     }
 
-    bool isDone() {
-        return _isDone;
-    }
-
-    sfRenderWindow* renderWindow() {
-        return _renderWindow;
-    }
-
-    sfEvent event() {
-        return _event;
-    }
-
     void beginDraw() {
         _renderWindow.sfRenderWindow_clear(sfBlack);
     }
@@ -53,29 +41,44 @@ class Window {
         create();
     }
 
-private:
-    void setup(string title, sfVector2u size) {
-        _windowTitle = title;
-        _windowSize = size;
-        _isFullScreen = false;
-        _isDone = false;
-        create();
+    @property {
+        bool isDone() {
+            return _isDone;
+        }
+
+        sfRenderWindow* renderWindow() {
+            return _renderWindow;
+        }
+
+        sfEvent event() {
+            return _event;
+        }
     }
 
-    void destroy() {
-        _renderWindow.sfRenderWindow_close();
-    }
+    private {
+        void setup(string title, sfVector2u size) {
+            _windowTitle = title;
+            _windowSize = size;
+            _isFullScreen = false;
+            _isDone = false;
+            create();
+        }
 
-    void create() {
-        sfWindowStyle style = _isFullScreen ? sfWindowStyle.sfFullscreen : sfWindowStyle.sfDefaultStyle;
-        _renderWindow = sfRenderWindow_create(sfVideoMode(_windowSize.x, _windowSize.y, 32), toStringz(_windowTitle), style, null);
-    }
+        void destroy() {
+            _renderWindow.sfRenderWindow_close();
+        }
 
-    sfRenderWindow* _renderWindow;
-    sfVector2u _windowSize;
-    string _windowTitle;
-    bool _isDone;
-    bool _isFullScreen;
-    sfEvent _event;
+        void create() {
+            sfWindowStyle style = _isFullScreen ? sfWindowStyle.sfFullscreen : sfWindowStyle.sfDefaultStyle;
+            _renderWindow = sfRenderWindow_create(sfVideoMode(_windowSize.x, _windowSize.y, 32), toStringz(_windowTitle), style, null);
+        }
+
+        sfRenderWindow* _renderWindow;
+        sfVector2u _windowSize;
+        string _windowTitle;
+        bool _isDone;
+        bool _isFullScreen;
+        sfEvent _event;
+    }
 }
 

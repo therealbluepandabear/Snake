@@ -7,9 +7,14 @@ import std.conv;
 import bindbc.loader;
 import game;
 
+struct List(T) {
+	typeof(this)* arr;
+}
 
 void main() {
 	loadSFML();
+
+	List!int l = List!int();
 
 	Game game = new Game();
 

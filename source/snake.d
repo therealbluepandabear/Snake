@@ -79,34 +79,6 @@ class Snake {
         reset();
     }
 
-    int speed() {
-        return _speed;
-    }
-
-    sfVector2i position() {
-        return (!(_snakeBody.length == 0)) ? _snakeBody.head.position : sfVector2i(1, 1);
-    }
-
-    SnakeContainer snakeBody() {
-        return _snakeBody;
-    }
-
-    int score() {
-        return _score;
-    }
-
-    void incScore() {
-        ++_score;
-    }
-
-    bool lost() {
-        return _lost;
-    }
-
-    float size() {
-        return _size;
-    }
-
     void dir(Direction dir) {
         _dir = dir;
     }
@@ -248,51 +220,82 @@ class Snake {
         return dir;
     }
 
-private:
-    void checkCollision() {
-        if (_snakeBody.length < 5) {
-            return;
+    @property {
+        int speed() {
+            return _speed;
         }
 
-        for (int i = 1; i < _snakeBody.length; ++i) {
-            if (_snakeBody[i].position == _snakeBody.head.position) {
-                lose();
-                break;
+        sfVector2i position() {
+            return (!(_snakeBody.length == 0)) ? _snakeBody.head.position : sfVector2i(1, 1);
+        }
+
+        SnakeContainer snakeBody() {
+            return _snakeBody;
+        }
+
+        int score() {
+            return _score;
+        }
+
+        void incScore() {
+            ++_score;
+        }
+
+        bool lost() {
+            return _lost;
+        }
+
+        float size() {
+            return _size;
+        }
+    }
+
+    private {
+        void checkCollision() {
+            if (_snakeBody.length < 5) {
+                return;
+            }
+
+            for (int i = 1; i < _snakeBody.length; ++i) {
+                if (_snakeBody[i].position == _snakeBody.head.position) {
+                    lose();
+                    break;
+                }
             }
         }
-    }
 
-    void createSprite(ref sfSprite* sprite, ref sfTexture* texture, string src) {
-        texture = sfTexture_createFromFile(toStringz(src), null);
-        sprite = sfSprite_create();
-        sprite.sfSprite_setTexture(texture, 0);
-        sprite.sfSpriteExt_sizeToBounds(texture, sfVector2f(size, size));
-    }
+        void createSprite(ref sfSprite* sprite, ref sfTexture* texture, string src) {
+            texture = sfTexture_createFromFile(toStringz(src), null);
+            sprite = sfSprite_create();
+            sprite.sfSprite_setTexture(texture, 0);
+            sprite.sfSpriteExt_sizeToBounds(texture, sfVector2f(size, size));
+        }
 
-    SnakeContainer _snakeBody;
-    float _size;
-    Direction _dir = Direction.none;
-    int _speed;
-    int _score;
-    bool _lost;
-    sfTexture* _snakeHeadUpTexture;
-    sfSprite* _snakeHeadUpSprite;
-    sfTexture* _snakeHeadDownTexture;
-    sfSprite* _snakeHeadDownSprite;
-    sfTexture* _snakeHeadLeftTexture;
-    sfSprite* _snakeHeadLeftSprite;
-    sfTexture* _snakeHeadRightTexture;
-    sfSprite* _snakeHeadRightSprite;
-    sfTexture* _snakeBodyTexture1;
-    sfSprite* _snakeBodySprite1;
-    sfTexture* _snakeBodyTexture2;
-    sfSprite* _snakeBodySprite2;
-    sfTexture* _snakeEdgeNETexture;
-    sfSprite* _snakeEdgeNESprite;
-    sfTexture* _snakeEdgeNWTexture;
-    sfSprite* _snakeEdgeNWSprite;
-    sfTexture* _snakeEdgeSETexture;
-    sfSprite* _snakeEdgeSESprite;
-    sfTexture* _snakeEdgeSWTexture;
-    sfSprite* _snakeEdgeSWSprite;
+        SnakeContainer _snakeBody;
+        float _size;
+        Direction _dir = Direction.none;
+        int _speed;
+        int _score;
+        bool _lost;
+        sfTexture* _snakeHeadUpTexture;
+        sfSprite* _snakeHeadUpSprite;
+        sfTexture* _snakeHeadDownTexture;
+        sfSprite* _snakeHeadDownSprite;
+        sfTexture* _snakeHeadLeftTexture;
+        sfSprite* _snakeHeadLeftSprite;
+        sfTexture* _snakeHeadRightTexture;
+        sfSprite* _snakeHeadRightSprite;
+        sfTexture* _snakeBodyTexture1;
+        sfSprite* _snakeBodySprite1;
+        sfTexture* _snakeBodyTexture2;
+        sfSprite* _snakeBodySprite2;
+        sfTexture* _snakeEdgeNETexture;
+        sfSprite* _snakeEdgeNESprite;
+        sfTexture* _snakeEdgeNWTexture;
+        sfSprite* _snakeEdgeNWSprite;
+        sfTexture* _snakeEdgeSETexture;
+        sfSprite* _snakeEdgeSESprite;
+        sfTexture* _snakeEdgeSWTexture;
+        sfSprite* _snakeEdgeSWSprite;
+    }
 }
