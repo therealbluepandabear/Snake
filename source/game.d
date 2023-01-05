@@ -105,6 +105,7 @@ class Game : GameEventHandler {
         _showSettingsWindow = false;
         GameSettings.boardSize = boardSize;
         setup();
+        _highScore = 0;
     }
 
     private {
