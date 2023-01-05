@@ -41,15 +41,15 @@ class SettingsWindow {
         const(BoardSize[]) arr = cast(BoardSize[])[EnumMembers!BoardSize];
         _boardSizeRow = new Row!(Button)(sfVector2f(margin, _colorRect.sfRectangleShape_getPosition().y + _colorRect.sfRectangleShape_getSize().y + margin));
 
-        Button[3] b;
-
-        static foreach (indx, BoardSize boardSize; arr) {
-            b[indx] = new Button();
-            b[indx].text = format("%sx%s", boardSize[0], boardSize[1]);
-            b[indx].onButtonClick = {
-                eventHandler.settingsWindow_onBoardSizeButtonClick(boardSize);
-            };
-            _boardSizeRow.addChild(b[indx]);
+        foreach (BoardSize boardSize; arr) {
+            Button b = new Button();
+            b.text = format("%sx%s", boardSize[0], boardSize[1]);
+            b.onButtonClick = (BoardSize iteration_boardSize) {
+                return {
+                    eventHandler.settingsWindow_onBoardSizeButtonClick(iteration_boardSize);
+                };
+            }(boardSize);
+            _boardSizeRow.addChild(b);
         }
     }
 
