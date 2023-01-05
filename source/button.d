@@ -5,10 +5,13 @@ import textbox;
 import sfmlextensions;
 import std.stdio;
 import shapes;
+import theme;
 
 class Button {
     this() {
         _rect = sfRectangleShape_create();
+        _color = Theme.buttonBackground;
+        _colorHover = Theme.buttonHoverBackground;
         _textbox = new Textbox();
     }
 
@@ -22,11 +25,11 @@ class Button {
                 _rect.sfRectangleShape_setFillColor(_colorHover);
             }
 
-            if (event.type == sfEventType.sfEvtMouseButtonPressed && _executeOnButtonClick) {
+            if (event.type == sfEventType.sfEvtMouseButtonPressed) {
+                _executeOnButtonClick = true;
+            } else if (event.type == sfEventType.sfEvtMouseButtonReleased && _executeOnButtonClick) {
                 _onButtonClick();
                 _executeOnButtonClick = false;
-            } else if (event.type == sfEventType.sfEvtMouseButtonReleased) {
-                _executeOnButtonClick = true;
             }
         } else {
             _rect.sfRectangleShape_setFillColor(_color);
@@ -59,15 +62,6 @@ class Button {
         void position(sfVector2f position) {
             _rect.sfRectangleShape_setPosition(position);
             _textbox.position = _rect.sfRectangleShapeExt_getCenter(_textbox.size, sfVector2f(0, -4));
-        }
-
-        void colorHover(sfColor colorHover) {
-            _colorHover = colorHover;
-        }
-
-        void color(sfColor color) {
-            _color = color;
-            _rect.sfRectangleShape_setFillColor(color);
         }
     }
 

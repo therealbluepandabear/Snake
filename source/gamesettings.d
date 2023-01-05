@@ -2,10 +2,10 @@ module gamesettings;
 
 import std.typecons;
 
-enum BoardSize : Tuple!(uint, uint) {
-    small = tuple(5u, 5u),
-    medium = tuple(20u, 20u),
-    large = tuple(35u, 35u)
+enum BoardSize : Tuple!(int, int) {
+    small = tuple(5, 5),
+    medium = tuple(20, 20),
+    large = tuple(35, 35)
 }
 
 struct GameSettings {

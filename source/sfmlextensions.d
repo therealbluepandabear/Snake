@@ -87,6 +87,6 @@ RoundRect sfRectangleShapeExt_toRoundRect(sfRectangleShape* rect, float cornerRa
     return RoundRect(cornerRadius, rect.sfRectangleShape_getSize(), rect.sfRectangleShape_getPosition(), rect.sfRectangleShape_getFillColor());
 }
 
-sfColor sfColorExt_255(ubyte r, ubyte g, ubyte b) {
+sfColor sfColorExt_alpha255(ubyte r, ubyte g, ubyte b) {
     return sfColor(r, g, b, 255);
 }

@@ -13,14 +13,15 @@ import world;
 import gamesettings;
 import snake;
 import game;
+import theme;
 
 class BottomPanel {
-    this(sfRenderWindow* renderWindow, GameStatistics gameStatistics, int height, Game game) {
+    this(sfRenderWindow* renderWindow, GameStatistics gameStatistics, int height, BottomPanel.EventHandler eventHandler) {
         _renderWindow = renderWindow;
         _gameStatistics = gameStatistics;
 
         _backgroundRect = sfRectangleShape_create();
-        _backgroundRect.sfRectangleShape_setFillColor(Colors.shade_4);
+        _backgroundRect.sfRectangleShape_setFillColor(Theme.secondaryBackground);
         _backgroundRect.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, height));
         _backgroundRect.sfRectangleShape_setPosition(sfVector2f(0, renderWindow.sfRenderWindow_getSize().y - height));
 
@@ -47,33 +48,14 @@ class BottomPanel {
         _highScoreTextbox = new Textbox();
         _highScoreTextbox.position = sfVector2f(_highScoreSprite.sfSprite_getPosition().x + spriteSize.y + margin, txtPosY);
 
-        void delegate() onBackButtonClick = {
-            showSettingsWindow = false;
-        };
-
-        void delegate() onBoardSizeButtonClick = {
-            showSettingsWindow = false;
-            GameSettings.boardSize = BoardSize.small;
-            game.setup();
-        };
-
-        _settingsWindow = new SettingsWindow(_renderWindow, Colors.shade_1, Colors.shade_4, onBackButtonClick, onBoardSizeButtonClick);
-
-        void delegate() onButtonClick = {
-            showSettingsWindow = true;
-        };
-
         _settingsButton = new Button();
         _settingsButton.text = "Settings";
-        _settingsButton.onButtonClick = onButtonClick;
-        _settingsButton.color = Colors.shade_2;
-        _settingsButton.colorHover = Colors.shade_3;
+        _settingsButton.onButtonClick = &(eventHandler.bottomPanel_onSettingsButtonClick);
         _settingsButton.position = sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _settingsButton.size.x - margin, _backgroundRect.sfRectangleShapeExt_getCenter(_settingsButton.size).y);
     }
 
     void update(sfEvent event) {
         _settingsButton.update(event, _renderWindow);
-        _settingsWindow.update(event);
     }
 
     void render() {
@@ -87,23 +69,15 @@ class BottomPanel {
         _scoreTextbox.render(_renderWindow);
         _highScoreTextbox.render(_renderWindow);
         _renderWindow.sfRenderWindowExt_draw(_settingsButton);
+    }
 
-        if (showSettingsWindow) {
-            _settingsWindow.render();
-        }
+    interface EventHandler {
+        void bottomPanel_onSettingsButtonClick();
     }
 
     private {
-        enum Colors : sfColor {
-            shade_1 = sfColorExt_255(189, 183, 107),
-            shade_2 = sfColorExt_255(189, 183, 107),
-            shade_3 = sfColorExt_255(166, 159, 74),
-            shade_4 = sfColorExt_255(64, 190, 92)
-        }
-
         GameStatistics _gameStatistics;
         sfRectangleShape* _backgroundRect;
-        SettingsWindow _settingsWindow;
         Button _settingsButton;
         Textbox _scoreTextbox;
         Textbox _highScoreTextbox;
@@ -112,6 +86,5 @@ class BottomPanel {
         sfSprite* _highScoreSprite;
         sfTexture* _scoreTexture;
         sfSprite* _scoreSprite;
-        bool showSettingsWindow = false;
     }
 }

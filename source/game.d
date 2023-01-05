@@ -16,13 +16,17 @@ import gamestatistics;
 import bottompanel;
 import gamesettings;
 import row;
+import settingswindow;
 
-class Game {
+interface GameEventHandler : BottomPanel.EventHandler, SettingsWindow.EventHandler { }
+
+class Game : GameEventHandler {
     this() {
         int bottomPanelHeight = 100;
         int size = 600;
 
         _window = new Window("Snake", sfVector2u(size, size + bottomPanelHeight));
+        _settingsWindow = new SettingsWindow(_window.renderWindow, this);
         setup();
 
         _clock = sfClock_create();
@@ -36,14 +40,16 @@ class Game {
     }
 
     void handleInput() {
-        if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyUp) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyW))  && (_snake.getDirection() != Direction.down)) {
-            _snake.dir = Direction.up;
-        } else if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyDown) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyS)) && (_snake.getDirection() != Direction.up)) {
-            _snake.dir = Direction.down;
-        } else if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyLeft) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyA))  && (_snake.getDirection() != Direction.right)) {
-            _snake.dir = Direction.left;
-        } else if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyRight) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyD)) && (_snake.getDirection() != Direction.left)) {
-            _snake.dir = Direction.right;
+        if (_window.renderWindow.sfRenderWindow_hasFocus()) {
+            if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyUp) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyW))  && (_snake.getDirection() != Direction.down)) {
+                _snake.dir = Direction.up;
+            } else if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyDown) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyS)) && (_snake.getDirection() != Direction.up)) {
+                _snake.dir = Direction.down;
+            } else if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyLeft) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyA))  && (_snake.getDirection() != Direction.right)) {
+                _snake.dir = Direction.left;
+            } else if ((sfKeyboard_isKeyPressed(sfKeyCode.sfKeyRight) || sfKeyboard_isKeyPressed(sfKeyCode.sfKeyD)) && (_snake.getDirection() != Direction.left)) {
+                _snake.dir = Direction.right;
+            }
         }
     }
 
@@ -58,6 +64,7 @@ class Game {
 
         _window.update();
         _bottomPanel.update(_window.event);
+        _settingsWindow.update(_window.event);
 
         float timestep = 1.0f / _snake.speed;
         float div = 10;
@@ -66,7 +73,6 @@ class Game {
         if (_elapsed >= timestep) {
             _snake.tick();
             _world.update();
-
             _elapsed -= timestep;
         }
     }
@@ -80,20 +86,38 @@ class Game {
         _snake.render(_window.renderWindow);
         _bottomPanel.render();
 
+        if (_showSettingsWindow) {
+            _settingsWindow.render();
+        }
+
         _window.endDraw();
     }
 
-    void setup() {
-        if (_snake !is null && _snake.score > _highScore) {
-            _highScore = _snake.score;
-        }
+    override void bottomPanel_onSettingsButtonClick() {
+        _showSettingsWindow = true;
+    }
 
-        int blockSpan = GameSettings.boardSize[0];
-        _snake = new Snake(cast(float)(_window.renderWindow.sfRenderWindow_getSize().x) / blockSpan);
-        _world = new World(_window.renderWindow.sfRenderWindow_getSize(), blockSpan, _snake);
+    override void settingsWindow_onBackButtonClick() {
+        _showSettingsWindow = false;
+    }
+
+    override void settingsWindow_onBoardSizeButtonClick(BoardSize boardSize) {
+        _showSettingsWindow = false;
+        GameSettings.boardSize = boardSize;
+        setup();
     }
 
     private {
+        void setup() {
+            if (_snake !is null && _snake.score > _highScore) {
+                _highScore = _snake.score;
+            }
+
+            int blockSpan = GameSettings.boardSize[0];
+            _snake = new Snake(cast(float)(_window.renderWindow.sfRenderWindow_getSize().x) / blockSpan);
+            _world = new World(_window.renderWindow.sfRenderWindow_getSize(), blockSpan, _snake);
+        }
+
         World _world;
         Snake _snake;
         Window _window;
@@ -101,5 +125,7 @@ class Game {
         float _elapsed = 0;
         BottomPanel _bottomPanel;
         int _highScore;
+        bool _showSettingsWindow = false;
+        SettingsWindow _settingsWindow;
     }
 }

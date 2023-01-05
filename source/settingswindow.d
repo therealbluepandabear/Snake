@@ -11,21 +11,23 @@ import std.traits;
 import std.string;
 import gamesettings;
 import row;
+import theme;
+import std.random;
 
 class SettingsWindow {
-    this(sfRenderWindow* renderWindow, sfColor backgroundColor, sfColor secondaryColor, void delegate() onBackButtonClick, void delegate() onBoardSizeButtonClick) {
+    this(sfRenderWindow* renderWindow, SettingsWindow.EventHandler eventHandler) {
         _renderWindow = renderWindow;
 
         _backgroundRect = sfRectangleShape_create();
         _backgroundRect.sfRectangleShape_setSize(renderWindow.sfRenderWindow_getSize().sfVector2uExt_toVector2f());
         _backgroundRect.sfRectangleShape_setPosition(sfVector2fExt_splat(0));
-        _backgroundRect.sfRectangleShape_setFillColor(backgroundColor);
+        _backgroundRect.sfRectangleShape_setFillColor(Theme.primaryBackground);
 
-        short margin = 24;
+        int margin = 24;
 
         _colorRect = sfRectangleShape_create();
-        _colorRect.sfRectangleShape_setFillColor(secondaryColor);
-        _colorRect.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, margin * 3));
+        _colorRect.sfRectangleShape_setFillColor(Theme.secondaryBackground);
+        _colorRect.sfRectangleShape_setSize(sfVector2f(_backgroundRect.sfRectangleShape_getSize().x, margin * 3));
 
         _boardSizeTextbox = new Textbox();
         _boardSizeTextbox.text = "Board Size";
@@ -33,20 +35,21 @@ class SettingsWindow {
 
         _backButton = new Button();
         _backButton.text = "Back";
-        _backButton.position = sfVector2f(_renderWindow.sfRenderWindow_getSize().x - _backButton.size.x - margin, _colorRect.sfRectangleShapeExt_getCenter(_backButton.size).y);
-        _backButton.color = sfColor_fromRGB(189, 183, 107);
-        _backButton.colorHover = sfColor_fromRGB(166, 159, 74);
-        _backButton.onButtonClick = onBackButtonClick;
+        _backButton.position = sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _backButton.size.x - margin, _colorRect.sfRectangleShapeExt_getCenter(_backButton.size).y);
+        _backButton.onButtonClick = &(eventHandler.settingsWindow_onBackButtonClick);
 
         const(BoardSize[]) arr = cast(BoardSize[])[EnumMembers!BoardSize];
         _boardSizeRow = new Row!(Button)(sfVector2f(margin, _colorRect.sfRectangleShape_getPosition().y + _colorRect.sfRectangleShape_getSize().y + margin));
 
-        foreach (indx; 0..arr.length) {
-            Button button = new Button();
-            button.text = format("%sx%s", arr[indx][0], arr[indx][1]);
-            button.colorHover = sfColor_fromRGB(166, 159, 74);
-            button.onButtonClick = onBoardSizeButtonClick;
-            _boardSizeRow.addChild(button);
+        Button[3] b;
+
+        static foreach (indx, BoardSize boardSize; arr) {
+            b[indx] = new Button();
+            b[indx].text = format("%sx%s", boardSize[0], boardSize[1]);
+            b[indx].onButtonClick = {
+                eventHandler.settingsWindow_onBoardSizeButtonClick(boardSize);
+            };
+            _boardSizeRow.addChild(b[indx]);
         }
     }
 
@@ -64,6 +67,11 @@ class SettingsWindow {
         _renderWindow.sfRenderWindowExt_draw(_boardSizeTextbox);
         _renderWindow.sfRenderWindowExt_draw(_backButton);
         _boardSizeRow.render(_renderWindow);
+    }
+
+    interface EventHandler {
+        void settingsWindow_onBackButtonClick();
+        void settingsWindow_onBoardSizeButtonClick(BoardSize boardSize);
     }
 
     private {
