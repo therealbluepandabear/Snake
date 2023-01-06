@@ -16,7 +16,6 @@ enum BoardSize : Tuple!(int, int) {
 
 class GameSettings {
     static this() {
-        file =  File(_fileName, "a+");
         load();
     }
 
@@ -39,6 +38,7 @@ class GameSettings {
         }
 
         void load() {
+            file = File(_fileName, "a+");
             char[] content = cast(char[])(read(_fileName));
 
             if (content == "") {

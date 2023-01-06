@@ -48,7 +48,7 @@ class SettingsWindow {
                 return {
                     eventHandler.settingsWindow_onBoardSizeButtonClick(iteration_boardSize);
                 };
-            }(boardSize);
+            } (boardSize);
             _boardSizeRow.addChild(b);
         }
     }
