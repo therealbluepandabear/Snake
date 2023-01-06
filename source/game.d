@@ -22,6 +22,8 @@ interface GameEventHandler : BottomPanel.EventHandler, SettingsWindow.EventHandl
 
 class Game : GameEventHandler {
     this() {
+        GameSettings settings = new GameSettings();
+
         int bottomPanelHeight = 100;
         int size = 600;
 
