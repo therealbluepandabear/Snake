@@ -66,8 +66,8 @@ class BottomPanel {
         _scoreTextbox.text = to!string(_gameStatistics._score());
         _highScoreTextbox.text = to!string(_gameStatistics._highScore());
 
-        _scoreTextbox.render(_renderWindow);
-        _highScoreTextbox.render(_renderWindow);
+        _renderWindow.sfRenderWindowExt_draw(_scoreTextbox);
+        _renderWindow.sfRenderWindowExt_draw(_highScoreTextbox);
         _renderWindow.sfRenderWindowExt_draw(_settingsButton);
     }
 
