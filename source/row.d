@@ -17,8 +17,8 @@ class Row(T) {
         }
     }
 
-    void addChild(T child, float _cursorOffset = 0) {
-        child.sfDrawableExt_setPosition(sfVector2f(_cursor + _cursorOffset + _position.x, _position.y));
+    void addChild(T child) {
+        child.sfDrawableExt_setPosition(sfVector2f(_cursor + _position.x, _position.y));
         _cursor += child.sfDrawableExt_getSize().x;
         _children ~= child;
     }
