@@ -39,10 +39,11 @@ class JSONConfigHelper {
         return _json[key];
     }
 
-private:
-    File _configFile;
-    string _configPath;
-    JSONValue _json;
+    private {
+        File _configFile;
+        string _configPath;
+        JSONValue _json;
+    }
 }
 
 class GameConfig {
