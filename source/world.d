@@ -8,7 +8,7 @@ import std.random;
 import std.string;
 import sfmlextensions;
 import food;
-import gamesettings;
+import gameconfig;
 
 class World {
     this(sfVector2u windowSize, int blockSpan, Snake player) {

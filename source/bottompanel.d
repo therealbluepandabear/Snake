@@ -10,7 +10,7 @@ import std.stdio;
 import button;
 import settingswindow;
 import world;
-import gamesettings;
+import gameconfig;
 import snake;
 import game;
 import theme;

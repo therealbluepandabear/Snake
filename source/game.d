@@ -14,7 +14,7 @@ import textbox;
 import std.random;
 import gamestatistics;
 import bottompanel;
-import gamesettings;
+import gameconfig;
 import row;
 import settingswindow;
 
@@ -22,7 +22,7 @@ interface GameEventHandler : BottomPanel.EventHandler, SettingsWindow.EventHandl
 
 class Game : GameEventHandler {
     this() {
-        GameSettings settings = new GameSettings();
+        _highscore = GameConfig.highscores[GameConfig.boardSize];
 
         int bottomPanelHeight = 100;
         int size = 600;
@@ -34,7 +34,7 @@ class Game : GameEventHandler {
         _clock = sfClock_create();
         _clock.sfClock_restart();
 
-        _bottomPanel = new BottomPanel(_window.renderWindow, GameStatistics((() => _snake.score), (() => _highScore)), bottomPanelHeight, this);
+        _bottomPanel = new BottomPanel(_window.renderWindow, GameStatistics((() => _snake.score), (() => _highscore)), bottomPanelHeight, this);
     }
 
     Window window() {
@@ -105,18 +105,19 @@ class Game : GameEventHandler {
 
     override void settingsWindow_onBoardSizeButtonClick(BoardSize boardSize) {
         _showSettingsWindow = false;
-        GameSettings.boardSize = boardSize;
+        GameConfig.boardSize = boardSize;
+        _highscore = GameConfig.highscores[GameConfig.boardSize];
         setup();
-        _highScore = 0;
     }
 
     private {
         void setup() {
-            if (_snake !is null && _snake.score > _highScore) {
-                _highScore = _snake.score;
+            if (_snake !is null && _snake.score > _highscore) {
+                _highscore = _snake.score;
+                GameConfig.setHighscore(GameConfig.boardSize, _highscore);
             }
 
-            int blockSpan = GameSettings.boardSize[0];
+            int blockSpan = GameConfig.boardSize[0];
             _snake = new Snake(cast(float)(_window.renderWindow.sfRenderWindow_getSize().x) / blockSpan);
             _world = new World(_window.renderWindow.sfRenderWindow_getSize(), blockSpan, _snake);
         }
@@ -127,7 +128,7 @@ class Game : GameEventHandler {
         sfClock* _clock;
         float _elapsed = 0;
         BottomPanel _bottomPanel;
-        int _highScore;
+        int _highscore;
         bool _showSettingsWindow = false;
         SettingsWindow _settingsWindow;
     }

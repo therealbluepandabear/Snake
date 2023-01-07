@@ -9,7 +9,7 @@ import button;
 import std.typecons;
 import std.traits;
 import std.string;
-import gamesettings;
+import gameconfig;
 import row;
 import theme;
 import std.random;
