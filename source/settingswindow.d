@@ -14,6 +14,43 @@ import row;
 import theme;
 import std.random;
 
+private int margin = 24;
+
+private class SettingsHeader {
+    this(sfRenderWindow* renderWindow, string title, sfVector2f position) {
+        _renderWindow = renderWindow;
+        _title = title;
+        _position = position;
+
+        _headerRectangle = sfRectangleShape_create();
+        _headerRectangle.sfRectangleShape_setFillColor(Theme.currentTheme.secondaryBackground());
+        _headerRectangle.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, margin * 3));
+
+        _headerTextbox = new Textbox();
+        _headerTextbox.text = title;
+        _headerTextbox.position = sfVector2f(position.x + margin, position.y + margin);
+    }
+
+    void render() {
+        _renderWindow.sfRenderWindowExt_draw(_headerRectangle);
+        _renderWindow.sfRenderWindowExt_draw(_headerTextbox);
+    }
+
+    @property {
+        sfRectangleShape* headerRectangle() {
+            return _headerRectangle;
+        }
+    }
+
+    private {
+        sfRenderWindow* _renderWindow;
+        string _title;
+        sfVector2f _position;
+        sfRectangleShape* _headerRectangle;
+        Textbox _headerTextbox;
+    }
+}
+
 class SettingsWindow {
     this(sfRenderWindow* renderWindow, SettingsWindow.EventHandler eventHandler) {
         _renderWindow = renderWindow;
@@ -21,27 +58,18 @@ class SettingsWindow {
         _backgroundRect = sfRectangleShape_create();
         _backgroundRect.sfRectangleShape_setSize(renderWindow.sfRenderWindow_getSize().sfVector2uExt_toVector2f());
         _backgroundRect.sfRectangleShape_setPosition(sfVector2fExt_splat(0));
-        _backgroundRect.sfRectangleShape_setFillColor(Theme.primaryBackground);
+        _backgroundRect.sfRectangleShape_setFillColor(Theme.currentTheme.primaryBackground());
 
-        int margin = 24;
-
-        _colorRect = sfRectangleShape_create();
-        _colorRect.sfRectangleShape_setFillColor(Theme.secondaryBackground);
-        _colorRect.sfRectangleShape_setSize(sfVector2f(_backgroundRect.sfRectangleShape_getSize().x, margin * 3));
-
-        _boardSizeTextbox = new Textbox();
-        _boardSizeTextbox.text = "Board Size";
-        _boardSizeTextbox.position = sfVector2fExt_splat(margin);
+        _boardSizeSettingsHeader = new SettingsHeader(renderWindow, "Board Size", sfVector2fExt_splat(0));
 
         _backButton = new Button();
         _backButton.text = "Back";
-        _backButton.position = sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _backButton.size.x - margin, _colorRect.sfRectangleShapeExt_getCenter(_backButton.size).y);
+        _backButton.position = sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _backButton.size.x - margin, _boardSizeSettingsHeader.headerRectangle.sfRectangleShapeExt_getCenter(_backButton.size).y);
         _backButton.onButtonClick = &(eventHandler.settingsWindow_onBackButtonClick);
 
-        const(BoardSize[]) arr = cast(BoardSize[])[EnumMembers!BoardSize];
-        _boardSizeRow = new Row!(Button)(sfVector2f(margin, _colorRect.sfRectangleShape_getPosition().y + _colorRect.sfRectangleShape_getSize().y + margin));
+        _boardSizeRow = new Row!(Button)(sfVector2f(margin,  _boardSizeSettingsHeader.headerRectangle.sfRectangleShape_getSize().y + margin), 16);
 
-        foreach (BoardSize boardSize; arr) {
+        foreach (BoardSize boardSize; cast(BoardSize[])[EnumMembers!BoardSize]) {
             Button b = new Button();
             b.text = format("%sx%s", boardSize[0], boardSize[1]);
             b.onButtonClick = (BoardSize iteration_boardSize) {
@@ -63,8 +91,7 @@ class SettingsWindow {
 
     void render() {
         _renderWindow.sfRenderWindowExt_draw(_backgroundRect);
-        _renderWindow.sfRenderWindowExt_draw(_colorRect);
-        _renderWindow.sfRenderWindowExt_draw(_boardSizeTextbox);
+        _boardSizeSettingsHeader.render();
         _renderWindow.sfRenderWindowExt_draw(_backButton);
         _boardSizeRow.render(_renderWindow);
     }
@@ -77,9 +104,8 @@ class SettingsWindow {
     private {
         sfRectangleShape* _backgroundRect;
         sfRenderWindow* _renderWindow;
-        sfRectangleShape* _colorRect;
         Button _backButton;
-        Textbox _boardSizeTextbox;
         Row!(Button) _boardSizeRow;
+        SettingsHeader _boardSizeSettingsHeader;
     }
 }

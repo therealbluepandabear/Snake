@@ -21,7 +21,7 @@ class BottomPanel {
         _gameStatistics = gameStatistics;
 
         _backgroundRect = sfRectangleShape_create();
-        _backgroundRect.sfRectangleShape_setFillColor(Theme.secondaryBackground);
+        _backgroundRect.sfRectangleShape_setFillColor(Theme.currentTheme.secondaryBackground());
         _backgroundRect.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, height));
         _backgroundRect.sfRectangleShape_setPosition(sfVector2f(0, renderWindow.sfRenderWindow_getSize().y - height));
 

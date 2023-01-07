@@ -10,8 +10,8 @@ import theme;
 class Button {
     this() {
         _rect = sfRectangleShape_create();
-        _color = Theme.buttonBackground;
-        _colorHover = Theme.buttonHoverBackground;
+        _color = Theme.currentTheme.buttonBackground();
+        _colorHover = Theme.currentTheme.buttonHoverBackground();
         _textbox = new Textbox();
     }
 
