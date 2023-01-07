@@ -102,6 +102,11 @@ class GameConfig {
             high_scores = "high_scores"
         }
 
+        invariant() {
+            assert(_highscores !is null, "_highscores must not be null");
+            assert(_jsonConfigHelper !is null, "_jsonConfigHelper must not be null");
+        }
+
         BoardSize _boardSize = BoardSize.medium;
         int[BoardSize] _highscores;
         JSONConfigHelper _jsonConfigHelper;
