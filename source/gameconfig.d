@@ -81,7 +81,6 @@ class GameConfig {
         }
 
         void setHighscore(BoardSize boardSize, int score) {
-            assert(_highscores.keys.length == (cast(BoardSize[])[EnumMembers!BoardSize]).length);
             _highscores[boardSize] = score;
             _jsonConfigHelper.write(JSONKeys.high_scores, highscoresJSON());
         }
@@ -105,6 +104,7 @@ class GameConfig {
 
         invariant() {
             assert(_highscores !is null, "_highscores must not be null");
+            assert(_highscores.keys.length == (cast(BoardSize[])[EnumMembers!BoardSize]).length, "Inappropriate length for _highscores");
             assert(_jsonConfigHelper !is null, "_jsonConfigHelper must not be null");
         }
 
