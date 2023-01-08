@@ -10,9 +10,9 @@ import std.typecons;
 import std.traits;
 import std.string;
 import gameconfig;
-import row;
 import theme;
 import std.random;
+import stacklayout;
 
 private int margin = 24;
 
@@ -68,7 +68,7 @@ class SettingsWindow {
         _backButton.position = sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _backButton.size.x - margin, _boardSizeSettingsHeader.headerRectangle.sfRectangleShapeExt_getCenter(_backButton.size).y);
         _backButton.onButtonClick = &(eventHandler.settingsWindow_onBackButtonClick);
 
-        _boardSizeRow = new Row!(Button)(sfVector2f(margin,  _boardSizeSettingsHeader.headerRectangle.sfRectangleShape_getSize().y + margin), 16);
+        _boardSizeRow = new StackLayout!Button(StackLayoutType.row, sfVector2f(margin, _boardSizeSettingsHeader.headerRectangle.sfRectangleShape_getSize().y + margin), margin);
 
         foreach (BoardSize boardSize; cast(BoardSize[])[EnumMembers!BoardSize]) {
             Button b = new Button();
@@ -106,7 +106,7 @@ class SettingsWindow {
         sfRectangleShape* _backgroundRect;
         sfRenderWindow* _renderWindow;
         Button _backButton;
-        Row!(Button) _boardSizeRow;
         SettingsHeader _boardSizeSettingsHeader;
+        StackLayout!Button _boardSizeRow;
     }
 }

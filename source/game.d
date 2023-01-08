@@ -15,7 +15,6 @@ import std.random;
 import gamestatistics;
 import bottompanel;
 import gameconfig;
-import row;
 import settingswindow;
 
 interface GameEventHandler : BottomPanel.EventHandler, SettingsWindow.EventHandler { }
