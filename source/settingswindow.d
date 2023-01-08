@@ -25,6 +25,7 @@ private class SettingsHeader {
         _headerRectangle = sfRectangleShape_create();
         _headerRectangle.sfRectangleShape_setFillColor(Theme.currentTheme.secondaryBackground());
         _headerRectangle.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, margin * 3));
+        _headerRectangle.sfRectangleShape_setPosition(position);
 
         _headerTextbox = new Textbox();
         _headerTextbox.text = title;
