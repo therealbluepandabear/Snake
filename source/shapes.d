@@ -2,8 +2,9 @@ module shapes;
 
 import bindbc.sfml;
 import sfmlextensions;
+import customdrawable;
 
-struct RoundRect {
+class RoundRect : ICustomDrawable {
     this(float cornerRadius, sfVector2f size, sfVector2f position, sfColor color) {
         assert((cornerRadius <= size.x / 2) && (cornerRadius <= size.y / 2), "cornerRadius too large");
 
@@ -45,7 +46,7 @@ struct RoundRect {
         }
     }
 
-    void render(sfRenderWindow* renderWindow) {
+    override void render(sfRenderWindow* renderWindow) {
         renderWindow.sfRenderWindowExt_drawArray(_circles);
         renderWindow.sfRenderWindowExt_drawArray(_rects);
     }

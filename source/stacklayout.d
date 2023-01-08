@@ -5,12 +5,13 @@ import sfmlextensions;
 import std.format;
 import std.stdio;
 import std.algorithm;
+import customdrawable;
 
 enum StackLayoutType {
     row, column
 }
 
-class StackLayout(T) {
+class StackLayout(T) : ICustomDrawable {
     this(StackLayoutType stackLayoutType, sfVector2f position, int spacing = 0) {
         static assert(isDrawable!T, format("Cannot call addChild method on type %s", T.stringof));
         _stackLayoutType = stackLayoutType;
@@ -18,7 +19,7 @@ class StackLayout(T) {
         _position = position;
     }
 
-    void render(sfRenderWindow* renderWindow) {
+    override void render(sfRenderWindow* renderWindow) {
         foreach (T child; _children) {
             renderWindow.sfRenderWindowExt_draw(child);
         }
@@ -49,6 +50,8 @@ class StackLayout(T) {
 
     private {
         void updateSize(bool isLast = false) {
+            assert(_children.length > 0);
+
             if (_stackLayoutType == StackLayoutType.row) {
                 float x = 0;
                 foreach (indx, T child; _children) {
@@ -79,8 +82,8 @@ class StackLayout(T) {
         StackLayoutType _stackLayoutType;
         T[] _children;
         float _cursor = 0;
-        sfVector2f _position = sfVector2f(0, 0);
         int _spacing;
+        sfVector2f _position = sfVector2f(0, 0);
         sfVector2f _size = sfVector2f(0, 0);
     }
 }

@@ -13,18 +13,18 @@ import gameconfig;
 import theme;
 import std.random;
 import stacklayout;
+import customdrawable;
 
 private int margin = 24;
 
-private class SettingsHeader {
-    this(sfRenderWindow* renderWindow, string title, sfVector2f position) {
-        _renderWindow = renderWindow;
+private class SettingsHeader : ICustomDrawable {
+    this(float width, string title, sfVector2f position) {
         _title = title;
         _position = position;
 
         _headerRectangle = sfRectangleShape_create();
         _headerRectangle.sfRectangleShape_setFillColor(Theme.currentTheme.secondaryBackground());
-        _headerRectangle.sfRectangleShape_setSize(sfVector2f(renderWindow.sfRenderWindow_getSize().x, margin * 3));
+        _headerRectangle.sfRectangleShape_setSize(sfVector2f(width, margin * 3));
         _headerRectangle.sfRectangleShape_setPosition(position);
 
         _headerTextbox = new Textbox();
@@ -32,9 +32,9 @@ private class SettingsHeader {
         _headerTextbox.position = sfVector2f(position.x + margin, position.y + margin);
     }
 
-    void render() {
-        _renderWindow.sfRenderWindowExt_draw(_headerRectangle);
-        _renderWindow.sfRenderWindowExt_draw(_headerTextbox);
+    override void render(sfRenderWindow* renderWindow) {
+        renderWindow.sfRenderWindowExt_draw(_headerRectangle);
+        renderWindow.sfRenderWindowExt_draw(_headerTextbox);
     }
 
     @property {
@@ -44,7 +44,6 @@ private class SettingsHeader {
     }
 
     private {
-        sfRenderWindow* _renderWindow;
         string _title;
         sfVector2f _position;
         sfRectangleShape* _headerRectangle;
@@ -61,7 +60,7 @@ class SettingsWindow {
         _backgroundRect.sfRectangleShape_setPosition(sfVector2fExt_splat(0));
         _backgroundRect.sfRectangleShape_setFillColor(Theme.currentTheme.primaryBackground());
 
-        _boardSizeSettingsHeader = new SettingsHeader(renderWindow, "Board Size", sfVector2fExt_splat(0));
+        _boardSizeSettingsHeader = new SettingsHeader(renderWindow.sfRenderWindow_getSize().x, "Board Size", sfVector2fExt_splat(0));
 
         _backButton = new Button();
         _backButton.text = "Back";
@@ -92,7 +91,7 @@ class SettingsWindow {
 
     void render() {
         _renderWindow.sfRenderWindowExt_draw(_backgroundRect);
-        _boardSizeSettingsHeader.render();
+        _boardSizeSettingsHeader.render(_renderWindow);
         _renderWindow.sfRenderWindowExt_draw(_backButton);
         _boardSizeRow.render(_renderWindow);
     }

@@ -7,8 +7,9 @@ import std.stdio;
 import button;
 import textbox;
 import shapes;
+import customdrawable;
 
-enum isDrawable(T) = is(T == sfCircleShape*) || is(T == sfRectangleShape*) || is(T == sfText*) || is(T == sfSprite*) || is(T == Button) || is(T == Textbox) || is(T == RoundRect);
+enum isDrawable(T) = is(T == sfCircleShape*) || is(T == sfRectangleShape*) || is(T == sfText*) || is(T == sfSprite*) || is(T : ICustomDrawable);
 
 void sfRenderWindowExt_draw(T)(sfRenderWindow* renderWindow, T drawable) {
     static assert(isDrawable!T, format("Cannot call any draw method on type %s", T.stringof));
@@ -21,7 +22,7 @@ void sfRenderWindowExt_draw(T)(sfRenderWindow* renderWindow, T drawable) {
         renderWindow.sfRenderWindow_drawText(drawable, null);
     } else static if (is(T == sfSprite*)) {
         renderWindow.sfRenderWindow_drawSprite(drawable, null);
-    } else static if (is(T == Button) || is(T == Textbox) || is(T == RoundRect)) {
+    } else static if (is(T : ICustomDrawable)) {
         drawable.render(renderWindow);
     }
 }
@@ -84,7 +85,7 @@ sfVector2f sfRectangleShapeExt_getCenter(sfRectangleShape* rect, sfVector2f boun
 }
 
 RoundRect sfRectangleShapeExt_toRoundRect(sfRectangleShape* rect, float cornerRadius) {
-    return RoundRect(cornerRadius, rect.sfRectangleShape_getSize(), rect.sfRectangleShape_getPosition(), rect.sfRectangleShape_getFillColor());
+    return new RoundRect(cornerRadius, rect.sfRectangleShape_getSize(), rect.sfRectangleShape_getPosition(), rect.sfRectangleShape_getFillColor());
 }
 
 sfColor sfColorExt_alpha255(ubyte r, ubyte g, ubyte b) {

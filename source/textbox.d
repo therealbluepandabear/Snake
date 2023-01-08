@@ -6,8 +6,9 @@ import std.container;
 import std.format;
 import std.string;
 import sfmlextensions;
+import customdrawable;
 
-class Textbox {
+class Textbox : ICustomDrawable {
     this() {
         _text = sfText_create();
         _text.sfText_setFont(sfFont_createFromFile("nunito_black.ttf"));
@@ -19,7 +20,7 @@ class Textbox {
         small = 12, medium = 24, large = 36
     }
 
-    void render(sfRenderWindow* renderWindow) {
+    override void render(sfRenderWindow* renderWindow) {
         renderWindow.sfRenderWindowExt_draw(_text);
     }
 

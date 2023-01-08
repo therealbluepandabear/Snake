@@ -6,8 +6,9 @@ import sfmlextensions;
 import std.stdio;
 import shapes;
 import theme;
+import customdrawable;
 
-class Button {
+class Button : ICustomDrawable {
     this() {
         _rect = sfRectangleShape_create();
         _color = Theme.currentTheme.buttonBackground();
@@ -36,7 +37,7 @@ class Button {
         }
     }
 
-    void render(sfRenderWindow* renderWindow) {
+    override void render(sfRenderWindow* renderWindow) {
         renderWindow.sfRenderWindowExt_draw(_rect.sfRectangleShapeExt_toRoundRect(10));
         renderWindow.sfRenderWindowExt_draw(_textbox);
     }
