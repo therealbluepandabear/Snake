@@ -24,9 +24,7 @@ class StackLayout : ICustomDrawable {
         }
     }
 
-    void addChild(T)(T child) {
-        static assert(is(T : ICustomDrawable), "Invalid type T for child");
-
+    void addChild(ICustomDrawable child) {
         if (_stackLayoutType == StackLayoutType.row) {
             child.sfDrawableExt_setPosition(sfVector2f(_cursor + (_spacing * _children.length) + _position.x, _position.y));
             _cursor += child.sfDrawableExt_getSize().x;
