@@ -8,6 +8,7 @@ import button;
 import textbox;
 import shapes;
 import customdrawable;
+import std.conv;
 
 enum isDrawable(T) = is(T == sfCircleShape*) || is(T == sfRectangleShape*) || is(T == sfText*) || is(T == sfSprite*) || is(T : ICustomDrawable);
 
@@ -25,19 +26,6 @@ void sfRenderWindowExt_draw(T)(sfRenderWindow* renderWindow, T drawable) {
     } else static if (is(T : ICustomDrawable)) {
         drawable.render(renderWindow);
     }
-}
-
-
-sfVector2f sfDrawableExt_getSize(T)(T drawable) {
-    static assert(isDrawable!T, format("Cannot call any getSize method on type %s", T.stringof));
-
-    sfVector2f size = sfVector2f(0, 0);
-
-    static if (is(T == Button)) {
-        size = drawable.size;
-    }
-
-    return size;
 }
 
 void sfDrawableExt_setPosition(T)(T drawable, sfVector2f vector) {

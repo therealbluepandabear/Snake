@@ -6,6 +6,7 @@ import std.format;
 import std.stdio;
 import std.algorithm;
 import customdrawable;
+import button;
 
 enum StackLayoutType {
     row, column
@@ -29,10 +30,10 @@ class StackLayout : ICustomDrawable {
 
         if (_stackLayoutType == StackLayoutType.row) {
             child.sfDrawableExt_setPosition(sfVector2f(_cursor + (_spacing * _children.length) + _position.x, _position.y));
-            _cursor += child.sfDrawableExt_getSize().x;
+            _cursor += child.size.x;
         } else if (_stackLayoutType == StackLayoutType.column) {
             child.sfDrawableExt_setPosition(sfVector2f(_position.x, _cursor + (_spacing * _children.length) + _position.y));
-            _cursor += child.sfDrawableExt_getSize().y;
+            _cursor += child.size.y;
         }
 
         _children ~= child;
@@ -56,7 +57,7 @@ class StackLayout : ICustomDrawable {
             if (_stackLayoutType == StackLayoutType.row) {
                 float x = 0;
                 foreach (indx, ICustomDrawable child; _children) {
-                    x += child.sfDrawableExt_getSize().x;
+                    x += child.size.x;
 
                     if (indx != _children.length && indx != 0) {
                         x += _spacing;
@@ -64,18 +65,18 @@ class StackLayout : ICustomDrawable {
                 }
 
                 _size.x = x;
-                _size.y = _children.maxElement!(child => child.sfDrawableExt_getSize().y).sfDrawableExt_getSize().y;
+                _size.y = _children.maxElement!(child => child.size.y).size.y;
             } else if (_stackLayoutType == StackLayoutType.column) {
                 float y = 0;
                 foreach (indx, ICustomDrawable child; _children) {
-                    y += child.sfDrawableExt_getSize().y;
+                    y += child.size.y;
 
                     if (indx != _children.length && indx != 0) {
                         y += _spacing;
                     }
                 }
 
-                _size.x = _children.maxElement!(child => child.sfDrawableExt_getSize().x).sfDrawableExt_getSize().x;
+                _size.x = _children.maxElement!(child => child.size.x).size.x;
                 _size.y = y;
             }
         }

@@ -8,6 +8,7 @@ class RoundRect : ICustomDrawable {
     this(float cornerRadius, sfVector2f size, sfVector2f position, sfColor color) {
         assert((cornerRadius <= size.x / 2) && (cornerRadius <= size.y / 2), "cornerRadius too large");
 
+        _size = size;
         float diameter = cornerRadius * 2;
         sfVector2f shapePosition;
         foreach (indx, ref sfCircleShape* circle; _circles) {
@@ -51,8 +52,15 @@ class RoundRect : ICustomDrawable {
         renderWindow.sfRenderWindowExt_drawArray(_rects);
     }
 
+    @property {
+        override sfVector2f size() {
+            return _size;
+        }
+    }
+
     private {
         sfCircleShape*[4] _circles;
         sfRectangleShape*[2] _rects;
+        sfVector2f _size;
     }
 }

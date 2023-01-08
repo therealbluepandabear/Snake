@@ -23,10 +23,11 @@ private class SettingsHeader : ICustomDrawable {
     this(float width, string title, sfVector2f position) {
         _title = title;
         _position = position;
+        _size = sfVector2f(width, margin * 3);
 
         _headerRectangle = sfRectangleShape_create();
         _headerRectangle.sfRectangleShape_setFillColor(Theme.currentTheme.secondaryBackground());
-        _headerRectangle.sfRectangleShape_setSize(sfVector2f(width, margin * 3));
+        _headerRectangle.sfRectangleShape_setSize(_size);
         _headerRectangle.sfRectangleShape_setPosition(position);
 
         _headerTextbox = new Textbox();
@@ -43,6 +44,10 @@ private class SettingsHeader : ICustomDrawable {
         sfRectangleShape* headerRectangle() {
             return _headerRectangle;
         }
+
+        override sfVector2f size() {
+            return _size;
+        }
     }
 
     private {
@@ -50,6 +55,7 @@ private class SettingsHeader : ICustomDrawable {
         sfVector2f _position;
         sfRectangleShape* _headerRectangle;
         Textbox _headerTextbox;
+        sfVector2f _size;
     }
 }
 
@@ -62,14 +68,15 @@ class SettingsWindow {
         _backgroundRect.sfRectangleShape_setPosition(sfVector2fExt_splat(0));
         _backgroundRect.sfRectangleShape_setFillColor(Theme.currentTheme.primaryBackground());
 
-        _boardSizeSettingsHeader = new SettingsHeader(renderWindow.sfRenderWindow_getSize().x, "Board Size", sfVector2fExt_splat(0));
+        _settingsHeaders[0] = new SettingsHeader(renderWindow.sfRenderWindow_getSize().x, "Board Size", sfVector2fExt_splat(0));
 
         _backButton = new Button();
         _backButton.text = "Back";
-        _backButton.position = sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _backButton.size.x - margin, _boardSizeSettingsHeader.headerRectangle.sfRectangleShapeExt_getCenter(_backButton.size).y);
+        _backButton.position = sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _backButton.size.x - margin, _settingsHeaders[0].headerRectangle.sfRectangleShapeExt_getCenter(_backButton.size).y);
         _backButton.onButtonClick = &(eventHandler.settingsWindow_onBackButtonClick);
 
-        _boardSizeRow = new StackLayout(StackLayoutType.row, sfVector2f(margin, _boardSizeSettingsHeader.headerRectangle.sfRectangleShape_getSize().y + margin), margin);
+        float _boardSizeRowPositionY = _settingsHeaders[0].headerRectangle.sfRectangleShape_getSize().y + margin;
+        _boardSizeRow = new StackLayout(StackLayoutType.row, sfVector2f(margin, _boardSizeRowPositionY), margin);
 
         foreach (BoardSize boardSize; cast(BoardSize[])[EnumMembers!BoardSize]) {
             Button b = new Button();
@@ -81,6 +88,8 @@ class SettingsWindow {
             } (boardSize);
             _boardSizeRow.addChild(b);
         }
+
+        _settingsHeaders[1] = new SettingsHeader(renderWindow.sfRenderWindow_getSize().x, "Theme", sfVector2f(0, _boardSizeRowPositionY + _boardSizeRow.size.y + margin));
     }
 
     void update(sfEvent event) {
@@ -94,7 +103,9 @@ class SettingsWindow {
 
     void render() {
         _renderWindow.sfRenderWindowExt_draw(_backgroundRect);
-        _boardSizeSettingsHeader.render(_renderWindow);
+        foreach (SettingsHeader settingsHeader; _settingsHeaders) {
+            settingsHeader.render(_renderWindow);
+        }
         _renderWindow.sfRenderWindowExt_draw(_backButton);
         _boardSizeRow.render(_renderWindow);
     }
@@ -108,7 +119,7 @@ class SettingsWindow {
         sfRectangleShape* _backgroundRect;
         sfRenderWindow* _renderWindow;
         Button _backButton;
-        SettingsHeader _boardSizeSettingsHeader;
+        SettingsHeader[2] _settingsHeaders;
         StackLayout _boardSizeRow;
     }
 }
