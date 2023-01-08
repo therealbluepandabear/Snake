@@ -14,6 +14,8 @@ import theme;
 import std.random;
 import stacklayout;
 import customdrawable;
+import std.conv;
+import std.exception;
 
 private int margin = 24;
 
@@ -67,7 +69,7 @@ class SettingsWindow {
         _backButton.position = sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _backButton.size.x - margin, _boardSizeSettingsHeader.headerRectangle.sfRectangleShapeExt_getCenter(_backButton.size).y);
         _backButton.onButtonClick = &(eventHandler.settingsWindow_onBackButtonClick);
 
-        _boardSizeRow = new StackLayout!Button(StackLayoutType.row, sfVector2f(margin, _boardSizeSettingsHeader.headerRectangle.sfRectangleShape_getSize().y + margin), margin);
+        _boardSizeRow = new StackLayout(StackLayoutType.row, sfVector2f(margin, _boardSizeSettingsHeader.headerRectangle.sfRectangleShape_getSize().y + margin), margin);
 
         foreach (BoardSize boardSize; cast(BoardSize[])[EnumMembers!BoardSize]) {
             Button b = new Button();
@@ -82,9 +84,10 @@ class SettingsWindow {
     }
 
     void update(sfEvent event) {
-        _backButton.update(event, _renderWindow);
+        assertNotThrown!ConvException(to!(Button[])(_boardSizeRow.children));
 
-        foreach (Button button; _boardSizeRow.children) {
+        _backButton.update(event, _renderWindow);
+        foreach (Button button; to!(Button[])(_boardSizeRow.children)) {
             button.update(event, _renderWindow);
         }
     }
@@ -106,6 +109,6 @@ class SettingsWindow {
         sfRenderWindow* _renderWindow;
         Button _backButton;
         SettingsHeader _boardSizeSettingsHeader;
-        StackLayout!Button _boardSizeRow;
+        StackLayout _boardSizeRow;
     }
 }

@@ -11,21 +11,22 @@ enum StackLayoutType {
     row, column
 }
 
-class StackLayout(T) : ICustomDrawable {
+class StackLayout : ICustomDrawable {
     this(StackLayoutType stackLayoutType, sfVector2f position, int spacing = 0) {
-        static assert(isDrawable!T, format("Cannot call addChild method on type %s", T.stringof));
         _stackLayoutType = stackLayoutType;
         _spacing = spacing;
         _position = position;
     }
 
     override void render(sfRenderWindow* renderWindow) {
-        foreach (T child; _children) {
+        foreach (ICustomDrawable child; _children) {
             renderWindow.sfRenderWindowExt_draw(child);
         }
     }
 
-    void addChild(T child) {
+    void addChild(T)(T child) {
+        static assert(is(T : ICustomDrawable), "Invalid type T for child");
+
         if (_stackLayoutType == StackLayoutType.row) {
             child.sfDrawableExt_setPosition(sfVector2f(_cursor + (_spacing * _children.length) + _position.x, _position.y));
             _cursor += child.sfDrawableExt_getSize().x;
@@ -39,7 +40,7 @@ class StackLayout(T) : ICustomDrawable {
     }
 
     @property {
-        T[] children() {
+        ICustomDrawable[] children() {
             return _children;
         }
 
@@ -54,7 +55,7 @@ class StackLayout(T) : ICustomDrawable {
 
             if (_stackLayoutType == StackLayoutType.row) {
                 float x = 0;
-                foreach (indx, T child; _children) {
+                foreach (indx, ICustomDrawable child; _children) {
                     x += child.sfDrawableExt_getSize().x;
 
                     if (indx != _children.length && indx != 0) {
@@ -66,7 +67,7 @@ class StackLayout(T) : ICustomDrawable {
                 _size.y = _children.maxElement!(child => child.sfDrawableExt_getSize().y).sfDrawableExt_getSize().y;
             } else if (_stackLayoutType == StackLayoutType.column) {
                 float y = 0;
-                foreach (indx, T child; _children) {
+                foreach (indx, ICustomDrawable child; _children) {
                     y += child.sfDrawableExt_getSize().y;
 
                     if (indx != _children.length && indx != 0) {
@@ -80,7 +81,7 @@ class StackLayout(T) : ICustomDrawable {
         }
 
         StackLayoutType _stackLayoutType;
-        T[] _children;
+        ICustomDrawable[] _children;
         float _cursor = 0;
         int _spacing;
         sfVector2f _position = sfVector2f(0, 0);
