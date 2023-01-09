@@ -28,14 +28,6 @@ void sfRenderWindowExt_draw(T)(sfRenderWindow* renderWindow, T drawable) {
     }
 }
 
-void sfDrawableExt_setPosition(T)(T drawable, sfVector2f vector) {
-    static assert(isDrawable!T, format("Cannot call any setPosition method on type %s", T.stringof));
-
-    static if (is(T == Button)) {
-        drawable.position = vector;
-    }
-}
-
 void sfRenderWindowExt_drawArray(T)(sfRenderWindow* renderWindow, T[] arr) {
     foreach (T t; arr) {
         renderWindow.sfRenderWindowExt_draw(t);
