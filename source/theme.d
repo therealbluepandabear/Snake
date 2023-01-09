@@ -58,7 +58,7 @@ class Theme {
     }
 }
 
-class GreenTheme : ITheme {
+private class GreenTheme : ITheme {
     @property override {
         sfColor iconColor() {
             return sfGreen;
@@ -84,7 +84,7 @@ class GreenTheme : ITheme {
     }
 }
 
-class RedTheme : ITheme {
+private class RedTheme : ITheme {
     @property override {
         sfColor iconColor() {
             return sfRed;
@@ -110,7 +110,7 @@ class RedTheme : ITheme {
     }
 }
 
-class BlueTheme : ITheme {
+private class BlueTheme : ITheme {
     @property override {
         sfColor iconColor() {
             return sfBlue;
