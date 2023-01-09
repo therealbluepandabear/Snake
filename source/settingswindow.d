@@ -112,6 +112,7 @@ class SettingsWindow {
 
     void update(sfEvent event) {
         assertNotThrown!ConvException(to!(Button[])(_boardSizeRow.children));
+        assertNotThrown!ConvException(to!(Clickable[])(_themeRow.children));
 
         _backButton.update(event, _renderWindow);
         foreach (Button button; to!(Button[])(_boardSizeRow.children)) {
