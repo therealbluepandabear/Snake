@@ -24,26 +24,28 @@ class Textbox : ICustomDrawable {
         renderWindow.sfRenderWindowExt_draw(_text);
     }
 
-    @property {
-        sfVector2f position() {
-            return _text.sfText_getPosition();
-        }
-
+    @property override {
         sfVector2f size() {
             sfFloatRect bounds = _text.sfText_getLocalBounds();
             return sfVector2f(bounds.width, bounds.height);
         }
 
+        sfVector2f position() {
+            return _text.sfText_getPosition();
+        }
+
+        void position(sfVector2f position) {
+            _text.sfText_setPosition(position);
+        }
+    }
+
+    @property {
         void text(string text) {
             _text.sfText_setString(toStringz(text));
         }
 
         void textSize(TextSize textSize) {
             _text.sfText_setCharacterSize(textSize);
-        }
-
-        void position(sfVector2f position) {
-            _text.sfText_setPosition(position);
         }
     }
 

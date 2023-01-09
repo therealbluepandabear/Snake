@@ -42,7 +42,7 @@ class Button : ICustomDrawable {
         renderWindow.sfRenderWindowExt_draw(_textbox);
     }
 
-    @property {
+    @property override {
         sfVector2f size() {
             return _rect.sfRectangleShape_getSize();
         }
@@ -51,6 +51,13 @@ class Button : ICustomDrawable {
             return _rect.sfRectangleShape_getPosition();
         }
 
+        void position(sfVector2f position) {
+            _rect.sfRectangleShape_setPosition(position);
+            _textbox.position = _rect.sfRectangleShapeExt_getCenter(_textbox.size, sfVector2f(0, -4));
+        }
+    }
+
+    @property {
         void text(string text) {
             _textbox.text = text;
             _rect.sfRectangleShape_setSize(sfVector2f(_textbox.size.x + 48, 50));
@@ -58,11 +65,6 @@ class Button : ICustomDrawable {
 
         void onButtonClick(void delegate() onButtonClick) {
             _onButtonClick = onButtonClick;
-        }
-
-        void position(sfVector2f position) {
-            _rect.sfRectangleShape_setPosition(position);
-            _textbox.position = _rect.sfRectangleShapeExt_getCenter(_textbox.size, sfVector2f(0, -4));
         }
     }
 

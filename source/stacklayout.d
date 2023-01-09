@@ -29,10 +29,10 @@ class StackLayout : ICustomDrawable {
         static assert(is(T : ICustomDrawable), "Invalid type T for child");
 
         if (_stackLayoutType == StackLayoutType.row) {
-            child.sfDrawableExt_setPosition(sfVector2f(_cursor + (_spacing * _children.length) + _position.x, _position.y));
+            child.position = sfVector2f(_cursor + (_spacing * _children.length) + _position.x, _position.y);
             _cursor += child.size.x;
         } else if (_stackLayoutType == StackLayoutType.column) {
-            child.sfDrawableExt_setPosition(sfVector2f(_position.x, _cursor + (_spacing * _children.length) + _position.y));
+            child.position = sfVector2f(_position.x, _cursor + (_spacing * _children.length) + _position.y);
             _cursor += child.size.y;
         }
 
@@ -40,13 +40,23 @@ class StackLayout : ICustomDrawable {
         updateSize();
     }
 
+    @property override {
+        sfVector2f size() {
+            return _size;
+        }
+
+        sfVector2f position() {
+            return _position;
+        }
+
+        void position(sfVector2f position) {
+
+        }
+    }
+
     @property {
         ICustomDrawable[] children() {
             return _children;
-        }
-
-        sfVector2f size() {
-            return _size;
         }
     }
 

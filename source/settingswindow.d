@@ -16,6 +16,7 @@ import stacklayout;
 import customdrawable;
 import std.conv;
 import std.exception;
+import clickable;
 
 private int margin = 24;
 
@@ -40,13 +41,23 @@ private class SettingsHeader : ICustomDrawable {
         renderWindow.sfRenderWindowExt_draw(_headerTextbox);
     }
 
+    @property override {
+        sfVector2f size() {
+            return _size;
+        }
+
+        sfVector2f position() {
+            return _position;
+        }
+
+        void position(sfVector2f position) {
+
+        }
+    }
+
     @property {
         sfRectangleShape* headerRectangle() {
             return _headerRectangle;
-        }
-
-        override sfVector2f size() {
-            return _size;
         }
     }
 
@@ -76,20 +87,27 @@ class SettingsWindow {
         _backButton.onButtonClick = &(eventHandler.settingsWindow_onBackButtonClick);
 
         float _boardSizeRowPositionY = _settingsHeaders[0].headerRectangle.sfRectangleShape_getSize().y + margin;
-        _boardSizeRow = new StackLayout(StackLayoutType.row, sfVector2f(margin, _boardSizeRowPositionY), margin);
+        _boardSizeRow = new StackLayout(StackLayoutType.row, sfVector2f(margin, _boardSizeRowPositionY), margin / 2);
 
-        foreach (BoardSize boardSize; cast(BoardSize[])[EnumMembers!BoardSize]) {
-            Button b = new Button();
-            b.text = format("%sx%s", boardSize[0], boardSize[1]);
-            b.onButtonClick = (BoardSize iteration_boardSize) {
-                return {
-                    eventHandler.settingsWindow_onBoardSizeButtonClick(iteration_boardSize);
-                };
-            } (boardSize);
-            _boardSizeRow.addChild(b);
-        }
+        foreach (BoardSize boardSizeIter; EnumMembers!BoardSize) (BoardSize boardSize) {
+            Button button = new Button();
+            button.text = format("%sx%s", boardSize[0], boardSize[1]);
+            button.onButtonClick = {
+                eventHandler.settingsWindow_onBoardSizeButtonClick(boardSize);
+            };
+            _boardSizeRow.addChild(button);
+        } (boardSizeIter);
 
-        _settingsHeaders[1] = new SettingsHeader(renderWindow.sfRenderWindow_getSize().x, "Theme", sfVector2f(0, _boardSizeRowPositionY + _boardSizeRow.size.y + margin));
+        float _themeHeaderPositionY = _boardSizeRowPositionY + _boardSizeRow.size.y + margin * 2;
+        _settingsHeaders[1] = new SettingsHeader(renderWindow.sfRenderWindow_getSize().x, "Theme", sfVector2f(0, _themeHeaderPositionY));
+
+        float _themeRowPosY = _themeHeaderPositionY + _settingsHeaders[1].size.y + margin;
+        _themeRow = new StackLayout(StackLayoutType.row, sfVector2f(margin, _themeRowPosY), margin / 2);
+
+        foreach (ColorTheme colorThemeIter; cast(ColorTheme[])[EnumMembers!ColorTheme]) (ColorTheme colorTheme) {
+            RoundRect roundRect = new RoundRect(8, sfVector2fExt_splat(30), sfVector2f(margin, _themeRowPosY), colorTheme);
+            _themeRow.addChild(new Clickable(roundRect, { writeln("Hi"); stdout.flush(); }));
+        } (colorThemeIter);
     }
 
     void update(sfEvent event) {
@@ -98,6 +116,9 @@ class SettingsWindow {
         _backButton.update(event, _renderWindow);
         foreach (Button button; to!(Button[])(_boardSizeRow.children)) {
             button.update(event, _renderWindow);
+        }
+        foreach (Clickable clickable; to!(Clickable[])(_themeRow.children)) {
+            clickable.update(event, _renderWindow);
         }
     }
 
@@ -108,6 +129,7 @@ class SettingsWindow {
         }
         _renderWindow.sfRenderWindowExt_draw(_backButton);
         _boardSizeRow.render(_renderWindow);
+        _themeRow.render(_renderWindow);
     }
 
     interface EventHandler {
@@ -121,5 +143,6 @@ class SettingsWindow {
         Button _backButton;
         SettingsHeader[2] _settingsHeaders;
         StackLayout _boardSizeRow;
+        StackLayout _themeRow;
     }
 }

@@ -11,19 +11,30 @@ private interface ITheme {
     sfColor buttonHoverBackground();
 }
 
+enum ColorTheme : sfColor {
+    red = sfColorExt_alpha255(255, 0, 0),
+    green = sfColorExt_alpha255(0, 255, 0)
+}
+
 class Theme {
     shared static this() {
         _currentTheme = new RedTheme();
+        _themes = [ColorTheme.green, ColorTheme.red];
     }
 
     @property static {
         ITheme currentTheme() {
             return _currentTheme;
         }
+
+        ColorTheme[] themes() {
+            return _themes;
+        }
     }
 
     private static {
         ITheme _currentTheme;
+        ColorTheme[2] _themes;
     }
 }
 
