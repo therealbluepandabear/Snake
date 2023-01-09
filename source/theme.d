@@ -23,6 +23,7 @@ class Theme {
     shared static this() {
         _themes[0] = new RedTheme();
         _themes[1] = new GreenTheme();
+        _themes[2] = new BlueTheme();
         _currentTheme = _themes[0];
     }
 
@@ -31,7 +32,7 @@ class Theme {
             return _currentTheme;
         }
 
-        ITheme[2] themes() {
+        ITheme[3] themes() {
             return _themes;
         }
 
@@ -52,7 +53,7 @@ class Theme {
 
     private static {
         ITheme _currentTheme;
-        ITheme[2] _themes;
+        ITheme[3] _themes;
         IThemeable[] _themeables;
     }
 }
@@ -105,6 +106,32 @@ class RedTheme : ITheme {
 
         sfColor buttonHoverBackground() {
             return sfColor_fromRGB(138, 0, 0);
+        }
+    }
+}
+
+class BlueTheme : ITheme {
+    @property override {
+        sfColor iconColor() {
+            return sfBlue;
+        }
+    }
+
+    override {
+        sfColor primaryBackground() {
+            return sfColor_fromRGB(0, 210, 210);
+        }
+
+        sfColor secondaryBackground() {
+            return sfColor_fromRGB(0, 189, 189);
+        }
+
+        sfColor buttonBackground() {
+            return sfColor_fromRGB(0, 160, 160);
+        }
+
+        sfColor buttonHoverBackground() {
+            return sfColor_fromRGB(0, 131, 131);
         }
     }
 }
