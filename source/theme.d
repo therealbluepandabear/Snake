@@ -9,6 +9,8 @@ interface ITheme {
     @property {
         sfColor iconColor();
     }
+    sfColor checkerboardShade1();
+    sfColor checkerboardShade2();
     sfColor primaryBackground();
     sfColor secondaryBackground();
     sfColor buttonBackground();
@@ -66,6 +68,14 @@ private class GreenTheme : ITheme {
     }
 
     override {
+        sfColor checkerboardShade1() {
+            return sfColor_fromRGB(5, 156, 0);
+        }
+
+        sfColor checkerboardShade2() {
+            return sfColor_fromRGB(4, 137, 0);
+        }
+
         sfColor primaryBackground() {
             return sfColor_fromRGB(5, 157, 0);
         }
@@ -92,6 +102,14 @@ private class RedTheme : ITheme {
     }
 
     override {
+        sfColor checkerboardShade1() {
+            return sfColor_fromRGB(233, 0, 0);
+        }
+
+        sfColor checkerboardShade2() {
+            return sfColor_fromRGB(215, 0, 0);
+        }
+
         sfColor primaryBackground() {
             return sfColor_fromRGB(216, 0, 0);
         }
@@ -118,6 +136,14 @@ private class BlueTheme : ITheme {
     }
 
     override {
+        sfColor checkerboardShade1() {
+            return sfColor_fromRGB(0, 227, 227);
+        }
+
+        sfColor checkerboardShade2() {
+            return sfColor_fromRGB(0, 208, 208);
+        }
+
         sfColor primaryBackground() {
             return sfColor_fromRGB(0, 210, 210);
         }

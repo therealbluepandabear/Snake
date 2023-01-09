@@ -9,6 +9,7 @@ import std.string;
 import sfmlextensions;
 import food;
 import gameconfig;
+import theme;
 
 class World {
     this(sfVector2u windowSize, int blockSpan, Snake player) {
@@ -82,15 +83,15 @@ class World {
                 for (float y = 0; y < _blockSpan; ++y) {
                     if (x % 2 == 0) {
                         if (y % 2 == 0) {
-                            fillColor = _orangeLight;
+                            fillColor = Theme.currentTheme.checkerboardShade1();
                         } else {
-                            fillColor = _orangeDark;
+                            fillColor = Theme.currentTheme.checkerboardShade2();
                         }
                     } else {
                         if (y % 2 != 0) {
-                            fillColor = _orangeLight;
+                            fillColor = Theme.currentTheme.checkerboardShade1();
                         } else {
-                            fillColor = _orangeDark;
+                            fillColor = Theme.currentTheme.checkerboardShade2();
                         }
                     }
 
