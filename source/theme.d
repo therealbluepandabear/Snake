@@ -66,19 +66,19 @@ class GreenTheme : ITheme {
 
     override {
         sfColor primaryBackground() {
-            return sfColor_fromRGB(189, 183, 107);
+            return sfColor_fromRGB(5, 157, 0);
         }
 
         sfColor secondaryBackground() {
-            return sfColor_fromRGB(64, 190, 92);
+            return sfColor_fromRGB(4, 128, 0);
         }
 
         sfColor buttonBackground() {
-            return sfColor_fromRGB(189, 183, 107);
+            return sfColor_fromRGB(3, 99, 0);
         }
 
         sfColor buttonHoverBackground() {
-            return sfColor_fromRGB(166, 159, 74);
+            return sfColor_fromRGB(3, 81, 0);
         }
     }
 }
@@ -92,19 +92,19 @@ class RedTheme : ITheme {
 
     override {
         sfColor primaryBackground() {
-            return sfColor_fromRGB(232, 93, 4);
+            return sfColor_fromRGB(216, 0, 0);
         }
 
         sfColor secondaryBackground() {
-            return sfColor_fromRGB(220, 47, 2);
+            return sfColor_fromRGB(189, 0, 0);
         }
 
         sfColor buttonBackground() {
-            return sfColor_fromRGB(188, 57, 8);
+            return sfColor_fromRGB(162, 0, 0);
         }
 
         sfColor buttonHoverBackground() {
-            return sfColor_fromRGB(157, 2, 8);
+            return sfColor_fromRGB(138, 0, 0);
         }
     }
 }
