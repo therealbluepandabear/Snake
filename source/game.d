@@ -16,6 +16,8 @@ import gamestatistics;
 import bottompanel;
 import gameconfig;
 import settingswindow;
+import theme;
+import std.exception;
 
 interface GameEventHandler : BottomPanel.EventHandler, SettingsWindow.EventHandler { }
 
@@ -28,12 +30,15 @@ class Game : GameEventHandler {
 
         _window = new Window("Snake", sfVector2u(size, size + bottomPanelHeight));
         _settingsWindow = new SettingsWindow(_window.renderWindow, this);
+
         setup();
 
         _clock = sfClock_create();
         _clock.sfClock_restart();
 
         _bottomPanel = new BottomPanel(_window.renderWindow, GameStatistics((() => _snake.score), (() => _highscore)), bottomPanelHeight, this);
+
+        Theme.themeables = cast(IThemeable[])[_settingsWindow, _bottomPanel];
     }
 
     Window window() {

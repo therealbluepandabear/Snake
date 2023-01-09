@@ -3,23 +3,27 @@ module theme;
 import sfmlextensions;
 import bindbc.sfml;
 import std.stdio;
+import std.typecons;
 
-private interface ITheme {
+interface ITheme {
+    @property {
+        sfColor iconColor();
+    }
     sfColor primaryBackground();
     sfColor secondaryBackground();
     sfColor buttonBackground();
     sfColor buttonHoverBackground();
 }
 
-enum ColorTheme : sfColor {
-    red = sfColorExt_alpha255(255, 0, 0),
-    green = sfColorExt_alpha255(0, 255, 0)
+interface IThemeable {
+    void onThemeChanged();
 }
 
 class Theme {
     shared static this() {
-        _currentTheme = new RedTheme();
-        _themes = [ColorTheme.green, ColorTheme.red];
+        _themes[0] = new RedTheme();
+        _themes[1] = new GreenTheme();
+        _currentTheme = _themes[0];
     }
 
     @property static {
@@ -27,18 +31,39 @@ class Theme {
             return _currentTheme;
         }
 
-        ColorTheme[] themes() {
+        ITheme[2] themes() {
             return _themes;
+        }
+
+        void currentTheme(ITheme currentTheme) {
+            _currentTheme = currentTheme;
+
+            foreach (IThemeable themeable; _themeables) {
+                themeable.onThemeChanged();
+            }
+        }
+    }
+
+    static {
+        void themeables(IThemeable[] themeables) {
+            _themeables = themeables;
         }
     }
 
     private static {
         ITheme _currentTheme;
-        ColorTheme[2] _themes;
+        ITheme[2] _themes;
+        IThemeable[] _themeables;
     }
 }
 
-private class GreenTheme : ITheme {
+class GreenTheme : ITheme {
+    @property override {
+        sfColor iconColor() {
+            return sfGreen;
+        }
+    }
+
     override {
         sfColor primaryBackground() {
             return sfColor_fromRGB(189, 183, 107);
@@ -58,7 +83,13 @@ private class GreenTheme : ITheme {
     }
 }
 
-private class RedTheme : ITheme {
+class RedTheme : ITheme {
+    @property override {
+        sfColor iconColor() {
+            return sfRed;
+        }
+    }
+
     override {
         sfColor primaryBackground() {
             return sfColor_fromRGB(232, 93, 4);

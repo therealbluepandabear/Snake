@@ -70,44 +70,9 @@ private class SettingsHeader : ICustomDrawable {
     }
 }
 
-class SettingsWindow {
+class SettingsWindow : IThemeable {
     this(sfRenderWindow* renderWindow, SettingsWindow.EventHandler eventHandler) {
-        _renderWindow = renderWindow;
-
-        _backgroundRect = sfRectangleShape_create();
-        _backgroundRect.sfRectangleShape_setSize(renderWindow.sfRenderWindow_getSize().sfVector2uExt_toVector2f());
-        _backgroundRect.sfRectangleShape_setPosition(sfVector2fExt_splat(0));
-        _backgroundRect.sfRectangleShape_setFillColor(Theme.currentTheme.primaryBackground());
-
-        _settingsHeaders[0] = new SettingsHeader(renderWindow.sfRenderWindow_getSize().x, "Board Size", sfVector2fExt_splat(0));
-
-        _backButton = new Button();
-        _backButton.text = "Back";
-        _backButton.position = sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _backButton.size.x - margin, _settingsHeaders[0].headerRectangle.sfRectangleShapeExt_getCenter(_backButton.size).y);
-        _backButton.onButtonClick = &(eventHandler.settingsWindow_onBackButtonClick);
-
-        float _boardSizeRowPositionY = _settingsHeaders[0].headerRectangle.sfRectangleShape_getSize().y + margin;
-        _boardSizeRow = new StackLayout(StackLayoutType.row, sfVector2f(margin, _boardSizeRowPositionY), margin / 2);
-
-        foreach (BoardSize boardSizeIter; EnumMembers!BoardSize) (BoardSize boardSize) {
-            Button button = new Button();
-            button.text = format("%sx%s", boardSize[0], boardSize[1]);
-            button.onButtonClick = {
-                eventHandler.settingsWindow_onBoardSizeButtonClick(boardSize);
-            };
-            _boardSizeRow.addChild(button);
-        } (boardSizeIter);
-
-        float _themeHeaderPositionY = _boardSizeRowPositionY + _boardSizeRow.size.y + margin * 2;
-        _settingsHeaders[1] = new SettingsHeader(renderWindow.sfRenderWindow_getSize().x, "Theme", sfVector2f(0, _themeHeaderPositionY));
-
-        float _themeRowPosY = _themeHeaderPositionY + _settingsHeaders[1].size.y + margin;
-        _themeRow = new StackLayout(StackLayoutType.row, sfVector2f(margin, _themeRowPosY), margin / 2);
-
-        foreach (ColorTheme colorThemeIter; cast(ColorTheme[])[EnumMembers!ColorTheme]) (ColorTheme colorTheme) {
-            RoundRect roundRect = new RoundRect(8, sfVector2fExt_splat(30), sfVector2f(margin, _themeRowPosY), colorTheme);
-            _themeRow.addChild(new Clickable(roundRect, { writeln("Hi"); stdout.flush(); }));
-        } (colorThemeIter);
+        initialize(renderWindow, eventHandler);
     }
 
     void update(sfEvent event) {
@@ -138,8 +103,59 @@ class SettingsWindow {
         void settingsWindow_onBoardSizeButtonClick(BoardSize boardSize);
     }
 
+    override {
+        void onThemeChanged() {
+            assert(_renderWindow !is null, "_renderWindow is null");
+            assert(_eventHandler !is null, "_eventHandler is null");
+            initialize(_renderWindow, _eventHandler);
+        }
+    }
+
     private {
+        void initialize(sfRenderWindow* renderWindow, SettingsWindow.EventHandler eventHandler) {
+            _renderWindow = renderWindow;
+            _eventHandler = eventHandler;
+
+            _backgroundRect = sfRectangleShape_create();
+            _backgroundRect.sfRectangleShape_setSize(renderWindow.sfRenderWindow_getSize().sfVector2uExt_toVector2f());
+            _backgroundRect.sfRectangleShape_setPosition(sfVector2fExt_splat(0));
+            _backgroundRect.sfRectangleShape_setFillColor(Theme.currentTheme.primaryBackground());
+
+            _settingsHeaders[0] = new SettingsHeader(renderWindow.sfRenderWindow_getSize().x, "Board Size", sfVector2fExt_splat(0));
+
+            _backButton = new Button();
+            _backButton.text = "Back";
+            _backButton.position = sfVector2f(_backgroundRect.sfRectangleShape_getSize().x - _backButton.size.x - margin, _settingsHeaders[0].headerRectangle.sfRectangleShapeExt_getCenter(_backButton.size).y);
+            _backButton.onButtonClick = &(eventHandler.settingsWindow_onBackButtonClick);
+
+            float _boardSizeRowPositionY = _settingsHeaders[0].headerRectangle.sfRectangleShape_getSize().y + margin;
+            _boardSizeRow = new StackLayout(StackLayoutType.row, sfVector2f(margin, _boardSizeRowPositionY), margin / 2);
+
+            foreach (BoardSize boardSizeIter; EnumMembers!BoardSize) (BoardSize boardSize) {
+                Button button = new Button();
+                button.text = format("%sx%s", boardSize[0], boardSize[1]);
+                button.onButtonClick = {
+                    eventHandler.settingsWindow_onBoardSizeButtonClick(boardSize);
+                };
+                _boardSizeRow.addChild(button);
+            } (boardSizeIter);
+
+            float _themeHeaderPositionY = _boardSizeRowPositionY + _boardSizeRow.size.y + margin * 2;
+            _settingsHeaders[1] = new SettingsHeader(renderWindow.sfRenderWindow_getSize().x, "Theme", sfVector2f(0, _themeHeaderPositionY));
+
+            float _themeRowPosY = _themeHeaderPositionY + _settingsHeaders[1].size.y + margin;
+            _themeRow = new StackLayout(StackLayoutType.row, sfVector2f(margin, _themeRowPosY), margin / 2);
+
+            foreach (ITheme themeIter; Theme.themes) (ITheme theme) {
+                RoundRect roundRect = new RoundRect(8, sfVector2fExt_splat(30), sfVector2f(margin, _themeRowPosY), theme.iconColor);
+                _themeRow.addChild(new Clickable(roundRect, {
+                    Theme.currentTheme = theme;
+                }));
+            } (themeIter);
+        }
+
         sfRectangleShape* _backgroundRect;
+        SettingsWindow.EventHandler _eventHandler;
         sfRenderWindow* _renderWindow;
         Button _backButton;
         SettingsHeader[2] _settingsHeaders;
