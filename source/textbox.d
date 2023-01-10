@@ -20,8 +20,16 @@ class Textbox : ICustomDrawable {
         small = 12, medium = 24, large = 36
     }
 
-    override void render(sfRenderWindow* renderWindow) {
-        renderWindow.sfRenderWindowExt_draw(_text);
+    override {
+        void render(sfRenderWindow* renderWindow) {
+            if (_visibility == Visibility.hidden) {
+                sfColor currentColor = _text.sfText_getColor();
+                _text.sfText_setColor(sfColor(currentColor.r, currentColor.g, currentColor.b, 0));
+            } else {
+                _text.sfText_setColor(sfWhite);
+            }
+            renderWindow.sfRenderWindowExt_draw(_text);
+        }
     }
 
     @property override {
@@ -40,6 +48,10 @@ class Textbox : ICustomDrawable {
     }
 
     @property {
+        Visibility visibility() {
+            return _visibility;
+        }
+
         void text(string text) {
             _text.sfText_setString(toStringz(text));
         }
@@ -47,9 +59,20 @@ class Textbox : ICustomDrawable {
         void textSize(TextSize textSize) {
             _text.sfText_setCharacterSize(textSize);
         }
+
+        void visibility(Visibility visibility) {
+            _visibility = visibility;
+        }
+    }
+
+    static {
+        enum Visibility {
+            visible, hidden
+        }
     }
 
     private {
         sfText* _text;
+        Visibility _visibility = Visibility.visible;
     }
 }

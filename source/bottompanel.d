@@ -20,7 +20,42 @@ class BottomPanel : IThemeable {
         initialize(renderWindow, gameStatistics, height, eventHandler);
     }
 
+    void restartClock() {
+        if (_startAnim) {
+            _elapsed += sfTime_asSeconds(_clock.sfClock_restart());
+        }
+    }
+
     void update(sfEvent event) {
+        float timestep = 0.6f;
+
+        if (_elapsed >= timestep && _startAnim) {
+            if (_scoreTextbox.visibility == Textbox.Visibility.visible) {
+                _scoreTextbox.visibility = Textbox.Visibility.hidden;
+            } else {
+                _scoreTextbox.visibility = Textbox.Visibility.visible;
+                ++_animItr;
+            }
+            _elapsed -= timestep;
+
+            if (_animItr == 3) {
+                assert(_scoreTextbox.visibility == Textbox.Visibility.visible, "_scoreTextbox must be visible");
+                _startAnim = false;
+                _animOver = true;
+                _elapsed = 0;
+                _animItr = 0;
+                _clock.sfClock_destroy();
+            }
+        }
+
+        if (!_animOver && _gameStatistics._score() % 10 == 0 && _gameStatistics._score() != 0) {
+            _startAnim = true;
+            _clock = sfClock_create();
+        } else if (_gameStatistics._score() % 10 != 0 || _gameStatistics._score() == 0) {
+            _scoreTextbox.visibility = Textbox.Visibility.visible;
+            _animOver = false;
+        }
+
         _settingsButton.update(event, _renderWindow);
     }
 
@@ -45,6 +80,12 @@ class BottomPanel : IThemeable {
         void onThemeChanged() {
             assert(_renderWindow !is null, "_renderWindow is null");
             initialize(_renderWindow, _gameStatistics, _height, _eventHandler);
+        }
+    }
+
+    @property {
+        Textbox scoreTextbox() {
+            return _scoreTextbox;
         }
     }
 
@@ -90,16 +131,22 @@ class BottomPanel : IThemeable {
         }
 
         GameStatistics _gameStatistics;
-        sfRectangleShape* _backgroundRect;
         int _height;
         BottomPanel.EventHandler _eventHandler;
         Button _settingsButton;
         Textbox _scoreTextbox;
         Textbox _highScoreTextbox;
         sfRenderWindow* _renderWindow;
+        sfRectangleShape* _backgroundRect;
         sfTexture* _highScoreTexture;
-        sfSprite* _highScoreSprite;
         sfTexture* _scoreTexture;
+        sfSprite* _highScoreSprite;
         sfSprite* _scoreSprite;
+
+        sfClock* _clock;
+        bool _startAnim = false;
+        bool _animOver = false;
+        float _elapsed = 0;
+        int _animItr = 0;
     }
 }

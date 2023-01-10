@@ -61,6 +61,7 @@ class Game : GameEventHandler {
 
     void restartClock() {
         _elapsed += sfTime_asSeconds(_clock.sfClock_restart());
+        _bottomPanel.restartClock();
     }
 
     void update() {
@@ -74,7 +75,6 @@ class Game : GameEventHandler {
 
         float timestep = 1.0f / _snake.speed;
         float div = 10;
-        float transitionTimestep = timestep / div;
 
         if (_elapsed >= timestep) {
             _snake.tick();
